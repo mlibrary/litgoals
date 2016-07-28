@@ -1,0 +1,14 @@
+LIT|Library Information & Technology
+A&E|Architecture & Engineering|LIT
+D&D|Design & Discovery|LIT
+DCC|Digital Content & Collections|LIT
+DLA|Digital Library Applications|LIT
+HT|HathiTrust
+SYS|Library Systems|LIT
+TCP|Encoded Text / TCP|DCC
+DCU|Digital Conversion Unit|DCC
+TA|Training & Assessment|D&D
+WS|Web Systems|D&D
+UX|User Experience|D&D
+
+
