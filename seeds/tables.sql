@@ -15,13 +15,16 @@ CREATE TABLE IF NOT EXISTS goalowner (
      ON DELETE RESTRICT
 )  ENGINE=InnoDB;
 
+
+
+
 CREATE TABLE IF NOT EXISTS status (
   name VARCHAR(255) PRIMARY KEY NOT NULL
 );
 
 -- ENUM('Not started', 'On hold', 'In progress', 'Completed', 'Abandoned')
 
-CREATE TABLE IF NOT EXISTS goals (
+CREATE TABLE IF NOT EXISTS goal (
   id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   owner VARCHAR(255),
   creator VARCHAR(255),

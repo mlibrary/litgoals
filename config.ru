@@ -1,3 +1,6 @@
+require 'roda'
 require_relative 'litgoals'
 
-run LITGoals.freeze.app
+
+
+run LITGoalsApp.freeze.app

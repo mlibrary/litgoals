@@ -1,17 +1,6 @@
 require 'sequel'
 
-database = ENV['litgoals_database']
-host     = ENV['litgoals_host']
-user     = ENV['litgoals_user']
-adapter  = ENV['litgoals_adapter']
-password = ENV['litgoals_password']
-
-
-DB = Sequel.connect(adapter:  adapter,
-                    database: database,
-                    user:     user,
-                    host:     host,
-                    password: password)
+DB = Sequel.connect(adapter: 'mysql2', database: 'goalsviz', user: 'dueberb', host: 'localhost')
 
 STATUS = [
     'Not started',
@@ -29,6 +18,7 @@ PLATFORM = {
 
 
 # Put in the statuses
+DB[:status].delete
 STATUS.map do |status|
   DB[:status].insert(name: status)
 end
@@ -36,49 +26,36 @@ end
 # Load up the units with its hierarchy
 
 def seed_units
-  File.open('units.txt').each do |ln|
+  File.open('seeds/units.txt').each do |ln|
     abbrev, name, parent = ln.chomp.split(/\s*\|\s*/)
     next unless abbrev
     DB[:goalowner].insert(uniqname:        abbrev,
-                          lastname:  name,
+                          lastname:        name,
                           parent_uniqname: parent,
-                          is_unit:   true
+                          is_unit:         true
     )
   end
 end
 
-# Let's get all the units
 
-require 'sequel'
-DB = Sequel.connect(:adapter=>:mysql2, :database=>"litgoals", user: 'dueberb', host: 'localhost')
-
-class Unit < Sequel::Model(DB[:goalowner].where(is_unit: true))
-  plugin :tree, :primary_key => :parent_uniqname, :key=>:parent_uniqname, :parent => {:key=>:parent_uniqname, :name => :parent_unit}
-  alias_method :abbreviation, :uniqname
-  alias_method :name, :lastname
-
-  def self.[](abbrev)
-    find(uniqname: abbrev)
+# Add the people
+# Adler	Richard	rcadler	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
+def add_people
+  File.open('seeds/staff.tsv').each do |l|
+    last, first, uniqname, title, _, unitname = l.chomp.split(/\t/).map(&:strip)
+    uabbrev = DB[:goalowner].where(:lastname => unitname).get(:uniqname)
+    DB[:goalowner].insert(uniqname:        uniqname,
+                          lastname:        last,
+                          firstname:       first,
+                          parent_uniqname: uabbrev,
+                          is_unit:         false
+    )
   end
 end
 
-class Person < Sequel::Model(DB[:goalowner].where(is_unit: false))
-  plugin :tree, :primary_key => :parent_uniqname, :parent => {:key=>:parent_uniqname, :name => :unit}
-end
+DB.run('SET FOREIGN_KEY_CHECKS=0')
+DB[:goalowner].truncate
+seed_units
+add_people
+DB.run('SET FOREIGN_KEY_CHECKS=1')
 
-# Load up the units with its hierarchy
-
-def seed_units
-  File.open('units.txt').each do |ln|
-    abbrev, name, parent = ln.chomp.split(/\s*\|\s*/)
-    next unless abbrev
-    Unit.new(uniqname:        abbrev,
-                          lastname:  name,
-                          parent_uniqname: parent,
-                          is_unit:   true
-    ).save
-  end
-end
-
-
-# Load up people

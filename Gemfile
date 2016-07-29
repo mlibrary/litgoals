@@ -11,6 +11,7 @@ gem 'mysql2'
 # gem 'rom-repository'
 # gem 'rom-sql'
 gem 'dotenv'
+gem 'dry-component'
 group :development do
   gem 'minitest'
 
