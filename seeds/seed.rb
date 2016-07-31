@@ -1,6 +1,11 @@
 require 'sequel'
 
-DB = Sequel.connect(adapter: 'mysql2', database: 'goalsviz', user: 'dueberb', host: 'localhost')
+DB = Sequel.connect(adapter:  ENV['litgoals_adapter'],
+                    database: ENV['litgoals_database'],
+                    user:     ENV['litgoals_user'],
+                    host:     ENV['litgoals_host'],
+                    password: ENV['litgoals_password']
+)
 
 STATUS = [
     'Not started',
@@ -40,22 +45,23 @@ end
 
 # Add the people
 # Adler	Richard	rcadler	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
-def add_people
+def seed_people
   File.open('seeds/staff.tsv').each do |l|
     last, first, uniqname, title, _, unitname = l.chomp.split(/\t/).map(&:strip)
     uabbrev = DB[:goalowner].where(:lastname => unitname).get(:uniqname)
-    DB[:goalowner].insert(uniqname:        uniqname,
+    err = DB[:goalowner].insert(uniqname:        uniqname,
                           lastname:        last,
                           firstname:       first,
                           parent_uniqname: uabbrev,
                           is_unit:         false
     )
+    puts err
   end
 end
 
 DB.run('SET FOREIGN_KEY_CHECKS=0')
 DB[:goalowner].truncate
 seed_units
-add_people
+seed_people
 DB.run('SET FOREIGN_KEY_CHECKS=1')
 

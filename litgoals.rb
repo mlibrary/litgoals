@@ -1,7 +1,7 @@
 Encoding.default_external = 'utf-8'
 
 require 'roda'
-
+require 'pry'
 require 'sequel'
 require 'dotenv'
 Dotenv.load
@@ -23,14 +23,30 @@ Sequel::Model.plugin :json_serializer
 require_relative 'models/sql_models'
 
 
+binding.pry
+
+puts 3
+
+__END__
+
 class LITGoalsApp < Roda
 
   plugin :render, cache: false, engine: 'erb'
   plugin :json, :classes=>[Array, Hash, Sequel::Model, GoalsViz::Person]
 
   route do |r|
+    uniqname = get_uniqname_from_env()
+    user = GoalsViz::Person.find(uniqname: uniqname)
+
+
+
+    locals = {
+        user: user,
+        pagetitle: "Your goals"
+    }
+
     r.root do
-      view "test", locals: {greeting: "Hi Bill"}
+      render "goals_list", locals: {user: user}
     end
 
     r.get 'hello' do

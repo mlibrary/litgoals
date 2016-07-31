@@ -1,4 +1,4 @@
-LIT|Library Information & Technology
+LIT|Library Information & Technology|
 A&E|Architecture & Engineering|LIT
 D&D|Design & Discovery|LIT
 DCC|Digital Content & Collections|LIT
