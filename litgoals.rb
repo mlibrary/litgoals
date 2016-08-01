@@ -23,16 +23,15 @@ Sequel::Model.plugin :json_serializer
 require_relative 'models/sql_models'
 
 
-binding.pry
-
-puts 3
-
-__END__
+def get_uniqname_from_env
+  'dueberb'
+end
 
 class LITGoalsApp < Roda
 
   plugin :render, cache: false, engine: 'erb'
   plugin :json, :classes=>[Array, Hash, Sequel::Model, GoalsViz::Person]
+  plugin :public
 
   route do |r|
     uniqname = get_uniqname_from_env()
@@ -60,6 +59,8 @@ class LITGoalsApp < Roda
         u.to_json
       end
     end
+
+    r.public
 
   end
 end
