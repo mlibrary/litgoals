@@ -19,7 +19,7 @@ Fulton	Colin	fultonis	Web Designer/Administrator Sr	LibraryInfoTech	Design & Dis
 Glenn	Valerie	valglenn	SR ASSOC LIBRARIAN	Library Info Tech	HathiTrust
 Glover	Jason	jaglover	Info Resources Assistant Sr	LibraryInfoTech	Digital Content & Collections
 Gross	Colin	grosscol	Sys Programmer/Analyst Inter	Library Info Tech	Architecture & Engineering
-Hagedorn	Kat	khage	LIBRARIAN	LibraryInfoTech	Digital Content & Collections
+Hagedorn	Kat	khage	LIBRARIAN	LibraryInfoTech	Digital Content & Collections	TRUE
 Hall	Brian	moseshll	App Programmer/Analyst Inter	Library Info Tech	Digital Library Applications
 Hockey	Bryan	bhock	Sys Programmer/Analyst Inter	Library Info Tech	Architecture & Engineering
 Howell	Ben	bnhowell	ASST LIBRARIAN	LibraryInfoTech	User Experience
@@ -28,25 +28,25 @@ Jaffer	Nabeela	njaffer	App Programmer/Analyst Inter	Library Info Tech	Digital Li
 Johnson	Seth	sethajoh	App Programmer/Analyst Sr	Library Info Tech	Digital Library Applications
 Kelly	Margaret	megrust	SR ASSOC LIBRARIAN	Library Info Tech	Library Systems
 Kopinski	William	kopinski	Desktop Support Spec Ld Supr	Library Info Tech	Library Systems
-Korner	Sebastien	skorner	IT Project Senior Manager	Library Info Tech	Architecture & Engineering
+Korner	Sebastien	skorner	IT Project Senior Manager	Library Info Tech	Architecture & Engineering	TRUE
 Kostin	Greg	gkostin	App Programmer/Analyst Inter	LibraryInfoTech	Digital Content & Collections
 LaChance	Matthew	mattlach	App Programmer/Analyst Inter	LibraryInfoTech	Digital Content & Collections
 Larsen	Keith	kllarsen	Info Resources Assistant Inter	LibraryInfoTech	Digital Content & Collections
 Latta	John	lattaj	Infor Resources Specialist Sr	LibraryInfoTech	Digital Content & Collections
 Leacock	Gordon	gordonl	App Programmer/Analyst Inter	Library Info Tech	Digital Library Applications
-Leasia	John	jleasia	IT Academic/Admin Div Sr Dir	Library Info Tech	Architecture & Engineering
+Leasia	John	jleasia	IT Academic/Admin Div Sr Dir	Library Info Tech	Architecture & Engineering	TRUE
 Leon	Marian	marianle	Administrative Assistant Inter	Library Info Tech	LIT
 Logarbo	Mona	monall	Info Resources Technical Spec	LibraryInfoTech	Digital Content & Collections
 McIntyre	Robert	rjmcinty	Program Manager	LibraryInfoTech	Digital Content & Collections
 McIntyre	Sandra	mcintsan	LIBRARIAN	Library Info Tech	HathiTrust
 Moussa	Nancy	nancymou	App Programmer/Analyst Inter	LibraryInfoTech	Design & Discovery
-Musolff	Meghan	musolffm	ASSOC LIBRARIAN	LibraryInfoTech	Design & Discovery
+Musolff	Meghan	musolffm	ASSOC LIBRARIAN	LibraryInfoTech	Design & Discovery	TRUE
 O'Malley	Conor	conorom	App Programmer/Analyst Inter	Library Info Tech	Digital Library Applications
 Ondracek	Kayla	krenee	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
 Payne	Lizanne	elpayne	LIBRARIAN	Library Info Tech	HathiTrust
 Powell	Chris	sooty	SR ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
 Prettyman	Timothy	timothy	App Programmer/Analyst Sr	Library Info Tech	Library Systems
-Rothman	Jonathan	jrothman	LIBRARIAN	Library Info Tech	Library Systems
+Rothman	Jonathan	jrothman	LIBRARIAN	Library Info Tech	Library Systems	TRUE
 Rotter	Ryan	rrotter	Sys Programmer/Analyst Inter	Library Info Tech	Architecture & Engineering
 Schaffner	Paul	pfs	SR ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
 Scott	Eliot	eliotwsc	Web Applications Developer	LibraryInfoTech	Design & Discovery
@@ -55,9 +55,9 @@ Steverman	Joshua	jstever	App Programmer/Analyst Inter	Library Info Tech	Library 
 Stewart	Melissa	mmstewa	Administrative Assistant Sr	Library Info Tech	HathiTrust
 Syrigos	Panagis	syrigos	Systems Administrator Inter	Library Info Tech	Architecture & Engineering
 Unger	Lara	ldunger	Info Resources Inter Supr	LibraryInfoTech	Digital Content & Collections
-Varnum	Ken	varnum	LIBRARIAN	LibraryInfoTech	Design & Discovery
+Varnum	Ken	varnum	LIBRARIAN	LibraryInfoTech	Design & Discovery	TRUE
 Warin	Martin	mwarin	App Programmer/Analyst Inter	Library Info Tech	Library Systems
-Weise	John	jweise	LIBRARIAN	Library Info Tech	Digital Library Applications
+Weise	John	jweise	LIBRARIAN	Library Info Tech	Digital Library Applications	TRUE
 Wentzel	Lawrence	lwentzel	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
-Zaytsev	Angelina	azaytsev	ASST LIBRARIAN	Library Info Tech	HathiTrust
+Zaytsev	Angelina	azaytsev	ASST LIBRARIAN	Library Info Tech	HathiTrust	TRUE
 York	Maurice	mcyork	AUL		LIT

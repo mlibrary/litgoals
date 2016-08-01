@@ -1,5 +1,8 @@
 require 'sequel'
 
+require 'dotenv'
+Dotenv.load
+
 DB = Sequel.connect(adapter:  ENV['litgoals_adapter'],
                     database: ENV['litgoals_database'],
                     user:     ENV['litgoals_user'],
@@ -47,15 +50,16 @@ end
 # Adler	Richard	rcadler	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
 def seed_people
   File.open('seeds/staff.tsv').each do |l|
-    last, first, uniqname, title, _, unitname = l.chomp.split(/\t/).map(&:strip)
+    last, first, uniqname, title, _, unitname, isadmin = l.chomp.split(/\t/).map(&:strip)
     uabbrev = DB[:goalowner].where(:lastname => unitname).get(:uniqname)
     err = DB[:goalowner].insert(uniqname:        uniqname,
                           lastname:        last,
                           firstname:       first,
                           parent_uniqname: uabbrev,
-                          is_unit:         false
+                          is_unit:         false,
+                          is_admin: (isadmin == 'TRUE')
     )
-    puts err
+    puts isadmin
   end
 end
 

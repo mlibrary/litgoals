@@ -2,6 +2,7 @@ require 'sequel'
 
 module GoalsViz
 
+
   class GoalOwner < Sequel::Model
     plugin :after_initialize
 
@@ -67,4 +68,14 @@ module GoalsViz
 
   end
 
+
+
+  class Status < Sequel::Model
+    set_dataset DB[:status]
+  end
+
+  class Goal < Sequel::Model
+    set_dataset DB[:goal]
+
+  end
 end

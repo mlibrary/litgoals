@@ -39,81 +39,8 @@
     </header>
 
     <main>
-      <div class="callout">
-        <div class="container">
-          <h1 class="no-spacing-top">Create a goal</h1>
+      <%= yield %>
 
-          <p>
-            Enter your goals here to help LIT understand and track the big picture of the division.
-          </p>
-        </div>
-      </div>
-
-      <div class="container">
-        <fieldset>
-          <label for="status">Goal Type</label>
-          <p class="help-text">
-            (Display this field for managers only)
-          </p>
-          <select name="select" id="status">
-            <option value="value1" selected>Personal Goal</option>
-            <option value="value1">Unit Goal</option>
-            <option value="value2">Department Goal</option>
-            <option value="value3">Division Goal</option>
-          </select>
-        </fieldset>
-
-        <form action="" method="post">
-          <fieldset class="full-width" >
-            <label for="title">Title</label>
-            <p class="help-text">
-              Give your goal a title that can quickly identify it's purpose.
-            </p>
-            <input id="title" type="text" />
-          </fieldset>
-
-          <fieldset class="full-width" >
-            <label for="description">Description</label>
-            <p class="help-text">
-              Write down and explain relevant details.
-            </p>
-            <textarea id="description" class="textarea-tall"></textarea>
-          </fieldset>
-
-          <fieldset class="full-width">
-            <label for="associated-goals">Associated Goals</label>
-            <p class="help-text">
-              Select other unit and department goals that are associated with this personal goal. <a href="">View and learn more about these goals.</a>
-            </p>
-            <input id="associated-goals" type="text" />
-          </fieldset>
-
-          <fieldset>
-            <label for="status">Status</label>
-            <p class="help-text">
-              Keep in mind you'll be able to update the status of this goal as it progresses.
-            </p>
-            <select name="select" id="status">
-              <option value="value1" selected>Not Started</option>
-              <option value="value1">In Progress</option>
-              <option value="value2">On Hold</option>
-              <option value="value3">Completed</option>
-              <option value="value2">Abandoned</option>
-            </select>
-          </fieldset>
-
-          <fieldset>
-            <label for="end-date">Target Date</label>
-            <p class="help-text">
-              Please enter date in YYYY/MM/DD format.
-            </p>
-            <input id="end-date" type="text" />
-          </fieldset>
-
-          <input type="submit" value="Create Goal" class="button" />
-        </form>
-
-      </div>
     </main>
 
     <footer class="site-footer">
@@ -142,59 +69,6 @@
       </div>
     </footer>
 
-    <script>
-      $('#associated-goals').selectize({
-        persist: false,
-        maxItems: null,
-        valueField: 'uid',
-        searchField: ['title'],
-        options: [
-          {
-            title: 'Refine the TASC Impact ratings scales by mid-November for use in planning the Winter 2016 cycle.',
-            uid: 1,
-            domain: 'Design & Discovery',
-            division_goal: 'Evolve Ratings and Cycle Design Partnership between TASC and LIT'
-          },
-          {
-            title: 'Refine complexity & cost rating scales with LIT managers (Fall 2015)',
-            uid: 2,
-            domain: 'Design & Discovery',
-            division_goal: 'Evolve Ratings and Cycle Design Partnership between TASC and LIT'
-          },
-          {
-            title: 'Refine Project Queue Trello board based on needs of FD reps and LIT managers (Fall 2015)',
-            uid: 3,
-            domain: 'Design & Discovery',
-            division_goal: 'Evolve Ratings and Cycle Design Partnership between TASC and LIT'
-          },
-          {
-            title: 'Develop process for formation of investigation teams',
-            uid: 4,
-            domain: 'Design & Discovery',
-            division_goal: 'Evolve Ratings and Cycle Design Partnership between TASC and LIT'
-          },
-          {
-            title: 'Develop a method or understanding of how to involve IT staff earlier in discussions of projects in the divisions',
-            uid: 5,
-            domain: 'Design & Discovery',
-            division_goal: 'Evolve Ratings and Cycle Design Partnership between TASC and LIT'
-          }
-        ],
-        render: {
-          item: function(item, escape) {
-            return '<div><span>' +
-              escape(item.title) +
-              '<br /><small><b>' + escape(item.domain) + '</b>, <b>' + escape(item.division_goal) + '</b></small>'
-            '</span></div>';
-          },
-          option: function(item, escape) {
-            return '<div><span>' +
-              escape(item.title) +
-              '<br /><small><b>' + escape(item.domain) + '</b>, <b>' + escape(item.division_goal) + '</b></small>'
-            '</span></div>';
-          }
-        }
-      });
-    </script>
+
   </body>
 </html>
