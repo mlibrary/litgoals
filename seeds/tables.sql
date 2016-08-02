@@ -1,9 +1,9 @@
 -- People belong to units. Units belong to each other. Either can have goals
 -- and a unit as a "parent." So, we'll model them as the same thing
 
+DROP TABLE IF EXISTS status;
 DROP TABLE IF EXISTS goal;
 DROP TABLE IF EXISTS goalowner;
-DROP TABLE IF EXISTS status;
 
 CREATE TABLE IF NOT EXISTS status (
   id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -34,17 +34,25 @@ CREATE TABLE goalowner (
 
 CREATE TABLE IF NOT EXISTS goal (
   id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  owner VARCHAR(255),
-  creator VARCHAR(255),
+  owner_uniqname VARCHAR(255),
+  creator_uniqname VARCHAR(255),
   title VARCHAR(255),
   description TEXT,
   status VARCHAR(255),
-  platform ENUM('Create', 'Scale', 'Build', 'N/A'),
+  platform VARCHAR(255),
   target_date DATE,
   created DATE,
   updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   foreign key fk_status(status) references status(name) on update cascade,
-  FOREIGN KEY fk_owner(owner) REFERENCES goalowner(uniqname) ON DELETE RESTRICT,
-  FOREIGN KEY fk_creator(creator) REFERENCES goalowner(uniqname) ON DELETE RESTRICT
+  FOREIGN KEY fk_owner(owner_uniqname) REFERENCES goalowner(uniqname) ON DELETE RESTRICT,
+  FOREIGN KEY fk_creator(creator_uniqname) REFERENCES goalowner(uniqname) ON DELETE RESTRICT
+)  ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS goaltogoal (
+  childgoalid INTEGER UNSIGNED,
+  parentgoalid INTEGER UNSIGNED,
+  foreign KEY fk_ggchild(childgoalid) REFERENCES goal(id),
+  foreign KEY fk_ggparent(parentgoalid) REFERENCES goal(id)
 )  ENGINE=InnoDB;
 

@@ -18,7 +18,7 @@ module GoalsViz
                       password: ENV['litgoals_password']
   )
 
-  PLATFORM = ['Create', 'Scale', 'Build', 'N/A']
+  PLATFORM_SELECT = ['Create', 'Scale', 'Build', 'N/A']
 end
 
 # Load up the models
@@ -31,12 +31,36 @@ def get_uniqname_from_env
   'dueberb'
 end
 
+
+def goal_form_locals(user, goal=nil)
+  goal     ||= GoalsViz::Goal.new
+
+  goal = GoalsViz::Goal.first
+  gforme = Forme::Form.new(goal)
+
+  forme    = Forme::Form.new
+  units    = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
+  statuses = GoalsViz::Status.order_by(:id).map {|x| [x.name, x.name]}
+
+  {
+      forme:    forme,
+      user:     user,
+      units:    units,
+      platform: GoalsViz::PLATFORM_SELECT,
+      statuses: statuses,
+      goal:     goal,
+      gforme:   gforme
+  }
+
+
+end
+
 class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
 
 
   plugin :render, cache: false, engine: 'erb'
-  plugin :json, :classes=>[Array, Hash, Sequel::Model, GoalsViz::Person]
+  plugin :json, :classes => [Array, Hash, Sequel::Model, GoalsViz::Person]
   plugin :public
   plugin :flash
 
@@ -46,7 +70,7 @@ class LITGoalsApp < Roda
 
   route do |r|
     uniqname = get_uniqname_from_env()
-    user = GoalsViz::Person.find(uniqname: uniqname)
+    user     = GoalsViz::Person.find(uniqname: uniqname)
 
 
     r.root do
@@ -55,16 +79,8 @@ class LITGoalsApp < Roda
 
 
     r.on "new_goal" do
-      r.get  do
-        forme = Forme::Form.new
-        units = GoalsViz::Unit.all.sort {|a,b| a.lastname <=> b.lastname}
-        statuses = GoalsViz::Status.order_by(:id).map(&:name)
-
-        view "new_goal", locals: { forme: forme,
-                                   user: user,
-                                   units: units,
-                                   platform: GoalsViz::PLATFORM,
-                                   statuses: statuses}
+      r.get do
+        view "new_goal", locals: goal_form_locals(user)
       end
 
       r.post do

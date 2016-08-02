@@ -16,16 +16,21 @@
 
     <fieldset>
 
-      <% if !user.is_admin %>
-          <label for="owner">Goal Scope</label>
-          <select name="owner" id="owner">
-            <option value="<%= user.uniqname %>" selected>Personal Goal
-              (for <%= user.firstname + ' ' + user.lastname + ')' %></option>
-            <% units.each do |unit| %>
-                <option value="<%= unit.abbreviation %>"><%= unit.name %></option>
-            <% end %>
-          </select>
-      <% else %>
+      <% if user.is_admin %>
+          <%=
+            forme.input(:select,
+                        label: "Goal Scope",
+                        name: "owner",
+                        id:   "owner",
+                        options: [["Personal Goal (#{user.name}", user.uniqname, ]] +
+                                  units.map{|u| [u.name, u.abbreviation]},
+                        selected: goal.owner_uniqname
+
+            )
+
+
+          %>
+       <% else %>
           <input type="hidden" name="owner" value="<%= user.uniqname %>"/>
       <% end %>
 
@@ -39,7 +44,7 @@
       <p class="help-text">
         Give your goal a title that can quickly identify it's purpose.
       </p>
-      <input id="title" type="text"/>
+      <%=  gforme.input :title %>
     </fieldset>
 
     <fieldset class="full-width">
@@ -47,7 +52,8 @@
       <p class="help-text">
         Write down and explain relevant details.
       </p>
-      <textarea id="description" class="textarea-tall"></textarea>
+      <%= gforme.input(:description, type: :textarea) %>
+
     </fieldset>
 
     <fieldset class="full-width">
@@ -64,22 +70,22 @@
       <p class="help-text">
         To which phase of work on The Platform&trade;, if any, does this goal most apply?
       </p>
-      <%= forme.input(:select, name: 'platform', options: platform) %>
+      <%= forme.input(:select, name: 'platform', options: platform.map{|x| [x,x]}, selected: goal.platform) %>
     </fieldset>
     <fieldset>
       <label for="status">Status</label>
       <p class="help-text">
         Keep in mind you'll be able to update the status of this goal as it progresses.
       </p>
-      <%= forme.input(:select, name: 'status', options: statuses) %>
+      <%= forme.input(:select, name: 'status', options: statuses, selected: goal.status) %>
     </fieldset>
 
     <fieldset>
       <label for="target_date">Target Date</label>
       <p class="help-text">
-        Please enter date in YYYY/MM/DD format.
+        Please enter the year/month you're targeting for completion as YYYY/MM
       </p>
-      <%= forme.input(:text, name: "target_date", id: "target_date") %>
+      <%=  forme.input(:text, name: 'target_date', placeholder: 'YYYY/MM', value: goal.target_date_string)%>
     </fieldset>
 
     <input type="submit" value="Create Goal" class="button"/>
