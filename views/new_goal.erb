@@ -1,18 +1,31 @@
 <div class="callout">
   <div class="container">
-    <h1 class="no-spacing-top">Create a goal</h1>
+    <h1 class="no-spacing-top"><%= @title %></h1>
 
     <p>
-      Enter your goals here to help LIT understand and track the big picture of the division.
+      Enter your goals  to help LIT understand and track the big picture of the division.
     </p>
   </div>
-  <% unless flash['goal_added_msg'].nil? %>
-      <div class="flash"><%= flash['goal_added_msg'] %></div>
-  <% end %>
 </div>
 <div class="container">
 
   <form action="/new_goal" method="post">
+    <% if flash['goal_rejected_msg'] %>
+        <h3>Please check:</h3>
+        <div class="flash" style="width: 100%; background-color:#faa">
+          <% flash['goal_rejected_msg'].flatten.each do |x| %>
+              <div><%= x %></div>
+          <% end %>
+        </div>
+    <% end %>
+
+    <% if flash['goal_added_msg'] %>
+        <div class="flash" style="width: 100%; background-color:#faa">
+          <%= flash['goal_added_msg'] %>
+        </div>
+    <% end %>
+
+    <input type="hidden" name="goal_id" value="<%goal.id%>">
 
     <fieldset>
 
@@ -20,8 +33,8 @@
           <%=
             forme.input(:select,
                         label: "Goal Scope",
-                        name: "owner",
-                        id:   "owner",
+                        name: "owner_uniqname",
+                        id:   "owner_uniqname",
                         options: [["Personal Goal (#{user.name}", user.uniqname, ]] +
                                   units.map{|u| [u.name, u.abbreviation]},
                         selected: goal.owner_uniqname
@@ -31,10 +44,10 @@
 
           %>
        <% else %>
-          <input type="hidden" name="owner" value="<%= user.uniqname %>"/>
+          <input type="hidden" name="owner_uniqname" value="<%= user.uniqname %>"/>
       <% end %>
 
-      <input type="hidden" name="creator" value="<%= user.uniqname %>"/>
+      <input type="hidden" name="creator_uniqname" value="<%= user.uniqname %>"/>
 
 
     </fieldset>
@@ -52,7 +65,7 @@
       <p class="help-text">
         Write down and explain relevant details.
       </p>
-      <%= gforme.input(:description, type: :textarea) %>
+      <%= forme.input(:textarea, name: 'description', value: goal.description) %>
 
     </fieldset>
 
