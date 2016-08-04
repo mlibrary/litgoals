@@ -3,10 +3,14 @@ require 'sequel'
 module GoalsViz
 
   # Pre-declare everything so the associations work
-  class GoalOwner < Sequel::Model; end
-  class Goal < GoalOwner; end
-  class Unit < GoalOwner; end
-  class Person < GoalOwner; end
+  class GoalOwner < Sequel::Model;
+  end
+  class Goal < GoalOwner;
+  end
+  class Unit < GoalOwner;
+  end
+  class Person < GoalOwner;
+  end
 
   class GoalOwner < Sequel::Model
     set_dataset DB[:goalowner]
@@ -41,16 +45,15 @@ module GoalsViz
     end
 
 
-
   end
 
   class Unit < GoalOwner
     set_dataset DB[:goalowner].where(is_unit: true)
 
-    one_to_many :subunits,   class: Unit,   primary_key: :uniqname,        key: :parent_uniqname
-    many_to_one :parent_unit,class: Unit,   primary_key: :parent_uniqname, key: :uniqname
-    one_to_many :people,     class: Person, primary_key: :uniqname,        key: :parent_uniqname
-    one_to_many :goals,      class: Goal,   primary_key: :owner_uniqname,  key: :uniqname
+    one_to_many :subunits, class: Unit, primary_key: :uniqname, key: :parent_uniqname
+    many_to_one :parent_unit, class: Unit, primary_key: :parent_uniqname, key: :uniqname
+    one_to_many :people, class: Person, primary_key: :uniqname, key: :parent_uniqname
+    one_to_many :goals, class: Goal, primary_key: :owner_uniqname, key: :uniqname
 
     def after_initialize # or after_initialize
       super
@@ -98,7 +101,17 @@ module GoalsViz
   class Goal
     set_dataset DB[:goal]
 
-    one_to_many :goals,      class: Goal,   primary_key: :owner_uniqname,  key: :uniqname
+    many_to_many :parent_goals, :class => Goal, :right_key=>:childgoalid, :left_key=>:parentgoalid,
+                 :join_table=>:goaltogoal
+
+    many_to_many :child_goals, :class => Goal, :left_key=>:childgoalid, :right_key=>:parentgoalid,
+                 :join_table=>:goaltogoal
+
+    one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
+
+    def ancestor_goals
+      parent_goals.reduce([]) {|acc, pg| acc.include? pg ? acc : acc.unshift(pg).concat(pg.ancestor_goals)}
+    end
 
     def target_date_string
       return '' unless t = target_date
