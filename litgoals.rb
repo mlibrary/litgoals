@@ -66,15 +66,24 @@ def goal_form_locals(user, goal=nil)
 end
 
 
+
+# Turn a form submission into a goal
+
 def goal_from_params(params)
-  _, goal_id              = params.delete('goal_id')
-  _, ags                  = params.delete('associated-goals')
-  bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
-  goal = GoalsViz::Goal.new(params)
-  goal.id = goal_id
+  _, goal_id = params.delete('goal_id')
+  _, ags     = params.delete('associated-goals')
+  bad_date   = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
+  goal       = GoalsViz::Goal.new(params)
+  goal.id    = goal_id
   goal
 
 end
+
+
+def all_unit_goals
+  GoalsViz::Goal.where(owner_uniqname: GoalsViz::Unit.map(:uniqname)).all
+end
+
 
 class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
@@ -91,12 +100,18 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-    uniqname = get_uniqname_from_env()
-    user     = GoalsViz::Person.find(uniqname: uniqname)
+    uniqname          = get_uniqname_from_env()
+    user              = GoalsViz::Person.find(uniqname: uniqname)
+    my_orgchart_goals = user.my_orgchart_goals
 
 
     r.root do
-      render "goals_list"
+      r.redirect '/goals'
+    end
+
+    r.get 'unit_goals' do
+      @title = "LIT-wide and Department/Unit goals"
+      view 'goals', locals: {user: user}
     end
 
 
@@ -109,15 +124,14 @@ class LITGoalsApp < Roda
 
       r.post do
         validation = GoalSchema.(r.params)
-        errors = validation.messages(full: true)
+        errors     = validation.messages(full: true)
         if errors.size > 0
-          g                       = goal_from_params(r.params)
-          flash['bad_goal']       = g
-          flash['goal_rejected_msg'] = errors.values
+          g                  = goal_from_params(r.params)
+          flash['error_msg'] = errors.values
           flash.to_json
           r.redirect
         else
-          g = goal_from_params(r.params)
+          g                       = goal_from_params(r.params)
           flash['goal_added_msg'] = "Goal '#{g.title}' added"
           g.save
           r.redirect
@@ -126,12 +140,29 @@ class LITGoalsApp < Roda
     end
 
     r.on "edit_goal/:goalid" do |goalid|
+      gid = goalid.to_i
+      unless user.is_admin or user.goals.map(&:id).include? gid
+        flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
+        r.redirect "/new_goal"
+      end
       r.get do
         goal   = GoalsViz::Goal.find(id: goalid.to_i)
         locals = goal_form_locals(user, goal)
         @title = "Edit '#{goal.title}'"
         view "new_goal", locals: locals
       end
+    end
+
+    r.get "goal/:goalid" do |goalid|
+      gid  = goalid.to_i
+      goal = GoalsViz::Goal[gid]
+      unless user.is_admin or goal.owner.is_admin or user.goals.include?(goal)
+        flash[:error_msg] = "You're not allowed to view that goal (must be owner or admin)"
+        r.redirect "/goals"
+      end
+
+      view "goal", locals: {goal: goal}
+
     end
 
 

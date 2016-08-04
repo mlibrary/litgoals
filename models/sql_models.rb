@@ -28,11 +28,11 @@ module GoalsViz
 
 
     def ancestors
-      case parent_uniqname
+      case parent
         when nil
           []
         else
-          self.parent.ancestors.unshift self.class.find(uniqname: parent_uniqname)
+          parent.ancestors.unshift(parent)
       end
     end
 
@@ -44,6 +44,14 @@ module GoalsViz
       Person.where(parent_uniqname: self.uniqname).all
     end
 
+    def higher_orgchart_goals
+      ancestors.map(&:goals).flatten
+    end
+
+
+    def my_orgchart_goals
+      goals + ancestors.map(&:goals).flatten
+    end
 
   end
 
@@ -53,7 +61,8 @@ module GoalsViz
     one_to_many :subunits, class: Unit, primary_key: :uniqname, key: :parent_uniqname
     many_to_one :parent_unit, class: Unit, primary_key: :parent_uniqname, key: :uniqname
     one_to_many :people, class: Person, primary_key: :uniqname, key: :parent_uniqname
-    one_to_many :goals, class: Goal, primary_key: :owner_uniqname, key: :uniqname
+
+
 
     def after_initialize # or after_initialize
       super
@@ -64,18 +73,26 @@ module GoalsViz
     alias_method :name, :lastname
     alias_method :parent_unit, :parent
 
+    def depth_first_subunits
+      case self.subunits
+        when []
+          []
+        else
+          self.subunits.reduce([]) do |acc, u|
+            acc.push(u).concat(u.depth_first_subunits)
+          end
+        end
+    end
+
+
   end
 
   class Person < GoalOwner
     set_dataset DB[:goalowner].where(is_unit: false)
 
     one_to_many :children, class: self, primary_key: :uniqname, key: :parent_uniqname
-    many_to_one :parent, class: self, primary_key: :parent_uniqname, key: :uniqname
+    many_to_one :parent, class: Unit, primary_key: :uniqname, key: :parent_uniqname
 
-
-    def parent
-      GoalsViz::Unit.find(uniqname: parent_uniqname)
-    end
 
     alias_method :unit, :parent
 
@@ -89,8 +106,6 @@ module GoalsViz
     def name
       "#{firstname} #{lastname}"
     end
-
-
   end
 
 
@@ -109,21 +124,34 @@ module GoalsViz
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
-    def ancestor_goals
-      parent_goals.reduce([]) {|acc, pg| acc.include? pg ? acc : acc.unshift(pg).concat(pg.ancestor_goals)}
+    def person_or_unit(uniqname)
+      Person.find(uniqname: uniqname) || Unit.find(uniqname: uniqname)
     end
+
+    def owner
+      person_or_unit(owner_uniqname)
+    end
+
+
+    def owner=(goalowner)
+      owner_uniqname = goalowner.uniqname
+    end
+
+
+    def creator
+      person_or_unit(creator_uniqname)
+    end
+
+
+    def creator=(goalowner)
+      self.creator_uniqname = goalowner.uniqname
+    end
+
+
 
     def target_date_string
       return '' unless t = target_date
       '%4d/%02d' % [t.year, t.month]
-    end
-
-    def owner
-      Person.find(uniqname: owner_uniqname) || Unit.find(uniqname: owner_uniqname)
-    end
-
-    def creator
-      Person.find(uniqname: owner_uniqname)
     end
 
 

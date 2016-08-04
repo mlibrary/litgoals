@@ -28,10 +28,10 @@
               <a href="">About</a>
             </li>
             <li>
-              <a href="">Goals</a></a>
+              <a href="/goals">Goals</a>
             </li>
             <li>
-              <a href="">Create</a></a>
+              <a href="new_goal">Create</a>
             </li>
           </ul>
         </nav>
@@ -39,6 +39,31 @@
     </header>
 
     <main>
+      <div class="callout">
+        <div class="container">
+          <h1 class="no-spacing-top"><%= @title %></h1>
+
+          <p>
+            Enter your goals  to help LIT understand and track the big picture of the division.
+          </p>
+        </div>
+      </div>
+      <% if flash[:error_msg] %>
+          <div class="flash" style="width: 100%; background-color:#faa">
+            <h3>Please check:</h3>
+            <% Array(flash[:error_msg]).flatten.each do |x| %>
+                <div><%= x %></div>
+            <% end %>
+          </div>
+      <% end %>
+
+      <% if flash['goal_added_msg'] %>
+          <div class="flash" style="width: 100%; background-color:#faa">
+            <%= flash['goal_added_msg'] %>
+          </div>
+      <% end %>
+
+
       <%= yield %>
 
     </main>
@@ -59,10 +84,10 @@
               <a href="">About</a>
             </li>
             <li>
-              <a href="">Goals</a></a>
+              <a href="">Goals</a>
             </li>
             <li>
-              <a href="">Create</a></a>
+              <a href="">Create</a>
             </li>
           </ul>
         </nav>
