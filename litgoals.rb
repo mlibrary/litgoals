@@ -38,6 +38,10 @@ GoalSchema = Dry::Validation.Form do
   required(:target_date).filled(format?: DATEFORMAT)
 end
 
+UNITS = GoalsViz::Goals.all.reduce(Hash.new { [] }) do |acc, u|
+  acc[u.uniqname] << u
+end
+
 
 def get_uniqname_from_env
   'dueberb'
@@ -85,6 +89,19 @@ def all_unit_goals
 end
 
 
+# "Unit Name" => [list,of,goals]
+def division_goal_tree
+
+  h = Hash.new { [] }
+
+  all_unit_goals.each do |g|
+    h[UNITS[g.owner_uniqname].name] << g
+  end
+
+  h
+end
+
+
 class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
 
@@ -106,12 +123,18 @@ class LITGoalsApp < Roda
 
 
     r.root do
+      # view "about", locals: {user: user}
       r.redirect '/goals'
     end
 
-    r.get 'unit_goals' do
-      @title = "LIT-wide and Department/Unit goals"
-      view 'goals', locals: {user: user}
+    r.get 'goals' do
+      @title = "#{user.name} and LIT/Department goals"
+      locals = {
+          user: user,
+          user_goals: user.goals,
+          division_goals: division_goal_tree
+      }
+      view 'goals', locals: locals
     end
 
 
@@ -153,17 +176,17 @@ class LITGoalsApp < Roda
       end
     end
 
-    r.get "goal/:goalid" do |goalid|
-      gid  = goalid.to_i
-      goal = GoalsViz::Goal[gid]
-      unless user.is_admin or goal.owner.is_admin or user.goals.include?(goal)
-        flash[:error_msg] = "You're not allowed to view that goal (must be owner or admin)"
-        r.redirect "/goals"
-      end
-
-      view "goal", locals: {goal: goal}
-
-    end
+    # r.get "goal/:goalid" do |goalid|
+    #   gid  = goalid.to_i
+    #   goal = GoalsViz::Goal[gid]
+    #   unless user.is_admin or goal.owner.is_admin or user.goals.include?(goal)
+    #     flash[:error_msg] = "You're not allowed to view that goal (must be owner or admin)"
+    #     r.redirect "/goals"
+    #   end
+    #
+    #   view "goal", locals: {goal: goal}
+    #
+    # end
 
 
     r.on 'api' do
