@@ -1,0 +1,67 @@
+
+Accessibility
+Accessibility (set a good example; share our success)
+Analytics
+Article Search Link Resolver
+Assessment of FD process
+Broaden and improve the development environment support we provide to developers.
+Build and deploy DPN support within HathiTrust
+Build the Team
+Build with flexibility, reusability, and interoperability in mind
+Build/pilot a few microsites with varying needs in the recommended platform(s) to uncover strengths/weaknesses
+Complete developer guidelines 1.0
+Complete onsite group training in Ruby
+Complete onsite group training in a project AND change management methodology
+Craft a long-term plan for non-HT Library storage needs.
+Deploy an application server tier for non-HT services.
+Deploy the Research Data Repository public beta (Deep Blue Data)
+Design and begin to implement an enterprise Fedora and Hydra architecture.
+Develop strategies to increase diversity and inclusion within LIT
+Digital Forensics / Born Digital
+Epistles of Paul
+Establish quality assurance benchmarks
+Establish the Michigan Service Hub (DPLA)
+Evolve ratings and cycle design partnership between TASC and LIT
+Explore and select tool(s)/language(s) to use for metadata transformation and loading, looking towards mass content migrations from Deep Blue and DLXS to Fedora
+Explore ways in which LSO can leverage our data transformation expertise in order to contribute to migration of metadata (and possibly other content) in formats other than MARC and its derivatives. 
+Extend and improve bibliographic metadata.
+Extend reporting options available for assessment and analysis.
+Extend/improve communication about Library operational data with users.
+Front Door
+Front-end build process
+HathiTrust - Large Scale Search
+HathiTrust - Other text formats
+HathiTrust - collaborate on highest priorities, identified internally, and in coordination with HT leadership
+Hydra-Fedora: actively/iteratively develop and articulate our vision for applications on the platform. 
+Hydra-Fedora: actively/iteratively develop our implementation plan for applications
+Hydra-Fedora: actively/iteratively implement applications according to plan
+Implement centralized logging and analysis.
+Implement code management with GitHub as the primary tool
+Implement the UI Framework (Falafel)
+Improve infrastructure security.
+Improve performance of website
+Include Accessibility checklist review early and ongoing (every sprint/project)
+Increase server infrastructure reliability while decreasing effort maintinaing it.
+Interest group participation
+Investigate and select one or more new tools for managing/retrieving large quantities of descriptive metadata efficiently.
+LIT Project Queue
+Library Credential Badging
+Make clear criteria for 'done' and what add-ons require new front-door consideration vs ongoing operational effort
+Microsites service model
+Omeka
+Open Michigan
+Produce and implement a strategy for enabling library staff in other divisions to engage technology experiments and prototypes through a "microsites" model that provides reliable sandbox environments and a service model for how LIT will support them. 
+Provide kick-ass customer service
+Provide leadership for accessibility
+Provide leadership for web content coordination
+Pursue options for continuing our text encoding efforts
+Re-establish audio/moving image digitization
+Relaunch the Intranet
+Scale for future use.
+Search redesign
+Select and implement shared documentation tool and process
+Service Experts
+Upgrade scanning equipment
+Use the UI Falafel framework and convert existing apps where appropriate
+Workload
+update Apps to latest/appropriate libraries

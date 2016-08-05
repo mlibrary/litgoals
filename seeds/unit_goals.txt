@@ -1,0 +1,146 @@
+Refine the TASC Impact ratings scales by mid-November for use in planning the Winter 2016 cycle.  D&D
+Refine complexity & cost rating scales with LIT managers (Fall 2015)  D&D
+Refine Project Queue Trello board based on needs of FD reps and LIT managers (Fall 2015)  D&D
+Develop process for formation of investigation teams  D&D
+Develop a method or understanding of how to involve IT staff earlier in discussions of projects in the divisions  D&D
+Complete UI design based on falafel for limited beta (April)  D&D
+Plan approach for more comprehensive UX assessment of search beta. (April)  D&D
+Carry out plan for UX assessment of search beta (by end of July).  D&D
+Begin sharing limited alpha (staff only) with constituent groups in the library by December 2015.  D&D
+Release a public beta incorporating full UX input and staff feedback by May 2016.  D&D
+Define a service model and innovation pipeline for how projects move from experimental, to pilot, to core services  D&D
+Work with DMC and Design Lab to help define support model for startup experiments, and the pathway for those to scale to production if needed.  D&D
+Do some experiments with these models to see what works.  D&D
+Release public beta of Government Documents Registry   LSO
+Release initial production version of Gov. Docs. Registry  LSO
+Improved holdings sorting in HT public displays  LSO
+Expose HT catalog holdings via schema.org  LSO
+Service Experts Findability Investigation Team  D&D
+Library Credential Badging Investigation Team  A&E
+Article Search Link Resolver Investigation Team   D&D
+Article Search Link Resolver Implementation Team  D&D
+Open Michigan Reinvention Investigation Team  DLPS
+Omeka Use for Courses Investigation Team  D&D
+Epistles of Paul Investigation Team  DLPS
+Help to break down arbitrary walls and facilitate cross-system queries and reports by adding data from systems other than Aleph to Datamart by the end of FY2016.  LSO
+For projects in the current LIT project queue, by January, have all projects categorized by one of the following: 1) Completed 2) On Hold 3) Waiting customer input 4) Right sized and versioned, so current work is completed, and work for next semester is expressed as a new phase of work.  Admin
+Complete and assess one-year pilot of workload study  Admin
+Develop tools to help faciliate Front Door resource allocation discussions  Admin
+Implement a more fully-featured bibliographic API to provide better/broader access to Mirlyn bibliographic metadata by the end of FY2016.  LSO
+Implement a more fully-featured bibliographic API and/or a HathiTrust version of Datamart to provide better/broader access to Hathitrust bibliographic data by the end of FY2016.  LSO
+  A&E
+Born Digital Forensics and Imaging Investigation Team. In the fall cycle, lead the Born Digital (forensics) investigation team to completion with a final report for next steps.  A&E
+In the fall cycle, lead the Licensed Content investigation team to completion with a final report for next steps.  A&E
+In winter cycle, implement pilot infrastructure support for preservation of forensics captured content.  A&E
+In the fall cycle, lead the Licensed Content investigation team to completion with a final report for next steps.  DLPS
+Apply for NEH grant to expand Middle English Dictionary and Compendium (July)  DLPS
+Collaborate with Publishing to brainstorm ideas for sustaining an ongoing text encoding effort - is there a request for one-time funds to extend text-encoding? (May)  DLPS
+Collaborate with Publishing to brainstorm ideas for sustaining an ongoing text encoding effort (October)  DLPS
+Collaborate with other LIT units to determine where LSO might be best able to assist; determine training that might be needed and schedule it;  LSO
+By the end of 2015, working with LIT units, implement an appropriate administrative scheme for the MLibrary github org to support the agreed upon code management workflow. This includes implementing local replication of the MLibrary code base for DR purposes.  A&E
+  D&D
+Ensure that Accessibility is discussed at each sprint planning session using the Accessibility checklist as a reference  D&D
+Meet with developers about what the checklist is and how to use it  D&D
+Ensure that Accessibility is discussed at each sprint planning session using the Accessibility checklist as a reference  LTIG
+Ensure that Accessibility is discussed at each sprint planning session using the Accessibility checklist as a reference  DLPS
+Insure that every ticket has a testing criteria with a description of what it means to be done with that ticket. Trello cards should also include a description of what Done means.  A&E
+  Admin
+Collaborate with all interested parties toward completion of Version 1 (January), and Version 2 (June)  Admin
+  A&E
+R&D into deploying Fedora in the LIT dual-site production infrastructure, ultimately to support the Deep Blue Data pilot.  A&E
+Contribute to the community integration of PCDM into the Hydra stack, culminating in a viable Sufia 7  A&E
+Develop the Deep Blue Data pilot based on a local implementation of Sufia 7  A&E
+Develop the Deep Blue Data pilot UI  D&D
+Contribute to the community integration of PCDM into the Hydra stack, culminating in a viable Sufia 7  DLPS
+Develop the Deep Blue Data pilot based on a local implementation of Sufia 7  DLPS
+In Q1 of CY2016, implement Elastic ELK stack infrastructure and prepare for providing access to LIT units for their application logging and analysis needs.  A&E
+Assess long term non-HT storage needs. Evaluate various technology solutions based on cost and suitability. Craft and begin to execute the plan.   A&E
+By end of 2015, complete with other DPN nodes the roll out to production of the DPN infrastructure and service.  A&E
+In winter and spring of 2016, facilitate the early production phase of DPN, including development of new functionality as needed.  A&E
+Re-implement patron file data feed to use MCommunity data (Winter 2015)  LSO
+Build workstation refresh management system back end with extendable structure to allow for unforeseen uses and/or use beyond the Library. Design with an API to support variant interfaces for different user groups (e.g., Library staff, LIT staff working on refresh. MiWorkspace staff). Complete an initial version in time to pilot the system by the end of the FY2016 refresh.  LSO
+Collaborate with ITS in hooking up Caliper to PR as a way to investigate Caliper analytic capabilities and suitab lilty for other Library analytics data capture  A&E
+Establish initial analytics data collection model  D&D
+Build pipelines for data collection as a pilot for one or two online service areas  D&D
+Create a feature list of needs for microsite users as a guide to assessing potential solutions. Assist tech steering in recommendation of microsite solution platform.  A&E
+Define capacities that LIT can provide to push out to experimental and microsites, like templates, APIs, RESTful services, etc.  Admin
+Recategorize LIT project queue lists to match language of TASC - Investigation, Project, Service [?]  D&D
+Onboard new staff. Establish and clarify roles (November).  D&D
+Hire for open UX Specialist position (by the end of March).  D&D
+Re-establish presence in LIT and the Library through introductions and engagement in key areas of activity including Web Committee, Web Content Coordinators, PARC, ERSC, Hydra-Fedora, Search Redesign, Falafel, HathiTrust (by end of December).  D&D
+Introduce new staff to Front Door, and inject them into existing projects where appropriate (October/November).  D&D
+Fill open D&D Mgr position  Admin
+[goal to insert]  D&D
+update apps to latest versions of bootstrap, foundation or Falafel as available - 1st app (SALI)  A&E
+Complete update and migration to Omeka 3.X by March 2016.  D&D
+Replace LinkScan with a more modern tool  D&D
+Complete initial work to expose Mirlyn and HathiTrust Catalog content as triples, using schema.org bib extension vocabulary.  LSO
+Use lessons learned to define additional areas of exploration for working with RDF triples by end of FY16.  LSO
+Select and implement a new tool for managing HT Government Documents Registry source records by end of 2015.  LSO
+Implement SMS notices to patrons from both Aleph and ILLiad by end of 2015.  LSO
+Implement process for updating/overlaying Chinese Roman only records in Aleph by overlaying with vernacular records from Worldcat. Process in place and initial batch completed by end of 2015.  LSO
+Implement automated search for cataloging records for Slavic, East European, and Eurasian receipts that are currently in the uncataloged backlog. Process in place and set up to iterate with initial runs completed by end of 2015.  LSO
+Collaborate with institutional partners to complete all DPLA's formal requirements for participation, and the MOU among the partners (October 2015)  DLPS
+Hire a coordinator (by December)  DLPS
+Provide coordination for the overall effort, including the aggregation of sub-hub records into a single feed for DPLA (November)  DLPS
+Communicate regularly with sub-hubs about best practice and process, and by the end of June, have best practices and processes documented and shareable.  DLPS
+Gather requirements and review products, and make recommendation (by December)  DLPS
+Complete purchase. (by June)  DLPS
+ Hire a technician (by December)  DLPS
+Thoroughly re-engage with the work to complete first batch of digitized media (by June)  DLPS
+Support HathiTrust on the goal to support other text formats (PDF, ePub) in the repository. Timeline is unclear, but meetings are becoming regular, lead by Mike Furlough. This project will ultimately involve a mix of preservation policy, architecture & engineering, and application development, but it starts with content and preservation.  DLPS
+Have outline of a training plan mid-April; gear up on training plan by the summer.  D&D
+change management  D&D
+project management  D&D
+Lead the information architecture and feature specification process by December 31, 2015.  D&D
+Recreate the Intranet in Drupal 8. Version 1 mid to late summer.  D&D
+Migrate content from current Intranet to new Intranet by April 30, 2016.  D&D
+As we begin having success with developer guidelines, frameworks, and contributions of accessibility experts on staff, share our experiences with the campus and beyond by making at least one blog post, presenting at a Web Accessibility Working Group meeting, and at least one conference.  D&D
+As we begin having success with developer guidelines, frameworks, and contributions of accessibility experts on staff, share our experiences with the campus and beyond by making at least one blog post, presenting at a Web Accessibility Working Group meeting, and at least one conference.  DLPS
+Collaborate with all interested parties to convert the vision into implementation plans for applications on the platform taking into consideration the needs of established projects such as Publishing's Mellon project, and the needs of stakeholders including Special Collections, Bentley, LS&A Museums, and others while gathering requirements, user stories, and other forms of input. (First draft shared widely for input by 12/31/2015)  DLPS
+Address specific, well known (by Tom) usability questions (do at least one by December, and at least one more by June)  D&D
+Improve large scale search, especially relevance ranking through a process of research and implementation  DLPS
+Define benchmarks for website performance by January 2015.   D&D
+Make infrastructure changes as needed to reach those benchmarks.  D&D
+By end of 2015, have the infrastructure deployed and ready for migration of production services onto it.  A&E
+In winter of 2016 support LSO, WS, and MPub in migrating Solr instances to this Tier.  A&E
+In the winter cycle, support LTIG , WS, and LSO in migrating all production Ruby applications from Torquebox to Puma-based deployments on this tier.  A&E
+In the winter cycle, scale out the Infinispan key-value solution, making it available to all units for production needs.  A&E
+Move LTIG Ruby applications to Puma-based deployments  A&E
+In winter of 2016, implement a pilot Puppet-based server management infrastructure for the application tier.  A&E
+By June of 2016, role out the Puppet-based management more broadly across the server infrastructure.  A&E
+In winter of 2016, investigate and formulate a plan for centralized infrastructure monitoring. Begin to deploy it across the infrastructure base through the end of the FY.  A&E
+By the end of 2015, implement 2-factor authentication across the server infrastructure, complemented by deploying a bastion host and honoring Kerberos credentials to ease workflows for developers.  A&E
+Through the fall and winter cycles, roll out HTTPS-only access across all web applications we support.  A&E
+In winter 2016, participate in the Fedora 4 research data cloud-based scaling prototype.  A&E
+Build/enhance robust APIs (Mirlyn, HT bibliographic, workstation refresh management, even where initial use may not be heavy).  LSO
+Move SALI to Falafel  A&E
+Contribute by way of design, usability, and accessibility following the lead of WS.  D&D
+Finish and publish the use and documentation for Falafel by January 2016.  D&D
+Establish new UX staff as chair of Content Coordinators Group (in January).  D&D
+Strategically and collaboratively revisit and revamp guidelines and policies about library website content (by end of year).  D&D
+Support Lisa Campbell's efforts to establish policy and guidelines for LibGuides (by end of December).  D&D
+Together with WS, L&T work to further evolve and put into practice policies and guidelines (present internally in March) for the implementation of accessible applications and sites (report progress in June).  D&D
+Provide LIT-wide workshops on customer service and develop strategy to integrate workshop tools back into daily LIT operations  D&D
+Investigate debrief process for LIT in coordination with Library colleagues  D&D
+bring new staff up to speed, including training. (by December)  D&D
+Collaborate with experts in the library and on campus and collaborate on efforts to establish best practice.  D&D
+  A&E
+Play a supporting role following WS lead.  D&D
+Lead effort to coherently and succinctly present our core guidelines for application development, accessibility, interface design, security, etc., by March 31, 2016.  D&D
+Participate in the DevOps interest group, learning and contributing Hydra enterprise architecture strategies.  A&E
+Host a Hydra Developer and Project Manager Congress at UM in May.  A&E
+Host a Hydra Developer and Project Manager Congress at UM in May.  D&D
+Host a Hydra Developer and Project Manager Congress at UM in May.  DLPS
+Identify all interest groups and working groups pertinent to our work at UM across units and divisions. Match staff with groups based on interest and expertise. Join and participate at least 5 groups so that our interests are represented and contributions valued.  DLPS
+move at least 1 app to Falafel when ready as test case  A&E
+This is to prove out feasability of whatever platform(s) we will support for microsites - find some test case microsite needs and set them up to see how well they support end user needs and ongoing maintenance  A&E
+Through a process of development efforts and exercises based on needs expressed in the vision and plans, build "engines" and applications that will serve our needs broadly. Simultaneously participate in development of specific high priority projects (e.g. Deep Blue Data). Success is measured by our collective ability to meet the goals of projects with deadlines.  DLPS
+Define quality assurance milestones and build release processes accordingly by June 2016.  D&D
+Define metrics to define QA and move at least one major web system into compliance by June 2016.  D&D
+By the end of 2015, provide workstation access, via CIFS, to non-HT development and prep filesystems.  A&E
+In winter 2016, investigate options for more formally providing support for local workstation-based development that mirrors the LIT server environment.  A&E
+In winter 2016 complete stable dev environment for Hydra, usable either in server environment or local desktop  A&E
+Develop strategies to increase diversity and inclusion within LIT  Admin
+Develop strategies to increase diversity and inclusion within the tools developed by LIT  Admin
+Move Course Reserves to Drupal 8  A&E

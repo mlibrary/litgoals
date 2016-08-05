@@ -134,7 +134,7 @@ module GoalsViz
 
 
     def owner=(goalowner)
-      owner_uniqname = goalowner.uniqname
+      self.owner_uniqname = goalowner.uniqname
     end
 
 

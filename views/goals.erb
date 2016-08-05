@@ -1,37 +1,21 @@
-    <div class="container">
-        <ul class="list-alternative">
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Refine the TASC Impact ratings scales by mid-November for use in planning the Winter 2016 cycle.
-            <div class="description">Description goes here</div>
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Refine Project Queue Trello board based on needs of FD reps and LIT managers (Fall 2015)
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Develop process for formation of investigation teams
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Develop a method or understanding of how to involve IT staff earlier in discussions of projects in the divisions
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Refine the TASC Impact ratings scales by mid-November for use in planning the Winter 2016 cycle.
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Refine Project Queue Trello board based on needs of FD reps and LIT managers (Fall 2015)
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Develop process for formation of investigation teams
-          </li>
-          <li>
-            <span class="info-text">Design &amp; Discovery</span>
-            Develop a method or understanding of how to involve IT staff earlier in discussions of projects in the divisions
-          </li>
-        </ul>
-      </div>
+<div class="container">
+  <ul class="list-alternative">
+    <% goalowners_to_show_goals_for.each do |u| %>
+        <% u.goals.each do |g| %>
+            <li>
+
+              <span class="info-text"><%= u.name %></span>
+
+              <% if user.is_admin or user.goals.map(&:id).include? g.id %>
+                  <button><a href="/edit_goal/<%=g.id%>">Edit</a></button>
+              <% end %>              <%= g.title %>
+              <div> <%= g.description %></div>
+            </li>
+        <% end %>
+    <% end %>
+  </ul>
+
+</div>
+
+
+

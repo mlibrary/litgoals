@@ -38,9 +38,11 @@ GoalSchema = Dry::Validation.Form do
   required(:target_date).filled(format?: DATEFORMAT)
 end
 
-UNITS = GoalsViz::Goals.all.reduce(Hash.new { [] }) do |acc, u|
-  acc[u.uniqname] << u
+UNITS = GoalsViz::Unit.each_with_object({}) do |u,acc|
+  acc[u.uniqname] = u
 end
+
+SORTED_UNITS = UNITS.to_a.map{|a| a[1]}.sort{|a,b| a.name <=> b.name}
 
 
 def get_uniqname_from_env
@@ -113,7 +115,10 @@ class LITGoalsApp < Roda
   plugin :slash_path_empty
 
   plugin :error_handler do |e|
-    "Oh No! #{e}"
+    "<pre>Oh No!
+      #{e.message}
+      #{e.backtrace.join"\n"}</pre>"
+
   end
 
   route do |r|
@@ -131,8 +136,7 @@ class LITGoalsApp < Roda
       @title = "#{user.name} and LIT/Department goals"
       locals = {
           user: user,
-          user_goals: user.goals,
-          division_goals: division_goal_tree
+          goalowners_to_show_goals_for: SORTED_UNITS.dup.unshift(user)
       }
       view 'goals', locals: locals
     end
