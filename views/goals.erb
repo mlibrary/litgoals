@@ -1,21 +1,95 @@
-<div class="container">
-  <ul class="list-alternative">
-    <% goalowners_to_show_goals_for.each do |u| %>
-        <% u.goals.each do |g| %>
-            <li>
+<div id="goal-list-container">
 
-              <span class="info-text"><%= u.name %></span>
+  <div id="goal-list-container">
 
-              <% if user.is_admin or user.goals.map(&:id).include? g.id %>
-                  <button><a href="/edit_goal/<%=g.id%>">Edit</a></button>
-              <% end %>              <%= g.title %>
-              <div> <%= g.description %></div>
-            </li>
-        <% end %>
-    <% end %>
-  </ul>
+    <div class="callout no-spacing-top">
+      <div class="container">
+
+        <div class="facet-container">
+          <fieldset class="no-spacing facet-title-search">
+            <label for="search-by-title">Search by title</label>
+            <input id="search-by-title" class="search" type="text" />
+          </fieldset>
+
+          <p class="facet-sort">
+            <label>Sort by</label>
+            <!--<span class="sort" data-sort="goal-target-date">Target Date</span>-->
+            <button class="facet sort" data-sort="goal-title" href="">Title</button>
+            <button class="facet sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
+          </p>
+
+          <p class="facet-filter">
+            <label>Filter by</label>
+            <button id="filter-by-my-goals" class="facet filter" data-sort="goal-my-goal">My Goals</button>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  <div class="container">
+    <p id="goal-list-info" class="goal-list-info">
+    </p>
+
+    <ul class="list-alternative list goal-list"></ul>
+  </div>
 
 </div>
 
+<div style="display: none;">
+  <li id="goal-item-template">
+    <span class="goal-edit-show" style=""><a class="button-light goal-edit goal-edit-href" href="">Edit</a></span>
+    <span class="goal-my-goal"></span>
+    <h5 class="goal-title no-spacing"></h5>
+    <p class="goal-metadata no-spacing">
+      <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
+      <span class="goal-associated"></span>
+    </p>
+    <p class="goal-description"></p>
+  </li>
+</div>
 
 
+<script>
+  var options = {
+    item: 'goal-item-template',
+    valueNames: [
+      'goal-associated',
+      { name: 'goal-target-date-timestamp', attr: 'data-timestamp'},
+      'goal-target-date',
+      'goal-title',
+      'goal-description',
+      'goal-my-goal',
+      { name: 'goal-edit-href', attr: 'href' },
+      { name: 'goal-edit-show', attr: 'style'}
+    ]
+  }
+  var values = <%= goal_list_for_display %>
+
+
+  var goalList = new List('goal-list-container', options, values);
+  var filter_by_my_goals = document.getElementById('filter-by-my-goals');
+  filter_by_my_goals.addEventListener('click', function(event) {
+    if (filter_by_my_goals.classList.contains('active')) {
+      filter_by_my_goals.classList.remove('active')
+      goalList.filter()
+    } else {
+      filter_by_my_goals.classList.add('active')
+      goalList.filter(function(item) {
+        if (item.values()['goal-my-goal'] == 'My Goal') { return true } else { return false }
+      })
+    }
+  })
+  goalList.on('updated', function(e) {
+    updateFacetInfo()
+  })
+  var goal_list_info = document.getElementById('goal-list-info')
+  var updateFacetInfo = function() {
+    var text = 'Showing ' + goalList.visibleItems.length + ' goal'
+    if (goalList.visibleItems.length > 1) {
+      text = text + 's'
+    }
+    goal_list_info.textContent = text
+  }
+  updateFacetInfo()
+</script>

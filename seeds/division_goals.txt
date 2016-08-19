@@ -1,4 +1,3 @@
-
 Accessibility
 Accessibility (set a good example; share our success)
 Analytics
@@ -23,7 +22,7 @@ Establish quality assurance benchmarks
 Establish the Michigan Service Hub (DPLA)
 Evolve ratings and cycle design partnership between TASC and LIT
 Explore and select tool(s)/language(s) to use for metadata transformation and loading, looking towards mass content migrations from Deep Blue and DLXS to Fedora
-Explore ways in which LSO can leverage our data transformation expertise in order to contribute to migration of metadata (and possibly other content) in formats other than MARC and its derivatives. 
+Explore ways in which LSO can leverage our data transformation expertise in order to contribute to migration of metadata (and possibly other content) in formats other than MARC and its derivatives.
 Extend and improve bibliographic metadata.
 Extend reporting options available for assessment and analysis.
 Extend/improve communication about Library operational data with users.
@@ -32,7 +31,7 @@ Front-end build process
 HathiTrust - Large Scale Search
 HathiTrust - Other text formats
 HathiTrust - collaborate on highest priorities, identified internally, and in coordination with HT leadership
-Hydra-Fedora: actively/iteratively develop and articulate our vision for applications on the platform. 
+Hydra-Fedora: actively/iteratively develop and articulate our vision for applications on the platform.
 Hydra-Fedora: actively/iteratively develop our implementation plan for applications
 Hydra-Fedora: actively/iteratively implement applications according to plan
 Implement centralized logging and analysis.
@@ -50,7 +49,7 @@ Make clear criteria for 'done' and what add-ons require new front-door considera
 Microsites service model
 Omeka
 Open Michigan
-Produce and implement a strategy for enabling library staff in other divisions to engage technology experiments and prototypes through a "microsites" model that provides reliable sandbox environments and a service model for how LIT will support them. 
+Produce and implement a strategy for enabling library staff in other divisions to engage technology experiments and prototypes through a "microsites" model that provides reliable sandbox environments and a service model for how LIT will support them.
 Provide kick-ass customer service
 Provide leadership for accessibility
 Provide leadership for web content coordination

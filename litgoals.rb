@@ -5,6 +5,9 @@ require 'pry'
 require 'sequel'
 require 'forme'
 require 'dry-validation'
+require 'logger'
+
+LOG = Logger.new(STDERR)
 
 require 'dotenv'
 Dotenv.load
@@ -38,11 +41,11 @@ GoalSchema = Dry::Validation.Form do
   required(:target_date).filled(format?: DATEFORMAT)
 end
 
-UNITS = GoalsViz::Unit.each_with_object({}) do |u,acc|
+UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
 
-SORTED_UNITS = UNITS.to_a.map{|a| a[1]}.sort{|a,b| a.name <=> b.name}
+SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 
 
 def get_uniqname_from_env
@@ -55,32 +58,37 @@ def goal_form_locals(user, goal=nil)
 
   gforme = Forme::Form.new(goal)
 
-  forme    = Forme::Form.new
-  units    = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
-  statuses = GoalsViz::Status.order_by(:id).map { |x| [x.name, x.name] }
+  forme                   = Forme::Form.new
+  units                   = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
+  statuses                = GoalsViz::Status.order_by(:id).map { |x| [x.name, x.name] }
+  interesting_goal_owners = SORTED_UNITS.dup.unshift(user)
 
   {
-      forme:    forme,
-      user:     user,
-      units:    units,
-      platform: GoalsViz::PLATFORM_SELECT,
-      statuses: statuses,
-      goal:     goal,
-      gforme:   gforme
+      forme:                             forme,
+      user:                              user,
+      units:                             units,
+      platform:                          GoalsViz::PLATFORM_SELECT,
+      statuses:                          statuses,
+      goal:                              goal,
+      gforme:                            gforme,
+      goalowners_to_show_goals_for:      interesting_goal_owners,
+      selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners)
+
+
   }
 
 end
 
 
-
 # Turn a form submission into a goal
 
 def goal_from_params(params)
-  _, goal_id = params.delete('goal_id')
-  _, ags     = params.delete('associated-goals')
-  bad_date   = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
-  goal       = GoalsViz::Goal.new(params)
-  goal.id    = goal_id
+  goal_id  = params.delete('goal_id')
+  ags      = params.delete('associated-goals')
+  bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
+  goal     = goal_id ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new(params)
+  goal.id  = goal_id
+
   goal
 
 end
@@ -90,6 +98,34 @@ def all_unit_goals
   GoalsViz::Goal.where(owner_uniqname: GoalsViz::Unit.map(:uniqname)).all
 end
 
+
+def goal_list_for_selectize(list_of_owners)
+  list_of_owners.map(&:goals).flatten.uniq.map do |g|
+    {
+        title:       g.title,
+        uid:         g.id,
+        domain:      g.owner.name,
+        description: g.description || "[no description given]"
+    }
+  end.to_json
+end
+
+def goal_list_for_display(list_of_owners, user)
+  list_of_owners.map(&:goals).flatten.uniq.map do |g|
+    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
+    {
+        'goal-associated': g.owner.name,
+        'goal-target-date': td,
+        'goal-target-date-timestamp':td,
+        'goal-title': g.title,
+        'goal-description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'goal-my-goal': g.owner == user ? 'My Goal' : '',
+        'goal-edit-show': (user.is_admin or g.owner == user) ?  '' : 'display: none;',
+        'goal-edit-href': (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : ''
+    }
+  end.to_json
+
+end
 
 # "Unit Name" => [list,of,goals]
 def division_goal_tree
@@ -117,7 +153,7 @@ class LITGoalsApp < Roda
   plugin :error_handler do |e|
     "<pre>Oh No!
       #{e.message}
-      #{e.backtrace.join"\n"}</pre>"
+    #{e.backtrace.join "\n"}</pre>"
 
   end
 
@@ -135,8 +171,9 @@ class LITGoalsApp < Roda
     r.get 'goals' do
       @title = "#{user.name} and LIT/Department goals"
       locals = {
-          user: user,
-          goalowners_to_show_goals_for: SORTED_UNITS.dup.unshift(user)
+          user:                         user,
+          goalowners_to_show_goals_for: SORTED_UNITS.dup.unshift(user),
+          goal_list_for_display: goal_list_for_display(SORTED_UNITS.dup.unshift(user), user)
       }
       view 'goals', locals: locals
     end
@@ -150,19 +187,24 @@ class LITGoalsApp < Roda
       end
 
       r.post do
-        validation = GoalSchema.(r.params)
-        errors     = validation.messages(full: true)
-        if errors.size > 0
-          g                  = goal_from_params(r.params)
-          flash['error_msg'] = errors.values
-          flash.to_json
-          r.redirect
-        else
-          g                       = goal_from_params(r.params)
-          flash['goal_added_msg'] = "Goal '#{g.title}' added"
-          g.save
-          r.redirect
-        end
+        LOG.warn(r.params)
+        r.params.to_json
+        # validation = GoalSchema.(r.params)
+        # errors     = validation.messages(full: true)
+        # ags      = r.params.delete('associated-goals')
+        # g          = goal_from_params(r.params)
+        # LOG.warn("Goal from params is #{g}")
+        # if errors.size > 0
+        #   flash['error_msg'] = errors.values
+        #   flash.to_json
+        #   r.redirect
+        # else
+        #   g.save
+        #   ags and Array(ags).each { |ag| LOG.warn("Adding parent goal #{ag}"); g.add_parent_goal(GoalsViz::Goal[ag.to_i]);  }
+        #   g.save
+        #   flash['goal_added_msg'] = "Goal '#{g.title}' with parent(s) '#{g.parent_goals.map(&:title).join(" / ")}' added"
+        #   r.redirect
+        # end
       end
     end
 
