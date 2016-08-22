@@ -1,0 +1,51 @@
+.goal-my-goal {
+  display: inline-block;
+  border: solid 2px $main-2;
+  border-radius: 4px;
+  background: white;
+  padding: 0 0.5rem;
+  margin-right: 0.2rem;
+  background: $main-3;
+  color: white;
+  float: right;
+  margin-left: 1rem;
+}
+
+.goal-my-goal:empty {
+  display: none;
+}
+
+.goal-edit {
+  float: right;
+  margin: 0;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.goal-list-info {
+  color: $grey-3;
+  margin-top: 1.5rem;
+}
+
+.goal-list {
+  margin-top: 0;
+}
+
+.goal-description {
+  margin-top: 1rem;
+}
+
+.goal-metadata {
+  display: block;
+  font-size: 0.9rem;
+  color: $grey-1;
+  margin-top: 1rem;
+}
+
+.goal-target-date,
+.goal-associated,
+.goal-status  {
+  font-weight: 600;
+  color: $grey-2;
+  margin-right: 1rem;
+}

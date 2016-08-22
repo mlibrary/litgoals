@@ -1,0 +1,87 @@
+.facet {
+  display: inline-block;
+  border: solid 2px $grey-4;
+  border-radius: 4px;
+  background: white;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  background: $grey-6;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+.facet:hover {
+  background: $grey-5;
+}
+
+.facet.asc,
+.facet.desc,
+.facet.active {
+  background: $main-3;
+  color: white;
+  border-color: $main-2;
+}
+
+.facet.asc,
+.facet.desc {
+  padding-right: 1rem;
+}
+
+.facet.asc:after {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid white;
+  content: "";
+  position: relative;
+  top: 0.8rem;
+  right: -0.4rem;;
+}
+
+.facet.desc:after {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  content: "";
+  position: relative;
+  bottom: 0.8rem;
+  right: -0.4rem;;
+}
+
+.facet-container {
+  display: block;
+}
+
+@media (max-width: 23rem) {
+  .facet-container {
+    display: block;
+  }
+}
+
+@media (min-width: 40rem) {
+    .facet-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .facet-title-search {
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      width: 19rem;
+    }
+
+    .facet-sort {
+      margin-right: 1rem;
+    }
+
+    .facet-sort,
+    .facet-filter {
+      margin-top: 0;
+
+      .facet {
+        margin-top: 0.25rem;
+      }
+    }
+}

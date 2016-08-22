@@ -1,0 +1,110 @@
+input[type="text"],
+textarea,
+select {
+  font-size: $font-size-base;
+  border: solid 0.15rem $grey-4;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  background: #fff;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+}
+
+fieldset {
+  width: 24rem;
+}
+
+select {
+  height: 2.75rem;
+  padding: 0;
+}
+
+label,
+legend {
+  color: $grey-2;
+  display: block;
+  font-weight: $font-weight-bold;
+}
+
+input[type="text"]:disabled,
+input[type="text"]:read-only {
+  background: $grey-6;
+  border-color: $grey-4;
+  color: $grey-3;
+  cursor: not-allowed;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  margin-right: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+fieldset {
+  margin: 1.5rem 0;
+}
+
+.help-text,
+.validation-text {
+  margin: 0;
+  font-size: 1rem;
+}
+
+fieldset.field-valid {
+  input[type="text"] {
+    border-color: $green-2;
+  }
+
+  .validation-text {
+    color: $green-2;
+  }
+}
+
+fieldset.field-error {
+  input[type="text"] {
+    border-color: $red-2;
+  }
+
+  .validation-text  {
+    color: $red-2;
+  }
+}
+
+fieldset.field-warning {
+  input[type="text"] {
+    border-color: $orange-2;
+  }
+
+  .validation-text  {
+    color: $orange-2;
+  }
+}
+
+textarea {
+  min-height: 10rem;
+  width: 100%;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  border-color: $main-2;
+}
+
+@media (max-width: 28rem) {
+  fieldset {
+    width: 100%;
+  }
+}
+
+.radio-label {
+  color: $grey-1;
+  font-weight: 400;
+}

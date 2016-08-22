@@ -1,0 +1,203 @@
+<html>
+  <head>
+    <title>Goals Visualization</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="assets/stylesheets/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+    <script src="https://code.jquery.com/jquery-3.1.0.slim.min.js" integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8=" crossorigin="anonymous"></script>
+    <script src="assets/javascript/selectize.js"></script>
+    <script src="assets/javascript/list.js"></script>
+
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="brand-link">
+          <img class="brand-image mlib-logo-image" src="http://www.lib.umich.edu/shared-files/graphics/logos/umlib_logo_white_72x442.png">
+        </a>
+
+        <nav>
+          <ul class="nav-list">
+            <li>
+              <a href="index.html">Create</a></a>
+            </li>
+            <li>
+              <a href="goals.html">Goals</a></a>
+            </li>
+            <li>
+              <a href="">Login</a>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+    </header>
+
+    <main>
+      <div class="callout">
+        <div class="container">
+          <h1 class="no-spacing">List of Goals</h1>
+        </div>
+      </div>
+
+      <div id="goal-list-container">
+
+        <div class="callout no-spacing-top">
+          <div class="container">
+
+            <div class="facet-container">
+              <fieldset class="no-spacing facet-title-search">
+                <label for="search-by-title">Search by title</label>
+                <input id="search-by-title" class="search" type="text" />
+              </fieldset>
+
+              <p class="facet-sort">
+                <label>Sort by</label>
+                <!--<span class="sort" data-sort="goal-target-date">Target Date</span>-->
+                <button class="facet sort" data-sort="goal-title" href="">Title</button>
+                <button class="facet sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
+              </p>
+
+              <p class="facet-filter">
+                <label>Filter by</label>
+                <button id="filter-by-my-goals" class="facet filter" data-sort="goal-my-goal">My Goals</button>
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="container">
+          <p id="goal-list-info" class="goal-list-info">
+          </p>
+
+          <ul class="list-alternative list goal-list"></ul>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <h2 class="no-spacing-top">Library Information Technology Goals</h2>
+        <p>
+          Created by M-Library LIT to help LIT understand and track the big picture of the division.
+        </p>
+
+        <nav>
+          <ul class="nav-list">
+            <li>
+              <a href="index.html">Create</a></a>
+            </li>
+            <li>
+              <a href="goals.html">Goals</a></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+
+    <div style="display: none;">
+      <li id="goal-item-template">
+        <a class="button-light button-small goal-edit goal-edit-href" href="">Edit</a>
+        <span class="goal-my-goal"></span>
+        <h5 class="goal-title no-spacing"></h5>
+        <p class="goal-description"></p>
+        <p class="goal-metadata">
+          <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
+          <span class="goal-associated"></span>
+          <span class="goal-status"></span>
+        </p>
+      </li>
+    </div>
+
+    <script>
+      var options = {
+        item: 'goal-item-template',
+        valueNames: [
+          'goal-associated',
+          { name: 'goal-target-date-timestamp', attr: 'data-timestamp'},
+          'goal-target-date',
+          'goal-title',
+          'goal-status',
+          'goal-description',
+          'goal-my-goal',
+          { name: 'goal-edit-href', attr: 'href' }
+        ]
+      }
+
+      var values = [
+        {
+          'goal-associated': 'Design & Discovery',
+          'goal-target-date': 'November 2016',
+          'goal-target-date-timestamp': '201610',
+          'goal-title': 'Refine Project Queue Trello board based on needs of FD reps and LIT managers',
+          'goal-description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'goal-my-goal': 'My Goal',
+          'goal-status': 'Draft',
+          'goal-edit-href': '/edit/goal-1'
+        },
+        {
+          'goal-associated': 'Design & Discovery',
+          'goal-target-date': 'December 2016',
+          'goal-target-date-timestamp': '201612',
+          'goal-title': 'Develop process for formation of investigation teams',
+          'goal-description': 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'goal-status': 'Not Started',
+          'goal-edit-href': '/edit/goal-2'
+        },
+        {
+          'goal-associated': 'Design & Discovery',
+          'goal-target-date': 'March 2017',
+          'goal-target-date-timestamp': '201703',
+          'goal-title': 'Develop a method or understanding of how to involve IT staff earlier in discussions of projects in the divisions',
+          'goal-description': 'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'goal-status': 'On Hold',
+          'goal-edit-href': '/edit/goal-3'
+        },
+      ]
+
+      var goalList = new List('goal-list-container', options, values);
+      var filter_by_my_goals = document.getElementById('filter-by-my-goals');
+
+      filter_by_my_goals.addEventListener('click', function(event) {
+        if (filter_by_my_goals.classList.contains('active')) {
+          filter_by_my_goals.classList.remove('active')
+          goalList.filter()
+        } else {
+          filter_by_my_goals.classList.add('active')
+          goalList.filter(function(item) {
+            if (item.values()['goal-my-goal'] == 'My Goal') { return true } else { return false }
+          })
+        }
+      })
+
+      goalList.on('updated', function(e) {
+        updateFacetInfo()
+      })
+
+      var goal_list_info = document.getElementById('goal-list-info')
+
+      var updateFacetInfo = function() {
+        var text = 'Showing ' + goalList.visibleItems.length + ' goal'
+
+        if (goalList.visibleItems.length != 1) {
+          text = text + 's'
+        }
+
+        if (goalList.visibleItems.length == 0) {
+          text = 'No goals match your search.'
+        }
+
+        goal_list_info.textContent = text
+      }
+
+      updateFacetInfo()
+
+    </script>
+  </body>
+</html>
