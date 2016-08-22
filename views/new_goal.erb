@@ -62,13 +62,22 @@
       </p>
       <%= forme.input(:select, name: 'platform', options: platform.map{|x| [x,x]}, selected: goal.platform) %>
     </fieldset>
+
     <fieldset>
-      <label for="status">Status</label>
+      <label>Status</label>
       <p class="help-text">
         Keep in mind you'll be able to update the status of this goal as it progresses.
       </p>
-      <%= forme.input(:select, name: 'status', options: statuses, selected: goal.status) %>
-    </fieldset>
+
+      <% status_triples.each do |status_value, status_text, checked| %>
+
+        <label class="radio-label">
+          <input type="radio" value="<%= status_value %>" name="status" <%=  checked ? "checked='checked'" : '' %>>
+          <%= status_text %>
+        </label>
+
+      <% end %>
+
 
     <fieldset>
       <label for="target_date">Target Date</label>
@@ -89,6 +98,7 @@
     maxItems: null,
     valueField: 'uid',
     searchField: ['title'],
+    items: <%= parent_goal_ids %>,
     options: <%= selectize_associated_goal_options %>,
 
     render: {

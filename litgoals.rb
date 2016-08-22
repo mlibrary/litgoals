@@ -60,19 +60,29 @@ def goal_form_locals(user, goal=nil)
 
   forme                   = Forme::Form.new
   units                   = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
-  statuses                = GoalsViz::Status.order_by(:id).map { |x| [x.name, x.name] }
   interesting_goal_owners = SORTED_UNITS.dup.unshift(user)
+
+  statuses = GoalsViz::Status.order_by(:id).map do |gs|
+    checked = gs.name == goal.status ? true : false
+    [gs.name, gs.name, checked]
+  end
+
+  unless goal.status
+    statuses[0][2] = true; # default the first one
+  end
+
 
   {
       forme:                             forme,
       user:                              user,
       units:                             units,
       platform:                          GoalsViz::PLATFORM_SELECT,
-      statuses:                          statuses,
+      status_triples:                    statuses,
       goal:                              goal,
       gforme:                            gforme,
       goalowners_to_show_goals_for:      interesting_goal_owners,
-      selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners)
+      selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners),
+      parent_goal_ids:                   goal.parent_goals.map(&:id)
 
 
   }
@@ -86,11 +96,9 @@ def goal_from_params(params)
   goal_id  = params.delete('goal_id')
   ags      = params.delete('associated-goals')
   bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
-  goal     = goal_id ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new(params)
-  goal.id  = goal_id
-
+  goal     = goal_id != '' ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new(params)
+  LOG.warn goal
   goal
-
 end
 
 
@@ -114,14 +122,14 @@ def goal_list_for_display(list_of_owners, user)
   list_of_owners.map(&:goals).flatten.uniq.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
     {
-        'goal-associated': g.owner.name,
-        'goal-target-date': td,
-        'goal-target-date-timestamp':td,
-        'goal-title': g.title,
-        'goal-description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'goal-my-goal': g.owner == user ? 'My Goal' : '',
-        'goal-edit-show': (user.is_admin or g.owner == user) ?  '' : 'display: none;',
-        'goal-edit-href': (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : ''
+        'goal-associated':            g.owner.name,
+        'goal-target-date':           td,
+        'goal-target-date-timestamp': td,
+        'goal-title':                 g.title,
+        'goal-description':           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
+        'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
+        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : ''
     }
   end.to_json
 
@@ -137,6 +145,18 @@ def division_goal_tree
   end
 
   h
+end
+
+def save_goal(goal, associated_goals)
+  goal.save
+  ags = Array(associated_goals).delete_if(&:empty?)
+  unless ags.empty?
+    goal.remove_all_parent_goals
+    goal.save
+    ags.each { |ag| LOG.warn("Adding parent goal #{ag}"); goal.add_parent_goal(GoalsViz::Goal[ag.to_i]); }
+    goal.save
+  end
+
 end
 
 
@@ -160,6 +180,7 @@ class LITGoalsApp < Roda
   route do |r|
     uniqname          = get_uniqname_from_env()
     user              = GoalsViz::Person.find(uniqname: uniqname)
+    user.is_admin     = true
     my_orgchart_goals = user.my_orgchart_goals
 
 
@@ -171,8 +192,7 @@ class LITGoalsApp < Roda
     r.get 'goals' do
       @title = "#{user.name} and LIT/Department goals"
       locals = {
-          user:                         user,
-          goalowners_to_show_goals_for: SORTED_UNITS.dup.unshift(user),
+          user:                  user,
           goal_list_for_display: goal_list_for_display(SORTED_UNITS.dup.unshift(user), user)
       }
       view 'goals', locals: locals
@@ -188,23 +208,21 @@ class LITGoalsApp < Roda
 
       r.post do
         LOG.warn(r.params)
-        r.params.to_json
-        # validation = GoalSchema.(r.params)
-        # errors     = validation.messages(full: true)
-        # ags      = r.params.delete('associated-goals')
-        # g          = goal_from_params(r.params)
-        # LOG.warn("Goal from params is #{g}")
-        # if errors.size > 0
-        #   flash['error_msg'] = errors.values
-        #   flash.to_json
-        #   r.redirect
-        # else
-        #   g.save
-        #   ags and Array(ags).each { |ag| LOG.warn("Adding parent goal #{ag}"); g.add_parent_goal(GoalsViz::Goal[ag.to_i]);  }
-        #   g.save
-        #   flash['goal_added_msg'] = "Goal '#{g.title}' with parent(s) '#{g.parent_goals.map(&:title).join(" / ")}' added"
-        #   r.redirect
-        # end
+        validation = GoalSchema.(r.params)
+        errors     = validation.messages(full: true)
+        ags        = r.params.delete('associated-goals')
+        g          = goal_from_params(r.params)
+        is_newgoal = g.id.nil?
+        LOG.warn("Goal from params is #{g}")
+        if errors.size > 0
+          flash['error_msg'] = errors.values
+          r.redirect
+        else
+          save_goal(g, ags)
+          action = is_newgoal ? "added" : "edited"
+          flash['goal_added_msg'] = "Goal <em>#{g.title}</em> #{action}"
+          r.redirect("/edit_goal/#{g.id}")
+        end
       end
     end
 
