@@ -218,7 +218,6 @@ class LITGoalsApp < Roda
     end
 
     r.get 'goals' do
-      @title = "#{user.name} and LIT/Department goals"
       interesting_owners = SORTED_UNITS.dup.unshift(user)
 
       locals = {
@@ -295,4 +294,3 @@ class LITGoalsApp < Roda
 
   end
 end
-

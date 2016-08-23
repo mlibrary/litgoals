@@ -1,32 +1,39 @@
 
+<div class="callout">
+  <div class="container">
+    <h1 class="no-spacing-top">Create a goal</h1>
+
+    <p>
+      Enter your goals here to help LIT understand and track the big picture of the division.
+    </p>
+  </div>
+</div>
+
 <div class="container">
 
   <form action="/new_goal" method="post">
     <input type="hidden" name="goal_id" value="<%= goal.id%>">
 
     <fieldset>
-
       <% if user.is_admin %>
-          <%=
-            forme.input(:select,
-                        label: "Goal Scope",
-                        name: "owner_uniqname",
-                        id:   "owner_uniqname",
-                        options: [["Personal Goal (#{user.name}", user.uniqname, ]] +
-                                  units.map{|u| [u.name, u.abbreviation]},
-                        selected: goal.owner_uniqname
+        <label for="owner_uniquname">Goal Scope</label>
+        <p class="help-text">
+          (This field is displayed for admins only)
+        </p>
+        <%=
+          forme.input(:select,
+                      name: "owner_uniqname",
+                      id:   "owner_uniqname",
+                      options: [["Personal Goal", user.uniqname, ]] +
+                                units.map{|u| [u.name, u.abbreviation]},
+                      selected: goal.owner_uniqname
 
-            )
-
-
-          %>
-       <% else %>
-          <input type="hidden" name="owner_uniqname" value="<%= user.uniqname %>"/>
+          )
+        %>
+      <% else %>
+        <input type="hidden" name="owner_uniqname" value="<%= user.uniqname %>"/>
       <% end %>
-
       <input type="hidden" name="creator_uniqname" value="<%= user.uniqname %>"/>
-
-
     </fieldset>
 
     <fieldset class="full-width">
@@ -49,10 +56,9 @@
     <fieldset class="full-width">
       <label for="associated-goals">Associated Goals</label>
       <p class="help-text">
-        Select other unit and department goals that are associated with this personal goal.
-        <a href="">View and learn more about these goals.</a>
+        Search for and associate other goals with this goal. <a target="_blank.html" href="goals.html">View list of goals.</a>
       </p>
-      <input id="associated-goals" name="associated-goals" type="text"/>
+      <input id="associated-goals" name="associated-goals" type="text" placeholder="Type to search"/>
     </fieldset>
 
     <fieldset>
@@ -70,19 +76,16 @@
       </p>
 
       <% status_triples.each do |status_value, status_text, checked| %>
-
         <label class="radio-label">
           <input type="radio" value="<%= status_value %>" name="status" <%=  checked ? "checked='checked'" : '' %>>
           <%= status_text %>
         </label>
-
       <% end %>
-
 
     <fieldset>
       <label for="target_date">Target Date</label>
       <p class="help-text">
-        Please enter the year/month you're targeting for completion as YYYY/MM
+        When do you expect this goal to be finished? Please enter date in YYYY/MM format.
       </p>
       <%=  forme.input(:text, name: 'target_date', placeholder: 'YYYY/MM', value: goal.target_date_string)%>
     </fieldset>
