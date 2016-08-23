@@ -126,7 +126,6 @@ def goal_from_params(params)
   ags      = params.delete('associated-goals')
   bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
   goal     = goal_id != '' ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new(params)
-  LOG.warn goal
   goal
 end
 
@@ -148,7 +147,6 @@ def goal_list_for_selectize(list_of_owners)
 end
 
 def goal_list_for_display(list_of_owners, user)
-  LOG.warn(list_of_owners)
   list_of_owners.map(&:goals).flatten.uniq.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
     {
