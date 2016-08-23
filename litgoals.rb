@@ -1,36 +1,65 @@
 Encoding.default_external = 'utf-8'
 
+require 'dotenv'
+Dotenv.load
+
 require 'roda'
 require 'pry'
 require 'sequel'
 require 'forme'
 require 'dry-validation'
-require 'logger'
 
+require 'logger'
 LOG = Logger.new(STDERR)
 
-require 'dotenv'
-Dotenv.load
+
+require_relative "lib/sql_dbh"
+
+# Need to set the GoalsViz::DB before requiring the models
+
 
 # Set up the DB connection
 
-module GoalsViz
-  DB = Sequel.connect(adapter:  ENV['litgoals_adapter'],
+if ENV['litgoals_environment'] == "production"
+  db = Sequel.connect(adapter:  ENV['litgoals_adapter'],
                       database: ENV['litgoals_database'],
                       user:     ENV['litgoals_user'],
                       host:     ENV['litgoals_host'],
                       password: ENV['litgoals_password']
   )
+else
+  tmpdir = Dir.tmpdir
+  filename = File.join(tmpdir, "litgoals_fake.db")
+  already_exists = File.exist?(filename)
 
+  # filename = "temp.db"
+  # already_exists = false
+
+  db  = Sequel.connect("sqlite://#{filename}")
+  GoalsViz::DB.db = db
+
+  unless already_exists
+    # seed it
+    db << File.read("seeds/sqlite_tables.sql")
+    load "seeds/seed.rb"
+    s = GoalsViz::Seed.new(db)
+    GoalsViz::DB.db = db
+    s.seed
+  end
+end
+
+
+# Now that we've got GoalsViz::DB, we can
+require_relative "lib/sql_models"
+
+
+module GoalsViz
   PLATFORM_SELECT = ['Create', 'Scale', 'Build', 'N/A']
 end
 
 # Load up the models
 
 Sequel::Model.plugin :json_serializer
-require_relative 'models/sql_models'
-
-ENV['RACK_ENV'] = "development"
 
 DATEFORMAT = /\d{4}\/\d{2}/
 
@@ -119,6 +148,7 @@ def goal_list_for_selectize(list_of_owners)
 end
 
 def goal_list_for_display(list_of_owners, user)
+  LOG.warn(list_of_owners)
   list_of_owners.map(&:goals).flatten.uniq.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
     {
@@ -191,9 +221,11 @@ class LITGoalsApp < Roda
 
     r.get 'goals' do
       @title = "#{user.name} and LIT/Department goals"
+      interesting_owners = SORTED_UNITS.dup.unshift(user)
+
       locals = {
           user:                  user,
-          goal_list_for_display: goal_list_for_display(SORTED_UNITS.dup.unshift(user), user)
+          goal_list_for_display: goal_list_for_display(interesting_owners, user)
       }
       view 'goals', locals: locals
     end

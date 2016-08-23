@@ -10,5 +10,6 @@ DCU|Digital Conversion Unit|DCC
 TA|Training & Assessment|D&D
 WS|Web Systems|D&D
 UX|User Experience|D&D
+LTIG|Learning Technologies Incubation Group|LIT
 
 
