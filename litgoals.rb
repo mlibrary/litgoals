@@ -125,7 +125,9 @@ def goal_from_params(params)
   goal_id  = params.delete('goal_id')
   ags      = params.delete('associated-goals')
   bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
-  goal     = goal_id != '' ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new(params)
+  goal     = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
+  LOG.warn(params)
+  goal.set_all(params)
   goal
 end
 
@@ -244,9 +246,11 @@ class LITGoalsApp < Roda
         is_newgoal = g.id.nil?
         LOG.warn("Goal from params is #{g}")
         if errors.size > 0
+          LOG.warn "Problem: #{errors.values}"
           flash['error_msg'] = errors.values
           r.redirect
         else
+          LOG.warn "Saving goal #{g.id}"
           save_goal(g, ags)
           action = is_newgoal ? "added" : "edited"
           flash['goal_added_msg'] = "Goal <em>#{g.title}</em> #{action}"
