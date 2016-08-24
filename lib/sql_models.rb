@@ -8,10 +8,22 @@ module GoalsViz
   class GoalOwner < Sequel::Model;
   end
   class Goal < GoalOwner;
+
+    def self.all_unit_goals
+      where(owner_uniqname: GoalsViz::Unit.map(:uniqname)).all
+    end
+
   end
+
+
   class Unit < GoalOwner;
   end
   class Person < GoalOwner;
+
+    def self.admins
+      where(is_admin: true)
+    end
+
   end
 
   class GoalOwner < Sequel::Model

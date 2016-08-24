@@ -7,74 +7,27 @@ require 'roda'
 require 'pry'
 require 'sequel'
 require 'forme'
-require 'dry-validation'
 
 require 'logger'
 LOG = Logger.new(STDERR)
 
-
+require_relative "lib/constants"
 require_relative "lib/sql_dbh"
 
+
 # Need to set the GoalsViz::DB before requiring the models
+GoalsViz::DB.setup_from_environment
 
-
-# Set up the DB connection
-
-if ENV['litgoals_environment'] == "production"
-  db = Sequel.connect(adapter:  ENV['litgoals_adapter'],
-                      database: ENV['litgoals_database'],
-                      user:     ENV['litgoals_user'],
-                      host:     ENV['litgoals_host'],
-                      password: ENV['litgoals_password']
-  )
-else
-  tmpdir = Dir.tmpdir
-  filename = File.join(tmpdir, "litgoals_fake.db")
-  already_exists = File.exist?(filename)
-
-  # filename = "temp.db"
-  # already_exists = false
-
-  db  = Sequel.connect("sqlite://#{filename}")
-  GoalsViz::DB.db = db
-
-  unless already_exists
-    # seed it
-    db << File.read("seeds/sqlite_tables.sql")
-    load "seeds/seed.rb"
-    s = GoalsViz::Seed.new(db)
-    GoalsViz::DB.db = db
-    s.seed
-  end
-end
-
-
-# Now that we've got GoalsViz::DB, we can
+# Now that we've got GoalsViz::DB, we can...
 require_relative "lib/sql_models"
 
-
-module GoalsViz
-  PLATFORM_SELECT = ['Create', 'Scale', 'Build', 'N/A']
-end
-
-# Load up the models
-
 Sequel::Model.plugin :json_serializer
-
-DATEFORMAT = /\d{4}\/\d{2}/
-
-GoalSchema = Dry::Validation.Form do
-
-  required(:title).filled
-  required(:description).filled
-  required(:target_date).filled(format?: DATEFORMAT)
-end
 
 UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
-
 SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
+
 
 
 def get_uniqname_from_env
@@ -124,7 +77,7 @@ end
 def goal_from_params(params)
   goal_id  = params.delete('goal_id')
   ags      = params.delete('associated-goals')
-  bad_date = params.delete('target_date') unless (DATEFORMAT.match params['target_date'])
+  bad_date = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
   goal     = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
   LOG.warn(params)
   goal.set_all(params)
@@ -132,9 +85,7 @@ def goal_from_params(params)
 end
 
 
-def all_unit_goals
-  GoalsViz::Goal.where(owner_uniqname: GoalsViz::Unit.map(:uniqname)).all
-end
+
 
 
 def goal_list_for_selectize(list_of_owners)
@@ -170,7 +121,7 @@ def division_goal_tree
 
   h = Hash.new { [] }
 
-  all_unit_goals.each do |g|
+  GoalsViz::Goals.all_unit_goals.each do |g|
     h[UNITS[g.owner_uniqname].name] << g
   end
 
@@ -239,7 +190,7 @@ class LITGoalsApp < Roda
 
       r.post do
         LOG.warn(r.params)
-        validation = GoalSchema.(r.params)
+        validation = GoalsViz::GoalSchema.(r.params)
         errors     = validation.messages(full: true)
         ags        = r.params.delete('associated-goals')
         g          = goal_from_params(r.params)
