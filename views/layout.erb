@@ -15,6 +15,26 @@
 
 </head>
 <body>
+
+    <% if flash[:error_msg] %>
+      <div class="alert alert-warning alert-site-banner">
+        <div class="container">
+          <h3>Please check:</h3>
+          <% Array(flash[:error_msg]).flatten.each do |x| %>
+            <div><%= x %></div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if flash['goal_added_msg'] %>
+      <div class="alert alert-success alert-site-banner">
+        <div class="container">
+          <%= flash['goal_added_msg'] %>
+        </div>
+      </div>
+    <% end %>
+
     <header class="site-header">
       <div class="container">
         <a href="/" class="brand-link">
@@ -38,23 +58,6 @@
     </header>
 
     <main>
-      <% if flash[:error_msg] %>
-        <div class="flash" style="width: 100%; background-color:#faa">
-          <h3>Please check:</h3>
-          <% Array(flash[:error_msg]).flatten.each do |x| %>
-            <div><%= x %></div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <div class="container">
-        <% if flash['goal_added_msg'] %>
-          <div class="flash" style="width: 100%; background-color:#faa">
-            <%= flash['goal_added_msg'] %>
-          </div>
-        <% end %>
-      </div>
-
       <%= yield %>
     </main>
 

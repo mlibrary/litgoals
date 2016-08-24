@@ -27,5 +27,12 @@
 }
 
 .alert *:first-child {
+  margin-top: 0;
+}
+
+.alert-site-banner {
   margin: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }

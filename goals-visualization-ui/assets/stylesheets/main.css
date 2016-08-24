@@ -506,8 +506,8 @@ select:focus {
   border-color: #05A657; }
 
 .alert-info {
-  background: #FFEEDD;
-  border-color: #E77504; }
+  background: #E4F3F8;
+  border-color: #14A2BF; }
 
 .alert-warning {
   background: #FFEEDD;
@@ -518,7 +518,13 @@ select:focus {
   border-color: #ED5D47; }
 
 .alert *:first-child {
-  margin: 0; }
+  margin-top: 0; }
+
+.alert-site-banner {
+  margin: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none; }
 
 .nav-list {
   margin-top: 1rem;
