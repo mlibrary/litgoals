@@ -184,7 +184,7 @@ class LITGoalsApp < Roda
     r.on "new_goal" do
       r.get do
         locals = goal_form_locals(user, flash[:bad_goal])
-        @title = 'Create a new goal'
+        @pagetitle = 'Create a new goal'
         view "new_goal", locals: locals
       end
 
@@ -221,7 +221,7 @@ class LITGoalsApp < Roda
       r.get do
         goal   = GoalsViz::Goal.find(id: goalid.to_i)
         locals = goal_form_locals(user, goal)
-        @title = "Edit '#{goal.title}'"
+        @pagetitle = "Edit '#{goal.title}'"
         view "new_goal", locals: locals
       end
     end
