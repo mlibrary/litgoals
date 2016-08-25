@@ -21,7 +21,7 @@
           (This field is displayed for admins only)
         </p>
         <%=
-          forme.input(:select,
+          forme.input(:radioset,
                       name: "owner_uniqname",
                       id:   "owner_uniqname",
                       options: [["Personal Goal", user.uniqname, ]] +
@@ -66,7 +66,7 @@
       <p class="help-text">
         To which phase of work on The Platform&trade;, if any, does this goal most apply?
       </p>
-      <%= forme.input(:select, name: 'platform', options: platform.map{|x| [x,x]}, selected: goal.platform) %>
+      <%= forme.input(:radioset, name: 'platform', options: platform.map{|x| [x,x]}, selected: goal.platform) %>
     </fieldset>
 
     <fieldset>
@@ -75,12 +75,9 @@
         Keep in mind you'll be able to update the status of this goal as it progresses.
       </p>
 
-      <% status_triples.each do |status_value, status_text, checked| %>
-        <label class="radio-label">
-          <input type="radio" value="<%= status_value %>" name="status" <%=  checked ? "checked='checked'" : '' %>>
-          <%= status_text %>
-        </label>
-      <% end %>
+      <%= forme.input(:radioset, name: 'status', options: status_options, selected: goal.status) %>
+
+
     </fieldset>
 
     <fieldset>

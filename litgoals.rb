@@ -59,7 +59,7 @@ def goal_form_locals(user, goal=nil)
       user:                              user,
       units:                             units,
       platform:                          GoalsViz::PLATFORM_SELECT,
-      status_triples:                    statuses,
+      status_options:                    GoalsViz::Status.order_by(:id).map{|s| [s.name, s.name]},
       goal:                              goal,
       gforme:                            gforme,
       goalowners_to_show_goals_for:      interesting_goal_owners,
