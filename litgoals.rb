@@ -43,23 +43,15 @@ def goal_form_locals(user, goal=nil)
   forme                   = Forme::Form.new
   units                   = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
   interesting_goal_owners = SORTED_UNITS.dup.unshift(user)
-
-  statuses = GoalsViz::Status.order_by(:id).map do |gs|
-    checked = gs.name == goal.status ? true : false
-    [gs.name, gs.name, checked]
-  end
-
-  unless goal.status
-    statuses[0][2] = true; # default the first one
-  end
-
+  status_options = GoalsViz::Status.order_by(:id).map{|s| [s.name, s.name]}
 
   {
       forme:                             forme,
       user:                              user,
       units:                             units,
       platform:                          GoalsViz::PLATFORM_SELECT,
-      status_options:                    GoalsViz::Status.order_by(:id).map{|s| [s.name, s.name]},
+      status_options:                    status_options,
+      selected_status:                   goal.status.nil? ? status_options[0][0] : goal.status,
       goal:                              goal,
       gforme:                            gforme,
       goalowners_to_show_goals_for:      interesting_goal_owners,
