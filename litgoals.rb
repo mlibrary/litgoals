@@ -28,7 +28,7 @@ UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
 end
 SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 
-
+COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
 
 def get_uniqname_from_env
   'dueberb'
@@ -154,6 +154,7 @@ class LITGoalsApp < Roda
     uniqname          = get_uniqname_from_env()
     user              = GoalsViz::Person.find(uniqname: uniqname)
     user.is_admin     = true
+    @user = user
     my_orgchart_goals = user.my_orgchart_goals
 
 
