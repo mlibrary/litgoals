@@ -183,7 +183,7 @@ class LITGoalsApp < Roda
 
     r.on "new_goal" do
       r.get do
-        locals = goal_form_locals(user, flash['bad_goal'])
+        locals = goal_form_locals(user, flash[:bad_goal])
         @title = 'Create a new goal'
         view "new_goal", locals: locals
       end
@@ -198,14 +198,15 @@ class LITGoalsApp < Roda
         LOG.warn("Goal from params is #{g}")
         if errors.size > 0
           LOG.warn "Problem: #{errors.values}"
-          flash['error_msg'] = errors.values
+          flash[:error_msg] = errors.values
+          flash[:bad_goal] = g
           r.redirect
         else
           LOG.warn "Saving goal #{g.id}"
           save_goal(g, ags)
           action = is_newgoal ? "added" : "edited"
-          flash['goal_added_msg'] = "Goal <em>#{g.title}</em> #{action}"
-          r.redirect("/edit_goal/#{g.id}")
+          flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
+          r.redirect("/goals")
         end
       end
     end
@@ -214,8 +215,9 @@ class LITGoalsApp < Roda
       gid = goalid.to_i
       unless user.is_admin or user.goals.map(&:id).include? gid
         flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
-        r.redirect "/new_goal"
+        r.redirect "/goals"
       end
+
       r.get do
         goal   = GoalsViz::Goal.find(id: goalid.to_i)
         locals = goal_form_locals(user, goal)
