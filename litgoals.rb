@@ -93,13 +93,14 @@ end
 
 def goal_list_for_display(list_of_owners, user)
   list_of_owners.map(&:goals).flatten.uniq.map do |g|
+    empty_description = g.description.nil? or g.description.empty?
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
     {
         'goal-associated':            g.owner.name,
         'goal-target-date':           td,
         'goal-target-date-timestamp': td,
         'goal-title':                 g.title,
-        'goal-description':           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'goal-description':           empty_description ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' : g.description,
         'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
         'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
         'goal-edit-href':             (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : ''
