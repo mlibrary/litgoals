@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS goal (
   description TEXT,
   status VARCHAR(255),
   platform VARCHAR(255),
+  draft INTEGER,
   target_date DATE,
   created DATE,
   updated DATETIME DEFAULT CURRENT_TIMESTAMP

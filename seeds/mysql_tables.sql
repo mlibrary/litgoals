@@ -20,10 +20,8 @@ CREATE TABLE goalowner (
   created DATE ,
   is_unit BOOLEAN,
   is_admin BOOLEAN,
-  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY fk_unit(parent_uniqname) REFERENCES goalowner(uniqname)
-     ON UPDATE CASCADE
-     ON DELETE RESTRICT
+  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
 )  ENGINE=InnoDB;
 
 
@@ -41,18 +39,14 @@ CREATE TABLE IF NOT EXISTS goal (
   status VARCHAR(255),
   platform VARCHAR(255),
   target_date DATE,
+  draft TINYINT DEFAULT 0,
   created DATE,
-  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  foreign key fk_status(status) references status(name) on update cascade,
-  FOREIGN KEY fk_owner(owner_uniqname) REFERENCES goalowner(uniqname) ON DELETE RESTRICT,
-  FOREIGN KEY fk_creator(creator_uniqname) REFERENCES goalowner(uniqname) ON DELETE RESTRICT
+  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )  ENGINE=InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS goaltogoal (
   childgoalid INTEGER UNSIGNED,
-  parentgoalid INTEGER UNSIGNED,
-  foreign KEY fk_ggchild(childgoalid) REFERENCES goal(id),
-  foreign KEY fk_ggparent(parentgoalid) REFERENCES goal(id)
+  parentgoalid INTEGER UNSIGNED
 )  ENGINE=InnoDB;
 
