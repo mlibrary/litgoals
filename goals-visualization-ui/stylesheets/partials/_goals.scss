@@ -35,9 +35,21 @@
   margin-top: 1rem;
 }
 
+.goal-metadata-container {
+  display: flex;
+  justify-content: space-between;
+
+  p {
+    font-size: 0.75rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+  }
+}
+
 .goal-metadata {
   display: block;
-  font-size: 0.9rem;
   color: $grey-1;
   margin-top: 1rem;
 }
@@ -47,5 +59,9 @@
 .goal-status  {
   font-weight: 600;
   color: $grey-2;
+}
+
+.goal-target-date,
+.goal-associated {
   margin-right: 1rem;
 }

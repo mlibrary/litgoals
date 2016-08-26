@@ -46,11 +46,20 @@
     <span class="goal-my-goal"></span>
     <h5 class="goal-title no-spacing"></h5>
     <p class="goal-description"></p>
-    <p class="goal-metadata">
-      <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
-      <span class="goal-associated"></span>
-      <span class="goal-status"></span>
-    </p>
+    <div class="goal-metadata-container">
+      <p class="goal-metadata">
+        Target Date<br />
+        <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
+      </p>
+      <p class="goal-metadata">
+        Goal Scope<br />
+        <span class="goal-associated"></span>
+      </p>
+      <p class="goal-metadata">
+        Goal Status<br />
+        <span class="goal-status"></span>
+      </p>
+    </div>
   </li>
 </div>
 
@@ -68,7 +77,6 @@
       'goal-my-goal',
       { name: 'goal-edit-href', attr: 'href' },
       { name: 'goal-edit-show', attr: 'style'}
-
     ]
   }
 

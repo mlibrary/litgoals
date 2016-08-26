@@ -672,9 +672,16 @@ select:focus {
 .goal-description {
   margin-top: 1rem; }
 
+.goal-metadata-container {
+  display: flex;
+  justify-content: space-between; }
+  .goal-metadata-container p {
+    font-size: 0.75rem; }
+  .goal-metadata-container span {
+    font-size: 0.9rem; }
+
 .goal-metadata {
   display: block;
-  font-size: 0.9rem;
   color: #333;
   margin-top: 1rem; }
 
@@ -682,7 +689,10 @@ select:focus {
 .goal-associated,
 .goal-status {
   font-weight: 600;
-  color: #4E4E4E;
+  color: #4E4E4E; }
+
+.goal-target-date,
+.goal-associated {
   margin-right: 1rem; }
 
 /**
