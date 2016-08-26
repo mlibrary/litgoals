@@ -161,6 +161,9 @@ module GoalsViz
       self.creator_uniqname = goalowner.uniqname
     end
 
+    def draft?
+      self.draft
+    end
 
 
     def target_date_string
