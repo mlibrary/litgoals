@@ -104,7 +104,8 @@ select:focus {
   }
 }
 
-.radio-label {
+.radio-label,
+label.option {
   color: $grey-1;
   font-weight: 400;
 }

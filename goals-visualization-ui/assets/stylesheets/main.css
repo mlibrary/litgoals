@@ -437,7 +437,8 @@ select:focus {
   fieldset {
     width: 100%; } }
 
-.radio-label {
+.radio-label,
+label.option {
   color: #333;
   font-weight: 400; }
 
