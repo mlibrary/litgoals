@@ -112,14 +112,13 @@ def goal_list_for_display(list_of_owners, user)
   end
 
   goals.map do |g|
-    empty_description = g.description.nil? or g.description.empty?
-    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
+    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
     {
         'goal-associated':            g.owner.name,
         'goal-target-date':           td,
         'goal-target-date-timestamp': td,
         'goal-title':                 g.title,
-        'goal-description':           empty_description ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' : g.description,
+        'goal-description':           g.description,
         'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
         'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
         'goal-edit-href':             (user.is_admin or g.owner == user) ? "/litgoals/edit_goal/#{g.id}" : '',
@@ -176,7 +175,6 @@ class LITGoalsApp < Roda
   route do |r|
     uniqname          = get_uniqname_from_env()
     user              = GoalsViz::Person.find(uniqname: uniqname)
-    user.is_admin     = true
     @user             = user
 
 
@@ -266,7 +264,7 @@ class LITGoalsApp < Roda
 
         r.get 'user/:uniqname' do |uniqname|
           u = GoalsViz::Person.find(uniqname: uniqname)
-          u.to_json
+          u.name
         end
       end
 
