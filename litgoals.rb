@@ -122,7 +122,7 @@ def goal_list_for_display(list_of_owners, user)
         'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
         'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
         'goal-edit-href':             (user.is_admin or g.owner == user) ? "/litgoals/edit_goal/#{g.id}" : '',
-        'goal-published-status':      g.draft? ? 'Draft' : ''
+        'goal-published-status':      g.draft? ? 'Draft' : g.status
     }
   end.to_json
 
