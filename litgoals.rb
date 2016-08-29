@@ -122,8 +122,8 @@ def goal_list_for_display(list_of_owners, user)
         'goal-description':           empty_description ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' : g.description,
         'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
         'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
-        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : '',
-        'goal-published-status':      g.draft? ? 'Draft' : 'Published'
+        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/litgoals/edit_goal/#{g.id}" : '',
+        'goal-published-status':      g.draft? ? 'Draft' : ''
     }
   end.to_json
 
@@ -180,8 +180,11 @@ class LITGoalsApp < Roda
     @user             = user
 
 
-    # r.on "litgoals" do
-    #   # view "about", locals: {user: user}
+    r.root do
+      r.redirect '/litgoals/'
+    end
+
+    r.on "litgoals" do
 
       r.root do
         r.redirect 'goals'
@@ -226,7 +229,7 @@ class LITGoalsApp < Roda
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
             sleep 0.5
-            r.redirect("/goals")
+            r.redirect("goals")
           end
         end
       end
@@ -235,7 +238,7 @@ class LITGoalsApp < Roda
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
           flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
-          r.redirect "/goals"
+          r.redirect "goals"
         end
 
         r.get do
@@ -270,5 +273,5 @@ class LITGoalsApp < Roda
       r.public
     end
 
-  # end
+  end
 end
