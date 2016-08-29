@@ -167,7 +167,7 @@ module GoalsViz
 
     def draft!
       self.draft = 1
-    end
+      end
 
     def publish!
       self.draft = 0

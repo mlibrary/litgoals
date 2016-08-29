@@ -1,6 +1,6 @@
 require 'sequel'
 require 'dotenv'
-Dotenv.load
+Dotenv.overload
 
 
 module GoalsViz

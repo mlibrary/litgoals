@@ -1,7 +1,8 @@
 Encoding.default_external = 'utf-8'
+
 require 'pry'
 require 'dotenv'
-Dotenv.load
+Dotenv.overload
 
 require 'roda'
 require 'pry'
@@ -31,7 +32,7 @@ SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
 
 def get_uniqname_from_env
-  'dueberb'
+  ENV['HTTP_X_REMOTE_USER']
 end
 
 
@@ -173,7 +174,8 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-    uniqname          = get_uniqname_from_env()
+#    uniqname          = get_uniqname_from_env()
+    uniqname = r.env['HTTP_X_REMOTE_USER']
     user              = GoalsViz::Person.find(uniqname: uniqname)
     @user             = user
 
@@ -261,6 +263,9 @@ class LITGoalsApp < Roda
 
 
       r.on 'api' do
+        r.on 'env' do
+          "<pre>" + r.env.keys.sort.map{|k| "#{k} => #{r.env[k]}"}.join("\n") + "</pre>"
+        end
 
         r.get 'user/:uniqname' do |uniqname|
           u = GoalsViz::Person.find(uniqname: uniqname)
