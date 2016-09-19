@@ -1,7 +1,8 @@
 Encoding.default_external = 'utf-8'
+
 require 'pry'
 require 'dotenv'
-Dotenv.load
+Dotenv.overload
 
 require 'roda'
 require 'pry'
@@ -31,7 +32,7 @@ SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
 
 def get_uniqname_from_env
-  'dueberb'
+  ENV['HTTP_X_REMOTE_USER']
 end
 
 
@@ -112,18 +113,17 @@ def goal_list_for_display(list_of_owners, user)
   end
 
   goals.map do |g|
-    empty_description = g.description.nil? or g.description.empty?
-    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2016/12'
+    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
     {
         'goal-associated':            g.owner.name,
         'goal-target-date':           td,
         'goal-target-date-timestamp': td,
         'goal-title':                 g.title,
-        'goal-description':           empty_description ? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' : g.description,
+        'goal-description':           g.description,
         'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
         'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
-        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/edit_goal/#{g.id}" : '',
-        'goal-published-status':      g.draft? ? 'Draft' : 'Published'
+        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/litgoals/edit_goal/#{g.id}" : '',
+        'goal-published-status':      g.draft? ? 'Draft' : g.status
     }
   end.to_json
 
@@ -174,14 +174,17 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-    uniqname          = get_uniqname_from_env()
+#    uniqname          = get_uniqname_from_env()
+    uniqname = r.env['HTTP_X_REMOTE_USER']
     user              = GoalsViz::Person.find(uniqname: uniqname)
-    user.is_admin     = true
     @user             = user
 
 
-    # r.on "litgoals" do
-    #   # view "about", locals: {user: user}
+    r.root do
+      r.redirect '/litgoals/'
+    end
+
+    r.on "litgoals" do
 
       r.root do
         r.redirect 'goals'
@@ -226,7 +229,7 @@ class LITGoalsApp < Roda
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
             sleep 0.5
-            r.redirect("/goals")
+            r.redirect("goals")
           end
         end
       end
@@ -235,7 +238,7 @@ class LITGoalsApp < Roda
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
           flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
-          r.redirect "/goals"
+          r.redirect "goals"
         end
 
         r.get do
@@ -260,15 +263,18 @@ class LITGoalsApp < Roda
 
 
       r.on 'api' do
+        r.on 'env' do
+          "<pre>" + r.env.keys.sort.map{|k| "#{k} => #{r.env[k]}"}.join("\n") + "</pre>"
+        end
 
         r.get 'user/:uniqname' do |uniqname|
           u = GoalsViz::Person.find(uniqname: uniqname)
-          u.to_json
+          u.name
         end
       end
 
       r.public
     end
 
-  # end
+  end
 end
