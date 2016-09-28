@@ -32,12 +32,10 @@ CREATE TABLE goalowner (
 
 CREATE TABLE IF NOT EXISTS goal (
   id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  owner_uniqname VARCHAR(255),
   creator_uniqname VARCHAR(255),
   title VARCHAR(255),
   description TEXT,
   status VARCHAR(255),
-  platform VARCHAR(255),
   target_date DATE,
   draft TINYINT DEFAULT 0,
   created DATE,
@@ -50,3 +48,7 @@ CREATE TABLE IF NOT EXISTS goaltogoal (
   parentgoalid INTEGER UNSIGNED
 )  ENGINE=InnoDB;
 
+CREATE table IF NOT EXISTS goaltoowner (
+  goalid INTEGER UNSIGNED,
+  ownerid INTEGER UNSIGNED
+) ENGINE=InnoDB;

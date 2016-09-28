@@ -96,7 +96,7 @@ def goal_list_for_selectize(list_of_owners)
     {
         title:       g.title,
         uid:         g.id,
-        domain:      g.owner.name,
+        domain:      g.owner_names.join(', '),
         description: g.description || "[no description given]"
     }
   end.to_json
@@ -115,7 +115,7 @@ def goal_list_for_display(list_of_owners, user)
   goals.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
     {
-        'goal-associated':            g.owner.name,
+        'goal-associated':            g.owner_names.join(', '),
         'goal-target-date':           td,
         'goal-target-date-timestamp': td,
         'goal-title':                 g.title,
@@ -135,7 +135,10 @@ def division_goal_tree
   h = Hash.new { [] }
 
   GoalsViz::Goal.all_unit_goals.each do |g|
-    h[UNITS[g.owner_uniqname].name] << g
+    g.owners.each do |owner|
+      h[UNITS[owner.uniqname].name] << g
+    end
+
   end
 
   h

@@ -24,6 +24,7 @@ group :development do
   gem "bundler", "~> 1.3"
   gem "rake", "~>11.0"
   gem "minitest", "~> 5.0"
+  gem "minitest-hooks"
   gem "yard", ">= 0.9.5"
   gem 'guard-puma'
 end

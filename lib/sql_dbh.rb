@@ -42,6 +42,16 @@ module GoalsViz
       @db
     end
 
+    def self.set_up_tables
+      dir = File.dirname(__FILE__)
+      @db << File.read("#{dir}/../seeds/sqlite_tables.sql")
+    end
+
+    def self.initialize_sqlite_memory_db
+      @db  = Sequel.sqlite
+      self.set_up_tables
+    end
+
     def self.initialize_sqlite_db
       dir = File.dirname(__FILE__)
       filename = File.join(dir, "litgoals_fake.db")
@@ -50,11 +60,7 @@ module GoalsViz
       @db  = Sequel.connect("sqlite://#{filename}")
 
       unless already_exists
-        # seed it
-        db << File.read("#{dir}/../seeds/sqlite_tables.sql")
-        load "#{dir}/../seeds/seed.rb"
-        s = GoalsViz::Seed.new(db)
-        s.seed
+        self.set_up_tables
       end
     end
 

@@ -24,6 +24,14 @@ module GoalsViz
       where(is_admin: true)
     end
 
+    def admin!
+      self.is_admin = true
+    end
+
+    def admin?
+      self.is_admin
+    end
+
   end
 
   class GoalOwner < Sequel::Model
@@ -136,21 +144,28 @@ module GoalsViz
     many_to_many :child_goals, :class => Goal, :left_key=>:childgoalid, :right_key=>:parentgoalid,
                  :join_table=>:goaltogoal
 
+    many_to_many :associated_owners, :class=>GoalOwner, :right_key => :goalid, :left_key => :ownerid,
+                 :join_table => :goaltoowner
+
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
     def person_or_unit(uniqname)
       Person.find(uniqname: uniqname) || Unit.find(uniqname: uniqname)
     end
 
-    def owner
-      person_or_unit(owner_uniqname)
+    def owners
+      self.associated_owners.map{|x| person_or_unit(x.uniqname)}
     end
 
+    def owners=(x)
+      self.remove_all_associated_owners
+      Array(x).each {|owner| self.add_associated_owner owner}
 
-    def owner=(goalowner)
-      self.owner_uniqname = goalowner.uniqname
     end
 
+    def owner_names
+      self.owners.map{|x| x.name}
+    end
 
     def creator
       person_or_unit(creator_uniqname)
