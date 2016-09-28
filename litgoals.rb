@@ -31,9 +31,7 @@ SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 
 COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
 
-def get_uniqname_from_env
-  ENV['HTTP_X_REMOTE_USER']
-end
+DEFAULT_USER_UNIQNAME = 'dueberb'
 
 
 def goal_form_locals(user, goal=nil)
@@ -70,6 +68,7 @@ end
 def goal_from_params(params)
   goal_id  = params.delete('goal_id')
   ags      = params.delete('associated-goals')
+  newowners = params.delete('associated_owners')
   bad_date = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
   goal     = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
 
@@ -106,23 +105,28 @@ end
 # We want all the goals for the user, and all the non-draft ones for everyone else
 
 def goal_list_for_display(list_of_owners, user)
+  LOG.warn "list_of_owners is nil" if list_of_owners.nil?
+  LOG.warn "user is nil" if user.nil?
   goals = list_of_owners.map(&:goals).flatten.uniq
 
   unless user.is_admin
-    goals = goals.find_all{|x| x.owner == user or !x.draft?}
+    goals = goals.find_all{|x| x.owners.include?(user) or !x.draft?}
   end
+
+  LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
 
   goals.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
+    is_editor = (user.is_admin or g.owners.include?(user))
     {
-        'goal-associated':            g.owner_names.join(', '),
+        'goal-owners':                g.owners.map(&:name).join('<br/>'),
         'goal-target-date':           td,
         'goal-target-date-timestamp': td,
         'goal-title':                 g.title,
         'goal-description':           g.description,
-        'goal-my-goal':               g.owner.id == user.id ? 'My Goal' : '',
-        'goal-edit-show':             (user.is_admin or g.owner == user) ? '' : 'display: none;',
-        'goal-edit-href':             (user.is_admin or g.owner == user) ? "/litgoals/edit_goal/#{g.id}" : '',
+        'goal-my-goal':               g.owners.include?(user) ? 'My Goal' : '',
+        'goal-edit-show':             is_editor ? '' : 'display: none;',
+        'goal-edit-href':             is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
         'goal-published-status':      g.draft? ? 'Draft' : g.status
     }
   end.to_json
@@ -144,16 +148,19 @@ def division_goal_tree
   h
 end
 
-def save_goal(goal, associated_goals)
-  LOG.warn "Goal draft status is #{goal.draft}"
+def save_goal(goal, associated_goals, associated_owners)
 
   goal.save
-  LOG.warn "Goal draft status is #{goal.draft}"
-  ags = Array(associated_goals).delete_if(&:empty?)
+  ags = Array(associated_goals)
   unless ags.empty?
     goal.remove_all_parent_goals
     goal.save
-    ags.each { |ag| LOG.warn("Adding parent goal #{ag}"); goal.add_parent_goal(GoalsViz::Goal[ag.to_i]); }
+    ags.each { |ag| LOG.warn("Adding parent goal #{ag.title}"); goal.add_parent_goal(ag) }
+    goal.save
+  end
+
+  unless associated_owners.empty?
+    goal.owners = associated_owners
     goal.save
   end
 end
@@ -177,8 +184,7 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-#    uniqname          = get_uniqname_from_env()
-    uniqname = r.env['HTTP_X_REMOTE_USER']
+    uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
     user              = GoalsViz::Person.find(uniqname: uniqname)
     @user             = user
 
@@ -214,10 +220,19 @@ class LITGoalsApp < Roda
 
         # Submit for saving
         r.post do
-          LOG.warn(r.params.to_json)
+          LOG.warn("Posting: " + r.params.to_json)
           validation = GoalsViz::GoalSchema.(r.params)
           errors     = validation.messages(full: true)
-          ags        = r.params.delete('associated-goals')
+
+          agIDString   = r.params.delete('associated-goals')
+          ags = agIDString.split(/\s*,\s*/).delete_if(&:empty?).map{|agid| GoalsViz::Goal[agid.to_i]}
+          LOG.warn "Ags are #{ags.map(&:title).join("; ")}"
+
+          ownerIDs     = r.params.delete('associated-owners')
+          LOG.warn "OwnerIDs is #{ownerIDs} of type #{ownerIDs.class}"
+          owners = GoalsViz::GoalOwner.where(id: ownerIDs).to_a
+          LOG.warn "Owners are #{owners.map(&:uniqname).join("; ")}"
+
           g          = goal_from_params(r.params)
           is_newgoal = g.id.nil?
           LOG.warn("Goal from params is #{g}")
@@ -228,7 +243,7 @@ class LITGoalsApp < Roda
             r.redirect
           else
             LOG.warn "Saving goal #{g.id}"
-            save_goal(g, ags)
+            save_goal(g, ags, owners)
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
             sleep 0.5

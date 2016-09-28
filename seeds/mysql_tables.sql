@@ -33,7 +33,7 @@ CREATE TABLE goalowner (
 CREATE TABLE IF NOT EXISTS goal (
   id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   creator_uniqname VARCHAR(255),
-  title VARCHAR(255),
+  title text,
   description TEXT,
   status VARCHAR(255),
   target_date DATE,

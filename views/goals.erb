@@ -42,7 +42,7 @@
 
 <div style="display: none;">
   <li id="goal-item-template">
-    <a class="button-light button-small goal-edit goal-edit-href" href="">Edit</a>
+    <a class="button-light button-small goal-edit goal-edit-show goal-edit-href" href="">Edit</a>
     <span class="goal-my-goal"></span>
     <h5 class="goal-title no-spacing"></h5>
     <p class="goal-description"></p>
@@ -53,12 +53,14 @@
       </p>
       <p class="goal-metadata">
         Goal Scope<br />
-        <span class="goal-associated"></span>
+        <span class="goal-owners"></span>
       </p>
       <p class="goal-metadata">
         Goal Status<br />
         <span class="goal-published-status"></span>
       </p>
+    </div>
+    <div class="goal-associated-goals">
     </div>
   </li>
 </div>
@@ -68,7 +70,7 @@
   var options = {
     item: 'goal-item-template',
     valueNames: [
-      'goal-associated',
+      'goal-owners',
       { name: 'goal-target-date-timestamp', attr: 'data-timestamp'},
       'goal-target-date',
       'goal-title',

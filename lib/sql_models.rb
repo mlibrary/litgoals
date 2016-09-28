@@ -10,7 +10,7 @@ module GoalsViz
   class Goal < GoalOwner;
 
     def self.all_unit_goals
-      where(owner_uniqname: GoalsViz::Unit.map(:uniqname)).all
+      where(owner: GoalsViz::Unit.all)
     end
 
   end
@@ -38,7 +38,8 @@ module GoalsViz
     set_dataset DB.db[:goalowner]
     plugin :after_initialize
 
-    one_to_many :goals, class: Goal, primary_key: :uniqname, key: :owner_uniqname
+    many_to_many :goals, :class=>Goal, :left_key => :goalid, :right_key => :ownerid,
+                 :join_table => :goaltoowner
 
     def parent
       self.class.find(uniqname: parent_uniqname)

@@ -83,7 +83,8 @@ module GoalsViz
         owner = GoalsViz::Unit.find(uniqname: ownername)
         puts "Owner is #{owner} (based on #{ownername}) for #{goaltitle}"
         goal = GoalsViz::Goal.new(title: goaltitle, description: "Lorum whatever")
-        goal.owner = owner
+        goal.save
+        goal.add_associated_owner  owner
         goal.save
       end
     end

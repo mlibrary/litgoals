@@ -11,22 +11,24 @@
 <div class="container">
 
   <form action="/litgoals/new_goal" method="post">
+
     <input type="hidden" name="goal_id" value="<%= goal.id %>">
 
     <fieldset>
       <% if user.is_admin %>
-          <label for="owner_uniqname">Goal Scope</label>
+          <label for="associated_owners">Goal Scope</label>
           <p class="help-text">
             (This field is displayed for admins only)
           </p>
           <div class="radioset">
             <%=
-              forme.input(:radioset,
-                          name:     "owner_uniqname",
-                          id:       "owner_uniqname",
-                          options:  [["Personal Goal", user.uniqname,]] +
-                                        units.map { |u| [u.name, u.abbreviation] },
-                          selected: goal.owner_uniqname
+              forme.input(:checkboxset,
+                          multiple: true,
+                          name:     "associated-owners[]",
+                          id:       "associated-owners[]",
+                          options:  [["Personal Goal for #{user.name}", user.id]] +
+                                        units.map { |u| [u.name, u.id] },
+                          selected: goal.owners.map(&:id)
 
               )
            %>
@@ -59,20 +61,11 @@
       <label for="associated-goals">Associated Goals</label>
       <p class="help-text">
         Search for and associate other goals with this goal.
-        <a target="_blank.html" href="goals.html">View list of goals.</a>
+        <a target="_blank.html" href="../goals">View list of goals.</a>
       </p>
       <input id="associated-goals" name="associated-goals" type="text" placeholder="Type to search"/>
     </fieldset>
 
-    <fieldset>
-      <label for="platform">"The Platform"</label>
-      <p class="help-text">
-        To which phase of work on The Platform&trade;, if any, does this goal most apply?
-      </p>
-      <div class="radioset">
-        <%= forme.input(:radioset, name: 'platform', options: platform.map { |x| [x, x] }, selected: goal.platform) %>
-      </div>
-    </fieldset>
 
     <fieldset>
       <label>Status</label>
