@@ -95,8 +95,14 @@
       <%= forme.input(:text, name: 'target_date', placeholder: 'YYYY/MM', value: goal.target_date_string) %>
     </fieldset>
 
+    <fieldset class="full-width">
+      <label for="notes">Notes</label>
+      <textarea id="notes"></textarea>
+
+    </fieldset>
+
     <input type="submit" value="Save and publish" class="button"/>
-    <input type="submit" name="draft" value="Save as draft" class="button-light"/>
+    <input type="submit" name="draft" value="Save as draft" class="button button-light"/>
   </form>
 
 </div>
