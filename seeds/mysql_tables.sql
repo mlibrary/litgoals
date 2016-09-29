@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS goal (
   creator_uniqname VARCHAR(255),
   title text,
   description TEXT,
+  notes TEXT,
   status VARCHAR(255),
   target_date DATE,
   draft TINYINT DEFAULT 0,
