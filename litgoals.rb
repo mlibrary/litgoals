@@ -41,7 +41,7 @@ def goal_form_locals(user, goal=nil)
 
   forme                   = Forme::Form.new
   units                   = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
-  interesting_goal_owners = SORTED_UNITS.dup.unshift(user)
+  interesting_goal_owners = allunits.unshift(user)
   status_options          = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
 
   {
@@ -91,7 +91,8 @@ end
 
 
 def goal_list_for_selectize(list_of_owners)
-  list_of_owners.map(&:goals).flatten.uniq.map do |g|
+
+  list_of_owners.map(&:reload).map(&:goals).flatten.uniq.map do |g|
     {
         title:       g.title,
         uid:         g.id,
@@ -107,7 +108,7 @@ end
 def goal_list_for_display(list_of_owners, user)
   LOG.warn "list_of_owners is nil" if list_of_owners.nil?
   LOG.warn "user is nil" if user.nil?
-  goals = list_of_owners.map(&:goals).flatten.uniq
+  goals = list_of_owners.map(&:reload).map(&:goals).flatten.uniq
 
   unless user.is_admin
     goals = goals.find_all{|x| x.owners.include?(user) or !x.draft?}
@@ -165,6 +166,9 @@ def save_goal(goal, associated_goals, associated_owners)
   end
 end
 
+def allunits
+  GoalsViz::Unit.all.sort{|a,b| a.name <=> b.name}
+end
 
 class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
@@ -201,7 +205,7 @@ class LITGoalsApp < Roda
 
 
       r.get 'goals' do
-        interesting_owners = SORTED_UNITS.dup.unshift(user)
+        interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
 
         locals = {
             user:                  user,
