@@ -234,11 +234,14 @@ class LITGoalsApp < Roda
 
           ownerIDs     = r.params.delete('associated-owners')
           LOG.warn "OwnerIDs is #{ownerIDs} of type #{ownerIDs.class}"
-          owners = GoalsViz::GoalOwner.where(id: ownerIDs).to_a
+          owners = GoalsViz::GoalOwner.where(id: ownerIDs).all
+          LOG.warn owners;
           LOG.warn "Owners are #{owners.map(&:uniqname).join("; ")}"
 
           g          = goal_from_params(r.params)
+          g.creator_uniqname = user.uniqname
           is_newgoal = g.id.nil?
+
           LOG.warn("Goal from params is #{g}")
           if errors.size > 0
             LOG.warn "Problem: #{errors.values}"

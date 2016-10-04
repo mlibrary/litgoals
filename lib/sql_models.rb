@@ -159,9 +159,9 @@ module GoalsViz
     end
 
     def owners=(x)
+      LOG.warn "Trying to add owners #{x}"
       self.remove_all_associated_owners
-      Array(x).each {|owner| self.add_associated_owner owner}
-
+      Array(x).each {|owner| self.add_associated_owner owner; LOG.warn "Added owner #{owner.uniqname}"}
     end
 
     def owner_names
