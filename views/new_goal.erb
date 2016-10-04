@@ -35,7 +35,7 @@
           </div>
 
     <% else %>
-          <input type="hidden" name="owner_uniqname" value="<%= user.uniqname %>"/>
+          <input type="hidden" name="associated-owners[]" value="<%= user.uniqname %>"/>
       <% end %>
       <input type="hidden" name="creator_uniqname" value="<%= user.uniqname %>"/>
     </fieldset>
