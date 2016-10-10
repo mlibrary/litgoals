@@ -13,12 +13,19 @@ module GoalsViz
       where(owner: GoalsViz::Unit.all)
     end
 
+
+
   end
 
 
   class Unit < GoalOwner;
   end
+
   class Person < GoalOwner;
+
+    def tagged_id
+      "p#{self.id}"
+    end
 
     def self.admins
       where(is_admin: true)
@@ -85,7 +92,9 @@ module GoalsViz
     many_to_one :parent_unit, class: Unit, primary_key: :parent_uniqname, key: :uniqname
     one_to_many :people, class: Person, primary_key: :uniqname, key: :parent_uniqname
 
-
+    def tagged_id
+      "u#{self.id}"
+    end
 
     def after_initialize # or after_initialize
       super
@@ -149,6 +158,11 @@ module GoalsViz
                  :join_table => :goaltoowner
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
+
+
+    def tagged_id
+      "g#{self.id}"
+    end
 
     def person_or_unit(uniqname)
       Person.find(uniqname: uniqname) || Unit.find(uniqname: uniqname)

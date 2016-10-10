@@ -14,6 +14,7 @@ LOG = Logger.new(STDERR)
 
 require_relative "lib/constants"
 require_relative "lib/sql_dbh"
+require_relative "lib/json_graph"
 
 
 # Need to set the GoalsViz::DB before requiring the models
@@ -197,12 +198,17 @@ class LITGoalsApp < Roda
       r.redirect '/litgoals/'
     end
 
+
+
     r.on "litgoals" do
 
       r.root do
         r.redirect 'goals'
       end
 
+      r.on "jsongraph" do
+        GoalsViz::JSONGraph.simple_graph
+      end
 
       r.get 'goals' do
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
