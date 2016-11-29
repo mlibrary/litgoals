@@ -1,3 +1,4 @@
+# noinspection SqlNoDataSourceInspectionForFile
 -- People belong to units. Units belong to each other. Either can have goals
 -- and a unit as a "parent." So, we'll model them as the same thing
 
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS goal (
   title text,
   description TEXT,
   notes TEXT,
+  goal_year INTEGER UNSIGNED,
   status VARCHAR(255),
   target_date DATE,
   draft TINYINT DEFAULT 0,

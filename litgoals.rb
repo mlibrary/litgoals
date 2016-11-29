@@ -8,6 +8,7 @@ require 'roda'
 require 'pry'
 require 'sequel'
 require 'forme'
+require 'json'
 
 require 'logger'
 LOG = Logger.new(STDERR)
@@ -131,7 +132,8 @@ def goal_list_for_display(list_of_owners, user)
         'goal-my-goal':               g.owners.include?(user) ? 'My Goal' : '',
         'goal-edit-show':             is_editor ? '' : 'display: none;',
         'goal-edit-href':             is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
-        'goal-published-status':      g.draft? ? 'Draft' : g.status
+        'goal-published-status':      g.draft? ? 'Draft' : g.status,
+        'goal_year':                  g.goal_year
     }
   end.to_json
 

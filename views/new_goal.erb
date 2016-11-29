@@ -41,6 +41,13 @@
     </fieldset>
 
     <fieldset class="full-width">
+      <label for="goal_year">Beginning year of goal</label>
+      <%=  forme.input(:select, multiple: false, name: 'goal_year',
+           options: [['2016-17', 2016], ['2017-18', 2017]],
+           selected: 2016
+           ) %>
+    </fieldset>
+    <fieldset class="full-width">
       <label for="title">Title</label>
       <p class="help-text">
         Give your goal a title that can quickly identify it's purpose.

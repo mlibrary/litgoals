@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS goal (
   description TEXT,
   status VARCHAR(255),
   notes TEXT,
+  goal_year INTEGER UNSIGNED,
   draft INTEGER,
   target_date DATE,
   created DATE,

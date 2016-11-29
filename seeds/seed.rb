@@ -82,7 +82,7 @@ module GoalsViz
         goaltitle, ownername = l.chomp.match(/\A(.*)\s+(.*)\Z/).captures
         owner = GoalsViz::Unit.find(uniqname: ownername)
         puts "Owner is #{owner} (based on #{ownername}) for #{goaltitle}"
-        goal = GoalsViz::Goal.new(title: goaltitle, description: "Lorum whatever")
+        goal = GoalsViz::Goal.new(title: goaltitle, description: "Lorum whatever", goal_year: 2016, status: 'In progress')
         goal.save
         goal.add_associated_owner  owner
         goal.save
