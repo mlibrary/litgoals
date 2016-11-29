@@ -6,7 +6,7 @@ gem 'dotenv'
 gem 'slim'
 
 gem 'sequel'
-# gem 'sqlite3'
+gem 'sqlite3'
 gem 'mysql2'
 gem 'neo4j', '~>4.0'
 

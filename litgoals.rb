@@ -25,6 +25,7 @@ require_relative "lib/sql_models"
 
 Sequel::Model.plugin :json_serializer
 
+
 UNITS        = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
@@ -66,6 +67,7 @@ end
 
 # Turn a form submission into a goal
 
+# noinspection RubyInterpreterInspection
 def goal_from_params(params)
   goal_id  = params.delete('goal_id')
   ags      = params.delete('associated-goals')

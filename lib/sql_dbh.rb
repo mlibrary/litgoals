@@ -33,10 +33,10 @@ module GoalsViz
     # In the absense of an already-defined db, pick one up
     # from the environment variables
     def self.initialize_mysql_db
-      @db = Sequel.connect(adapter:  ENV['litgoals_adapter'],
+      @db = Sequel.connect(adapter: ENV['litgoals_adapter'],
                            database: ENV['litgoals_database'],
-                           user:     ENV['litgoals_user'],
-                           host:     ENV['litgoals_host'],
+                           user: ENV['litgoals_user'],
+                           host: ENV['litgoals_host'],
                            password: ENV['litgoals_password']
       )
       @db
@@ -48,20 +48,26 @@ module GoalsViz
     end
 
     def self.initialize_sqlite_memory_db
-      @db  = Sequel.sqlite
+      @db = Sequel.sqlite
       self.set_up_tables
     end
 
     def self.initialize_sqlite_db
       dir = File.dirname(__FILE__)
       filename = File.join(dir, "litgoals_fake.db")
-      already_exists = File.exist?(filename)
-
-      @db  = Sequel.connect("sqlite://#{filename}")
-
-      unless already_exists
-        self.set_up_tables
+      if File.exist?(filename)
+        File.delete(filename)
       end
+
+      @db = Sequel.connect("sqlite://#{filename}")
+      puts "Setting up tables for sqlite at #{filename}"
+      self.set_up_tables
+
+      puts "Seeing sqlite3 tables"
+      require_relative "../seeds/seed.rb"
+      GoalsViz::Seed.new(@db).seed
+
+      @db
     end
 
   end

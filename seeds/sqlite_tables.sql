@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS goal (
   title VARCHAR(255),
   description TEXT,
   status VARCHAR(255),
-  platform VARCHAR(255),
+  notes TEXT,
   draft INTEGER,
   target_date DATE,
   created DATE,
@@ -48,4 +48,11 @@ CREATE TABLE IF NOT EXISTS goaltogoal (
   childgoalid INTEGER UNSIGNED,
   parentgoalid INTEGER UNSIGNED
 ) ;
+
+CREATE table IF NOT EXISTS goaltoowner (
+  goalid INTEGER UNSIGNED,
+  ownerid INTEGER UNSIGNED
+);
+
+
 

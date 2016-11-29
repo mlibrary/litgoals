@@ -5,10 +5,10 @@
 #  * Goal
 #
 # And four types of links
-#  * unit is_a_subunit_of other_unit
-#  * person is_a_member_of unit
-#  * goal is_a_subgoal_of other_goal
-#  * goal belongs_to person_or_unit
+#  * unit   is_subunit_of other_unit
+#  * person is_member_of unit
+#  * goal   is_subgoal_of other_goal
+#  * goal   is_goal_of person_or_unit
 #
 # The structure is as follows
 #
