@@ -17,7 +17,6 @@
 
         <p class="facet-sort">
           <label>Sort by</label>
-          <!--<span class="sort" data-sort="goal-target-date">Target Date</span>-->
           <button class="facet sort" data-sort="goal-title" href="">Title</button>
           <button class="facet sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
         </p>
@@ -36,6 +35,10 @@
     </p>
 
     <ul class="list-alternative list goal-list"></ul>
+
+    <ul class="pagination">
+
+    </ul>
   </div>
 
 </div>
@@ -48,14 +51,6 @@
     <p class="goal-description"></p>
     <div class="goal-metadata-container">
       <p class="goal-metadata">
-        Goal start year<br />
-        <span class="goal_year"></span>
-      </p>
-      <p class="goal-metadata">
-        Target Date<br />
-        <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
-      </p>
-      <p class="goal-metadata">
         Goal Scope<br />
         <span class="goal-owners"></span>
       </p>
@@ -63,12 +58,15 @@
         Goal Status<br />
         <span class="goal-published-status"></span>
       </p>
+      <p class="goal-metadata">
+        Target Date<br />
+        <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
+      </p>
     </div>
     <div class="goal-associated-goals">
     </div>
   </li>
 </div>
-
 
 <script>
   var options = {
@@ -81,9 +79,13 @@
       'goal-published-status',
       'goal-description',
       'goal-my-goal',
-        'goal_year',
+      'goal-fiscal-year',
       { name: 'goal-edit-href', attr: 'href' },
       { name: 'goal-edit-show', attr: 'style'}
+    ],
+    page: 10,
+    plugins: [
+      ListPagination({})
     ]
   }
 
@@ -111,7 +113,9 @@
   var goal_list_info = document.getElementById('goal-list-info')
 
   var updateFacetInfo = function() {
-    var text = 'Showing ' + goalList.visibleItems.length + ' goal'
+    var text = 'Matched ' + goalList.matchingItems.length + ' goal'
+
+
 
     if (goalList.visibleItems.length != 1) {
       text = text + 's'
