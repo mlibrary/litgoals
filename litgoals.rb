@@ -206,6 +206,9 @@ class LITGoalsApp < Roda
 
     r.on "litgoals" do
 
+      locals = { user: user}
+
+
       r.root do
         r.redirect 'goals'
       end
@@ -216,10 +219,9 @@ class LITGoalsApp < Roda
 
       r.on 'goals' do
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
-        locals = { user: user}
 
         r.is do
-          "Better do something here"
+          view 'yearlist'
         end
 
         r.get /(\d+)/ do |yearstring|
