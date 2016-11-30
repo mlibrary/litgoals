@@ -124,18 +124,18 @@ def goal_list_for_display(list_of_owners, user)
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
     is_editor = (user.is_admin or g.owners.include?(user))
     {
-        'goal-owners':                g.owners.map(&:name).join('<br/>'),
-        'goal-target-date':           td,
-        'goal-target-date-timestamp': td,
-        'goal-title':                 g.title,
-        'goal-description':           g.description,
-        'goal-my-goal':               g.owners.include?(user) ? 'My Goal' : '',
-        'goal-edit-show':             is_editor ? '' : 'display: none;',
-        'goal-edit-href':             is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
-        'goal-published-status':      g.draft? ? 'Draft' : g.status,
-        'goal-fiscal-year':           g.goal_year
+        'goal-owners' =>                g.owners.map(&:name).join('<br/>'),
+        'goal-target-date'=>           td,
+        'goal-target-date-timestamp'=> td,
+        'goal-title'=>                 g.title,
+        'goal-description'=>           g.description,
+        'goal-my-goal'=>               g.owners.include?(user) ? 'My Goal' : '',
+        'goal-edit-show'=>             is_editor ? '' : 'display: none;',
+        'goal-edit-href'=>             is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
+        'goal-published-status'=>      g.draft? ? 'Draft' : g.status,
+        'goal-fiscal-year'=>           g.goal_year
     }
-  end.to_json
+  end
 
 end
 
@@ -214,14 +214,25 @@ class LITGoalsApp < Roda
         GoalsViz::JSONGraph.simple_graph
       end
 
-      r.get 'goals' do
+      r.on 'goals' do
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
+        locals = { user: user}
 
-        locals = {
-            user:                  user,
-            goal_list_for_display: goal_list_for_display(interesting_owners, user)
-        }
-        view 'goals', locals: locals
+        r.is do
+          "Better do something here"
+        end
+
+        r.get /(\d+)/ do |yearstring|
+          year = yearstring.to_i
+
+
+          goals =  goal_list_for_display(interesting_owners, user)
+          goals = goals.select{|g| g['goal-fiscal-year'] == year}
+          locals[:goal_list_for_display] = goals.to_json
+          locals[:goal_year_string] = "#{year - 1}/#{year}"
+          view 'goals', locals: locals
+        end
+
       end
 
 
