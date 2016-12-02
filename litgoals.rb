@@ -297,7 +297,7 @@ class LITGoalsApp < Roda
             LOG.warn "Saving goal #{g.id}"
             save_goal(g, ags, owners)
             action                 = is_newgoal ? "added" : "edited"
-            flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
+            flash[:goal_added_msg] = "Goal <span class=\"goal-title\"">#{g.title}</span> #{action}"
             sleep 0.5
             r.redirect current_fiscal_year_url
           end
