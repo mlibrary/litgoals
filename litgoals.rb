@@ -18,6 +18,19 @@ require_relative "lib/sql_dbh"
 require_relative "lib/json_graph"
 
 
+require 'date'
+
+def current_fiscal_year
+  d = DateTime.now
+  if d.month <= 6
+    d.year
+  else
+    d.year + 1
+  end
+end
+
+
+
 # Need to set the GoalsViz::DB before requiring the models
 GoalsViz::DB.setup_from_environment
 
@@ -26,6 +39,9 @@ require_relative "lib/sql_models"
 
 Sequel::Model.plugin :json_serializer
 
+def fystring(yr)
+  "FY #{yr}"
+end
 
 UNITS        = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
@@ -193,9 +209,6 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-    uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
-    user              = GoalsViz::Person.find(uniqname: uniqname)
-    @user             = user
 
 
     r.root do
@@ -206,11 +219,19 @@ class LITGoalsApp < Roda
 
     r.on "litgoals" do
 
-      locals = { user: user}
+      uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
+      @user              = GoalsViz::Person.find(uniqname: uniqname)
+      @current_fiscal_year = current_fiscal_year
+      locals = { user: @user,
+                 current_fiscal_year: @current_fiscal_year
+      }
 
+      user  = @user
+
+      current_fiscal_year_url = "/litgoals/goals/#{current_fiscal_year}"
 
       r.root do
-        r.redirect 'goals'
+        r.redirect current_fiscal_year_url
       end
 
       r.on "jsongraph" do
@@ -218,10 +239,11 @@ class LITGoalsApp < Roda
       end
 
       r.on 'goals' do
+        puts locals
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
 
         r.is do
-          view 'archive'
+          view 'archive', locals: locals
         end
 
         r.get /(\d+)/ do |yearstring|
@@ -240,7 +262,7 @@ class LITGoalsApp < Roda
 
       r.on "create" do
         r.get do
-          locals     = goal_form_locals(user, flash[:bad_goal])
+          locals .merge!  goal_form_locals(user, flash[:bad_goal])
           @pagetitle = 'Create a new goal'
           view "create", locals: locals
         end
@@ -277,7 +299,7 @@ class LITGoalsApp < Roda
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <em>#{g.title}</em> #{action}"
             sleep 0.5
-            r.redirect("goals")
+            r.redirect current_fiscal_year_url
           end
         end
       end
@@ -286,7 +308,7 @@ class LITGoalsApp < Roda
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
           flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
-          r.redirect "goals"
+          r.redirect current_fiscal_year_url
         end
 
         r.get do
