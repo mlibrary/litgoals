@@ -221,7 +221,7 @@ class LITGoalsApp < Roda
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
 
         r.is do
-          view 'yearlist'
+          view 'archive'
         end
 
         r.get /(\d+)/ do |yearstring|
@@ -231,18 +231,18 @@ class LITGoalsApp < Roda
           goals =  goal_list_for_display(interesting_owners, user)
           goals = goals.select{|g| g['goal-fiscal-year'] == year}
           locals[:goal_list_for_display] = goals.to_json
-          locals[:goal_year_string] = "#{year - 1}/#{year}"
+          locals[:goal_year_string] = "FY #{year}"
           view 'goals', locals: locals
         end
 
       end
 
 
-      r.on "new_goal" do
+      r.on "create" do
         r.get do
           locals     = goal_form_locals(user, flash[:bad_goal])
           @pagetitle = 'Create a new goal'
-          view "new_goal", locals: locals
+          view "create", locals: locals
         end
 
         # Submit for saving
@@ -293,7 +293,7 @@ class LITGoalsApp < Roda
           goal       = GoalsViz::Goal.find(id: goalid.to_i)
           locals     = goal_form_locals(user, goal)
           @pagetitle = "Edit '#{goal.title}'"
-          view "new_goal", locals: locals
+          view "create", locals: locals
         end
       end
 

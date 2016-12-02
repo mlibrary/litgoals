@@ -29,6 +29,7 @@ footer, header, hgroup, menu, nav, section {
   display: block; }
 
 body {
+  min-width: 20rem;
   line-height: 1; }
 
 ol, ul {
@@ -179,12 +180,12 @@ html {
 */
 .site-header {
   background: #00274C;
-  padding: 1rem; }
+  padding: 1rem 0; }
   @media (min-width: 40rem) {
     .site-header nav {
       float: right; }
     .site-header .nav-list {
-      margin: 0; } }
+      margin-top: 0.25rem; } }
   .site-header .nav-list {
     margin-bottom: 0.5rem; }
 
@@ -519,6 +520,12 @@ label.option {
 
 .nav-list li:first-child {
   padding: 0; }
+
+@media (max-width: 40rem) {
+  .nav-list li {
+    display: block;
+    padding: 0; }
+}
 
 .nav-list a {
   color: #fff;
