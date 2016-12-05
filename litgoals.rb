@@ -1,11 +1,10 @@
 Encoding.default_external = 'utf-8'
 
-require 'pry'
 require 'dotenv'
-Dotenv.overload
+Dotenv.load
 
 require 'roda'
-require 'pry'
+
 require 'sequel'
 require 'forme'
 require 'json'

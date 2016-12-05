@@ -28,4 +28,6 @@ group :development do
   gem 'guard-puma'
   gem 'sqlite3'
   gem 'neo4j', '~>4.0'
+  gem 'pry'
+
 end
