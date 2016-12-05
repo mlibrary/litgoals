@@ -1,7 +1,6 @@
 require 'sequel'
 require 'dotenv'
-Dotenv.overload
-
+Dotenv.load
 
 module GoalsViz
   class DB

@@ -5,10 +5,9 @@ gem 'dotenv'
 
 gem 'slim'
 
-gem 'sequel'
-gem 'sqlite3'
 gem 'mysql2'
-gem 'neo4j', '~>4.0'
+gem 'sequel'
+
 
 
 
@@ -27,4 +26,6 @@ group :development do
   gem "minitest-hooks"
   gem "yard", ">= 0.9.5"
   gem 'guard-puma'
+  gem 'sqlite3'
+  gem 'neo4j', '~>4.0'
 end
