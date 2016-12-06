@@ -252,7 +252,7 @@ class LITGoalsApp < Roda
           goals =  goal_list_for_display(interesting_owners, user)
           goals = goals.select{|g| g['goal-fiscal-year'] == year}
           locals[:goal_list_for_display] = goals.to_json
-          locals[:goal_year_string] = "FY #{year}"
+          locals[:goal_year_string] = "Fiscal Year #{year}"
           view 'goals', locals: locals
         end
 

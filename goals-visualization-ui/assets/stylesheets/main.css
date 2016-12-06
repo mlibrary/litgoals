@@ -218,13 +218,14 @@ body {
   line-height: 1.7;
   font-size: 1.1rem;
   font-family: "Open Sans", sans-serif;
+  min-width: 20rem;
   color: #333; }
 
 /*
   Headings
 */
 h1 {
-  font-size: 2.25rem; }
+  font-size: 2rem; }
 
 h2 {
   font-size: 1.75rem; }
@@ -685,6 +686,12 @@ label.option {
     font-size: 0.85rem; }
   .goal-metadata-container span {
     font-size: 1rem; }
+
+@media (max-width: 32rem) {
+    .goal-metadata-container {
+      display: block;
+    }
+}
 
 .goal-metadata {
   display: block;
