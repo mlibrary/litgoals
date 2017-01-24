@@ -22,9 +22,9 @@ require 'date'
 def current_fiscal_year
   d = DateTime.now
   if d.month <= 6
-    d.year
+    d.year - 1
   else
-    d.year + 1
+    d.year 
   end
 end
 
