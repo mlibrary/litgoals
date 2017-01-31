@@ -265,6 +265,11 @@ class LITGoalsApp < Roda
       r.on "create" do
         r.get do
           locals .merge!  goal_form_locals(user, flash[:bad_goal])
+
+          year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
+               map{|y| [["FY July #{y}-June #{y + 1}", y]]}
+          locals[:two_years_of_fy_options] = year_options
+
           @pagetitle = 'Create a new goal'
           view "create", locals: locals
         end
