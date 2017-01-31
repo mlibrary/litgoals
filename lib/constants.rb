@@ -6,7 +6,6 @@ module GoalsViz
 
 
   GoalSchema = Dry::Validation.Form do
-
     required(:title).filled
     required(:description).filled
     required(:target_date).filled(format?: DATEFORMAT)

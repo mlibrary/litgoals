@@ -248,11 +248,14 @@ class LITGoalsApp < Roda
         r.get /(\d+)/ do |yearstring|
           year = yearstring.to_i
 
-
+          locals[:year] = year
           goals =  goal_list_for_display(interesting_owners, user)
+
+          # Filter to just the wanted year
           goals = goals.select{|g| g['goal-fiscal-year'] == year}
+
           locals[:goal_list_for_display] = goals.to_json
-          locals[:goal_year_string] = "Fiscal Year #{year}"
+          locals[:goal_year_string] = "#{year}"
           view 'goals', locals: locals
         end
 
