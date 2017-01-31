@@ -47,7 +47,9 @@
               <a href="/litgoals/create">Create Goal</a></a>
             </li>
             <li>
-              <a href="/litgoals/goals/<%= current_fiscal_year%>">Goals</a>
+              Goals (<a href="/litgoals/goals/<%= current_fiscal_year%>"><% current_fiscal_year %></a> /
+              (<a href="/litgoals/goals/<%= current_fiscal_year - 1%>"><% current_fiscal_year -1 %></a>
+              )
             </li>
             <li>
               <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= @user.uniqname %></a>
