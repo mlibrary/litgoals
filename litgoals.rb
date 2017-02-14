@@ -94,16 +94,12 @@ def goal_from_params(params)
   draft =  params.delete('draft')
 
   if (draft.nil? or draft.empty?)
-    LOG.warn "Not a draft"
     goal.publish!
-    LOG.warn "Goal draft status is #{goal.draft}"
   else
     LOG.warn "Saving as a draft"
     goal.draft!
-    LOG.warn "Goal draft status is #{goal.draft}"
   end
 
-  LOG.warn(params)
   goal.set_all(params)
   goal
 end
@@ -124,20 +120,27 @@ end
 
 # We want all the goals for the user, and all the non-draft ones for everyone else
 
+def mygoal?(goal, user)
+  return true if goal.creator_uniqname == user.uniqname or goal.owners.include? user
+  return true if user.is_admin and !goal.draft?
+  return false
+end
+
 def goal_list_for_display(list_of_owners, user)
   LOG.warn "list_of_owners is nil" if list_of_owners.nil?
   LOG.warn "user is nil" if user.nil?
-  goals = list_of_owners.map(&:reload).map(&:goals).flatten.uniq
 
-  unless user.is_admin
-    goals = goals.find_all{|x| x.owners.include?(user) or !x.draft?}
-  end
+  ownergoals = list_of_owners.map(&:reload).map(&:goals)
+  mygoals =  GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
+  allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort{|a,b| a.id <=> b.id}
 
+  goals = allgoals.select{|x| mygoal?(x, user)}
+  
   LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
 
   goals.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
-    is_editor = (user.is_admin or g.owners.include?(user))
+    is_editor = (user.is_admin or g.owners.include?(user) or g.creator_uniqname == user.uniqname)
     {
         'goal-owners' =>                g.owners.map(&:name).join('<br/>'),
         'goal-target-date'=>           td,
@@ -151,7 +154,6 @@ def goal_list_for_display(list_of_owners, user)
         'goal-fiscal-year'=>           g.goal_year
     }
   end
-
 end
 
 # "Unit Name" => [list,of,goals]
@@ -175,8 +177,6 @@ def save_goal(goal, associated_goals, associated_owners)
   ags = Array(associated_goals)
   unless ags.empty?
     goal.remove_all_parent_goals
-    goal.save
-    ags.each { |ag| LOG.warn("Adding parent goal #{ag.title}"); goal.add_parent_goal(ag) }
     goal.save
   end
 
@@ -250,6 +250,7 @@ class LITGoalsApp < Roda
 
           locals[:year] = year
           goals =  goal_list_for_display(interesting_owners, user)
+          allgoals = goals
 
           # Filter to just the wanted year
           goals = goals.select{|g| g['goal-fiscal-year'] == year}
@@ -276,25 +277,18 @@ class LITGoalsApp < Roda
 
         # Submit for saving
         r.post do
-          LOG.warn("Posting: " + r.params.to_json)
           validation = GoalsViz::GoalSchema.(r.params)
           errors     = validation.messages(full: true)
 
           agIDString   = r.params.delete('associated-goals')
           ags = agIDString.split(/\s*,\s*/).delete_if(&:empty?).map{|agid| GoalsViz::Goal[agid.to_i]}
-          LOG.warn "Ags are #{ags.map(&:title).join("; ")}"
-
           ownerIDs     = r.params.delete('associated-owners')
-          LOG.warn "OwnerIDs is #{ownerIDs} of type #{ownerIDs.class}"
           owners = GoalsViz::GoalOwner.where(id: ownerIDs).all
-          LOG.warn owners;
-          LOG.warn "Owners are #{owners.map(&:uniqname).join("; ")}"
 
           g          = goal_from_params(r.params)
-          g.creator_uniqname = user.uniqname
+          g.creator_uniqname ||= user.uniqname
           is_newgoal = g.id.nil?
 
-          LOG.warn("Goal from params is #{g}")
           if errors.size > 0
             LOG.warn "Problem: #{errors.values}"
             flash[:error_msg] = errors.values
@@ -321,6 +315,9 @@ class LITGoalsApp < Roda
         r.get do
           goal       = GoalsViz::Goal.find(id: goalid.to_i)
           locals     = goal_form_locals(user, goal)
+          year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
+               map{|y| ["FY July #{y}-June #{y + 1}", y]}
+          locals[:two_years_of_fy_options] = year_options
           @pagetitle = "Edit '#{goal.title}'"
           view "create", locals: locals
         end
