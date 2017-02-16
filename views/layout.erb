@@ -47,13 +47,14 @@
               <a href="/litgoals/create">Create</a>
             </li>
             <li style="color: #fff">
-              <a href="/litgoals/goals/<%= current_fiscal_year%>"><%= current_fiscal_year %> FY Goals</a>
+              <% #require 'pry'; binding.pry %>
+              <a href="<%= current_fiscal_year.goals_url%>">Current Year Goals</a>
             </li>
             <li>
               <a href="/litgoals/goals/">Archive</a>
             </li>
             <li>
-              <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= @user.uniqname %></a>
+              <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= user.uniqname %></a>
             </li>
           </ul>
         </nav>

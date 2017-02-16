@@ -12,18 +12,7 @@ LOG = Logger.new(STDERR)
 require_relative "lib/sql_models"
 require_relative "lib/json_graph"
 require_relative 'lib/constants'
-
-
-
-def current_fiscal_year
-  d = DateTime.now
-  if d.month <= 6
-    d.year - 1
-  else
-    d.year
-  end
-end
-
+require_relative 'lib/Utils/fiscal_year'
 
 
 Sequel::Model.plugin :json_serializer
@@ -184,7 +173,7 @@ class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
 
 
-  plugin :render, cache: false, engine: 'erb'
+  plugin :render, cache: false, engine: 'erb', layout_opts: {merge_locals: true}
   plugin :json, :classes => [Array, Hash, Sequel::Model, GoalsViz::Person]
   plugin :public
   plugin :flash
@@ -208,18 +197,19 @@ class LITGoalsApp < Roda
     r.on "litgoals" do
 
       uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
-      @user = GoalsViz::Person.find(uniqname: uniqname)
-      @current_fiscal_year = current_fiscal_year
-      locals = {user: @user,
-                current_fiscal_year: @current_fiscal_year
+      user = GoalsViz::Person.find(uniqname: uniqname)
+
+
+      currentFY = GoalsViz::FiscalYear.new
+
+      common_locals= {
+          user: user,
+          current_fiscal_year: currentFY
       }
 
-      user = @user
-
-      current_fiscal_year_url = "/litgoals/goals/#{current_fiscal_year}"
 
       r.root do
-        r.redirect current_fiscal_year_url
+        r.redirect currentFY.goals_url
       end
 
       r.on "jsongraph" do
@@ -227,19 +217,19 @@ class LITGoalsApp < Roda
       end
 
       r.on 'goals' do
-        puts locals
         interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
 
+
         r.is do
-          view 'archive', locals: locals
+          view 'archive', locals: common_locals
         end
 
         r.get /(\d+)/ do |yearstring|
           year = yearstring.to_i
 
-          locals[:year] = year
+          locals = common_locals.merge({year: year})
+
           goals = goal_list_for_display(interesting_owners, user)
-          allgoals = goals
 
           # Filter to just the wanted year
           goals = goals.select { |g| g['goal-fiscal-year'] == year }
@@ -254,10 +244,10 @@ class LITGoalsApp < Roda
 
       r.on "create" do
         r.get do
-          locals.merge! goal_form_locals(user, flash[:bad_goal])
+          locals = common_locals.merge goal_form_locals(user, flash[:bad_goal])
 
-          year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
-              map { |y| ["FY July #{y}-June #{y + 1}", y] }
+          year_options = [currentFY, currentFY.next].map(&:to_s)
+
           locals[:two_years_of_fy_options] = year_options
 
           @pagetitle = 'Create a new goal'
