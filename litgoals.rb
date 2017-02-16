@@ -18,10 +18,6 @@ require_relative 'lib/Utils/fiscal_year'
 Sequel::Model.plugin :json_serializer
 
 
-def fystring(yr)
-  "FY #{yr}"
-end
-
 UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
@@ -64,6 +60,7 @@ end
 
 # noinspection RubyInterpreterInspection
 def goal_from_params(params)
+  LOG.warn params
   goal_id = params.delete('goal_id')
   ags = params.delete('associated-goals')
   newowners = params.delete('associated_owners')
@@ -97,14 +94,6 @@ def goal_list_for_selectize(list_of_owners)
 end
 
 
-# We want all the goals for the user, and all the non-draft ones for everyone else
-
-def mygoal?(goal, user)
-  return true if goal.creator_uniqname == user.uniqname or goal.owners.include? user
-  return true if user.is_admin and !goal.draft?
-  return false
-end
-
 def goal_list_for_display(list_of_owners, user)
   LOG.warn "list_of_owners is nil" if list_of_owners.nil?
   LOG.warn "user is nil" if user.nil?
@@ -113,7 +102,7 @@ def goal_list_for_display(list_of_owners, user)
   mygoals = GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
   allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort { |a, b| a.id <=> b.id }
 
-  goals = allgoals.select { |x| mygoal?(x, user) }
+  goals = allgoals.select { |g| g.viewable_by?(user) }
 
   LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
 
@@ -230,6 +219,7 @@ class LITGoalsApp < Roda
           locals = common_locals.merge({year: year})
 
           goals = goal_list_for_display(interesting_owners, user)
+          LOG.debug goals.map{|g| "#{g['goal-id']} -- #{g['goal-fiscal-year']}: #{g['goal-title']}"}
 
           # Filter to just the wanted year
           goals = goals.select { |g| g['goal-fiscal-year'] == year }
@@ -246,7 +236,7 @@ class LITGoalsApp < Roda
         r.get do
           locals = common_locals.merge goal_form_locals(user, flash[:bad_goal])
 
-          year_options = [currentFY, currentFY.next].map(&:to_s)
+          year_options = [currentFY, currentFY.next].map{|x| [x.range_string, x.year]}
 
           locals[:two_years_of_fy_options] = year_options
 
@@ -279,7 +269,7 @@ class LITGoalsApp < Roda
             action = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <span class=\"goal-title\">#{g.title}</span> #{action}"
             sleep 0.5
-            r.redirect current_fiscal_year_url
+            r.redirect currentFY.goals_url
           end
         end
       end
@@ -288,14 +278,17 @@ class LITGoalsApp < Roda
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
           flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
-          r.redirect current_fiscal_year_url
+          r.redirect currentFY.goals_url
         end
 
         r.get do
           goal = GoalsViz::Goal.find(id: goalid.to_i)
-          locals = goal_form_locals(user, goal)
-          year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
-              map { |y| ["FY July #{y}-June #{y + 1}", y] }
+          locals = common_locals.merge goal_form_locals(user, goal)
+          year_options = [currentFY, currentFY.next].map{|x| [x.range_string, x.year]}
+
+          LOG.warn "Here I am!"
+          LOG.warn year_options
+          puts "Whoo"
           locals[:two_years_of_fy_options] = year_options
           @pagetitle = "Edit '#{goal.title}'"
           view "create", locals: locals

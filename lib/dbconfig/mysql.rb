@@ -15,7 +15,7 @@ module GoalsViz
           General.drop_all_tables(db)
           dir = File.dirname(__FILE__)
           sql = File.read("#{dir}/../../seeds/mysql_tables.sql")
-          sql.split(/;/).select{|x| x =~ /S/}.each {|x| db.run x}
+          sql.split(/-- SPLIT/m).select{|x| /\S/.match(x)}.each {|x|  db.run x}
         end
       end
 

@@ -10,10 +10,26 @@ module GoalsViz
   # Pre-declare everything so the associations work
   class GoalOwner < Sequel::Model;
   end
+
   class Goal < GoalOwner;
 
     def self.all_unit_goals
       where(owner: GoalsViz::Unit.all)
+    end
+
+    # Which ones can we link to as a parent_goal?
+    def self.parent_goals_for(user)
+
+    end
+
+    def viewable_by?(user)
+      # puts "Checking #{title} against #{user.name}"
+      return true if creator_uniqname == user.uniqname
+      # puts "#{creator_uniqname} is not the same as #{user.uniqname}"
+      return true if owners.include? user
+      # puts "#{owners} does not include #{user}"
+      return true if user.is_admin and !draft?
+      return false
     end
 
   end

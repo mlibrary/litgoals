@@ -1,3 +1,11 @@
+CREATE TABLE status (
+  id  int(10) unsigned NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) unique,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- SPLIT
+
 CREATE TABLE `goal` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `creator_uniqname` varchar(255) DEFAULT NULL,
@@ -18,6 +26,8 @@ CREATE TABLE `goal` (
 -- Table structure for table `goalowner`
 --
 
+-- SPLIT
+
 
 CREATE TABLE `goalowner` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -31,12 +41,13 @@ CREATE TABLE `goalowner` (
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqname` (`uniqname`)
-) ENGINE=InnoDB AUTO_INCREMENT=79;
+) ENGINE=InnoDB;
 
 
 --
 -- Table structure for table `goaltogoal`
 --
+-- SPLIT
 
 
 CREATE TABLE `goaltogoal` (
@@ -48,21 +59,10 @@ CREATE TABLE `goaltogoal` (
 --
 -- Table structure for table `goaltoowner`
 --
+-- SPLIT
 
 CREATE TABLE `goaltoowner` (
   `goalid` int(10) unsigned DEFAULT NULL,
   `ownerid` int(10) unsigned DEFAULT NULL
 ) ENGINE=InnoDB;
-
-
---
--- Table structure for table `status`
---
-
-
-CREATE TABLE `status` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6;
+;
