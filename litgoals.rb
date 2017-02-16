@@ -145,6 +145,7 @@ def save_goal(goal, associated_goals, associated_owners)
   ags = Array(associated_goals)
   unless ags.empty?
     goal.remove_all_parent_goals
+    ags.each {|x| goal.add_parent_goal(x)}
     goal.save
   end
 
