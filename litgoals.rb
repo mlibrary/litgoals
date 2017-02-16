@@ -25,7 +25,7 @@ SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 
 COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
 
-DEFAULT_USER_UNIQNAME = 'dueberb'
+DEFAULT_USER_UNIQNAME = 'jweise'
 
 
 def goal_form_locals(user, goal=nil)
