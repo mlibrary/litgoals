@@ -44,12 +44,13 @@
         <nav>
           <ul class="nav-list">
             <li>
-              <a href="/litgoals/create">Create Goal</a></a>
+              <a href="/litgoals/create">Create</a>
             </li>
             <li style="color: #fff">
-              Goals (<a href="/litgoals/goals/<%= current_fiscal_year%>"><%= current_fiscal_year %></a> /
-              (<a href="/litgoals/goals/">other years</a>
-              )
+              <a href="/litgoals/goals/<%= current_fiscal_year%>"><%= current_fiscal_year %> FY Goals</a>
+            </li>
+            <li>
+              <a href="/litgoals/goals/">Archive</a>
             </li>
             <li>
               <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= @user.uniqname %></a>
