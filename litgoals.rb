@@ -3,12 +3,15 @@ Encoding.default_external = 'utf-8'
 require 'dotenv'
 Dotenv.load
 
-require 'roda'
+# Set up the database connection information
 
+
+
+require 'roda'
 require 'sequel'
 require 'forme'
 require 'json'
-
+require 'date'
 require 'logger'
 LOG = Logger.new(STDERR)
 
@@ -17,7 +20,10 @@ require_relative "lib/sql_dbh"
 require_relative "lib/json_graph"
 
 
-require 'date'
+
+
+
+
 
 def current_fiscal_year
   d = DateTime.now

@@ -16,6 +16,8 @@ gem "rack-protection", "~> 1.5.3"
 gem "rack_csrf", "~> 2.5.0"
 gem 'forme'
 gem 'dry-validation'
+gem 'dry-container'
+gem 'dry-auto_inject'
 
 gem 'puma', '~>3.0'
 
