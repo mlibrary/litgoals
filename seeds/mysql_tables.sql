@@ -1,57 +1,68 @@
-# noinspection SqlNoDataSourceInspectionForFile
--- People belong to units. Units belong to each other. Either can have goals
--- and a unit as a "parent." So, we'll model them as the same thing
-
-DROP TABLE IF EXISTS status;
-DROP TABLE IF EXISTS goal;
-DROP TABLE IF EXISTS goalowner;
-
-CREATE TABLE IF NOT EXISTS status (
-  id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) unique
-);
-
-
-CREATE TABLE goalowner (
-  id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  uniqname varchar(255) UNIQUE,  -- uniqname or unit abbreviation
-  lastname VARCHAR (255), -- or the whole unit name
-  firstname VARCHAR (255),
-  parent_uniqname VARCHAR(255),
-  created DATE ,
-  is_unit BOOLEAN,
-  is_admin BOOLEAN,
-  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-
-)  ENGINE=InnoDB;
-
-
-
-
-
--- ENUM('Not started', 'On hold', 'In progress', 'Completed', 'Abandoned')
-
-CREATE TABLE IF NOT EXISTS goal (
-  id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  creator_uniqname VARCHAR(255),
-  title text,
-  description TEXT,
-  notes TEXT,
-  goal_year INTEGER UNSIGNED,
-  status VARCHAR(255),
-  target_date DATE,
-  draft TINYINT DEFAULT 0,
-  created DATE,
-  updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)  ENGINE=InnoDB;
-
-
-CREATE TABLE IF NOT EXISTS goaltogoal (
-  childgoalid INTEGER UNSIGNED,
-  parentgoalid INTEGER UNSIGNED
-)  ENGINE=InnoDB;
-
-CREATE table IF NOT EXISTS goaltoowner (
-  goalid INTEGER UNSIGNED,
-  ownerid INTEGER UNSIGNED
+CREATE TABLE `goal` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `creator_uniqname` varchar(255) DEFAULT NULL,
+  `title` text,
+  `description` text,
+  `status` varchar(255) DEFAULT NULL,
+  `target_date` date DEFAULT NULL,
+  `draft` tinyint(4) DEFAULT '0',
+  `created` date DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `notes` text,
+  `goal_year` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+
+--
+-- Table structure for table `goalowner`
+--
+
+
+CREATE TABLE `goalowner` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniqname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
+  `firstname` varchar(255) DEFAULT NULL,
+  `parent_uniqname` varchar(255) DEFAULT NULL,
+  `created` date DEFAULT NULL,
+  `is_unit` tinyint(1) DEFAULT NULL,
+  `is_admin` tinyint(1) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniqname` (`uniqname`)
+) ENGINE=InnoDB AUTO_INCREMENT=79;
+
+
+--
+-- Table structure for table `goaltogoal`
+--
+
+
+CREATE TABLE `goaltogoal` (
+  `childgoalid` int(10) unsigned DEFAULT NULL,
+  `parentgoalid` int(10) unsigned DEFAULT NULL
+) ENGINE=InnoDB;
+
+
+--
+-- Table structure for table `goaltoowner`
+--
+
+CREATE TABLE `goaltoowner` (
+  `goalid` int(10) unsigned DEFAULT NULL,
+  `ownerid` int(10) unsigned DEFAULT NULL
+) ENGINE=InnoDB;
+
+
+--
+-- Table structure for table `status`
+--
+
+
+CREATE TABLE `status` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=6;

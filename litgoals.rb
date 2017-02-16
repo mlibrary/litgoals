@@ -1,27 +1,17 @@
 Encoding.default_external = 'utf-8'
 
-require 'dotenv'
-Dotenv.load
-
-# Set up the database connection information
-
-
-
 require 'roda'
-require 'sequel'
 require 'forme'
 require 'json'
 require 'date'
+
 require 'logger'
 LOG = Logger.new(STDERR)
 
-require_relative "lib/constants"
-require_relative "lib/sql_dbh"
+
+require_relative "lib/sql_models"
 require_relative "lib/json_graph"
-
-
-
-
+require_relative 'lib/constants'
 
 
 
@@ -30,25 +20,20 @@ def current_fiscal_year
   if d.month <= 6
     d.year - 1
   else
-    d.year 
+    d.year
   end
 end
 
 
 
-# Need to set the GoalsViz::DB before requiring the models
-GoalsViz::DB.setup_from_environment
-
-# Now that we've got GoalsViz::DB, we can...
-require_relative "lib/sql_models"
-
 Sequel::Model.plugin :json_serializer
+
 
 def fystring(yr)
   "FY #{yr}"
 end
 
-UNITS        = GoalsViz::Unit.each_with_object({}) do |u, acc|
+UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
 SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
@@ -63,23 +48,22 @@ def goal_form_locals(user, goal=nil)
 
   gforme = Forme::Form.new(goal)
 
-  forme                   = Forme::Form.new
-  units                   = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
+  forme = Forme::Form.new
+  units = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
   interesting_goal_owners = allunits.unshift(user)
-  status_options          = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
+  status_options = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
 
   {
-      forme:                             forme,
-      user:                              user,
-      units:                             units,
-      platform:                          GoalsViz::PLATFORM_SELECT,
-      status_options:                    status_options,
-      selected_status:                   goal.status.nil? ? status_options[0][0] : goal.status,
-      goal:                              goal,
-      gforme:                            gforme,
-      goalowners_to_show_goals_for:      interesting_goal_owners,
+      forme: forme,
+      user: user,
+      units: units,
+      status_options: status_options,
+      selected_status: goal.status.nil? ? status_options[0][0] : goal.status,
+      goal: goal,
+      gforme: gforme,
+      goalowners_to_show_goals_for: interesting_goal_owners,
       selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners),
-      parent_goal_ids:                   goal.parent_goals.map(&:id)
+      parent_goal_ids: goal.parent_goals.map(&:id)
 
 
   }
@@ -91,13 +75,13 @@ end
 
 # noinspection RubyInterpreterInspection
 def goal_from_params(params)
-  goal_id  = params.delete('goal_id')
-  ags      = params.delete('associated-goals')
+  goal_id = params.delete('goal_id')
+  ags = params.delete('associated-goals')
   newowners = params.delete('associated_owners')
   bad_date = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
-  goal     = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
+  goal = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
 
-  draft =  params.delete('draft')
+  draft = params.delete('draft')
 
   if (draft.nil? or draft.empty?)
     goal.publish!
@@ -115,9 +99,9 @@ def goal_list_for_selectize(list_of_owners)
 
   list_of_owners.map(&:reload).map(&:goals).flatten.uniq.map do |g|
     {
-        title:       g.title,
-        uid:         g.id,
-        domain:      g.owner_names.join(', '),
+        title: g.title,
+        uid: g.id,
+        domain: g.owner_names.join(', '),
         description: g.description || "[no description given]"
     }
   end.to_json
@@ -137,27 +121,27 @@ def goal_list_for_display(list_of_owners, user)
   LOG.warn "user is nil" if user.nil?
 
   ownergoals = list_of_owners.map(&:reload).map(&:goals)
-  mygoals =  GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
-  allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort{|a,b| a.id <=> b.id}
+  mygoals = GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
+  allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort { |a, b| a.id <=> b.id }
 
-  goals = allgoals.select{|x| mygoal?(x, user)}
-  
+  goals = allgoals.select { |x| mygoal?(x, user) }
+
   LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
 
   goals.map do |g|
     td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
     is_editor = (user.is_admin or g.owners.include?(user) or g.creator_uniqname == user.uniqname)
     {
-        'goal-owners' =>                g.owners.map(&:name).join('<br/>'),
-        'goal-target-date'=>           td,
-        'goal-target-date-timestamp'=> td,
-        'goal-title'=>                 g.title,
-        'goal-description'=>           g.description,
-        'goal-my-goal'=>               g.owners.include?(user) ? 'My Goal' : '',
-        'goal-edit-show'=>             is_editor ? '' : 'display: none;',
-        'goal-edit-href'=>             is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
-        'goal-published-status'=>      g.draft? ? 'Draft' : g.status,
-        'goal-fiscal-year'=>           g.goal_year
+        'goal-owners' => g.owners.map(&:name).join('<br/>'),
+        'goal-target-date' => td,
+        'goal-target-date-timestamp' => td,
+        'goal-title' => g.title,
+        'goal-description' => g.description,
+        'goal-my-goal' => g.owners.include?(user) ? 'My Goal' : '',
+        'goal-edit-show' => is_editor ? '' : 'display: none;',
+        'goal-edit-href' => is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
+        'goal-published-status' => g.draft? ? 'Draft' : g.status,
+        'goal-fiscal-year' => g.goal_year
     }
   end
 end
@@ -193,7 +177,7 @@ def save_goal(goal, associated_goals, associated_owners)
 end
 
 def allunits
-  GoalsViz::Unit.all.sort{|a,b| a.name <=> b.name}
+  GoalsViz::Unit.all.sort { |a, b| a.name <=> b.name }
 end
 
 class LITGoalsApp < Roda
@@ -221,17 +205,16 @@ class LITGoalsApp < Roda
     end
 
 
-
     r.on "litgoals" do
 
       uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
-      @user              = GoalsViz::Person.find(uniqname: uniqname)
+      @user = GoalsViz::Person.find(uniqname: uniqname)
       @current_fiscal_year = current_fiscal_year
-      locals = { user: @user,
-                 current_fiscal_year: @current_fiscal_year
+      locals = {user: @user,
+                current_fiscal_year: @current_fiscal_year
       }
 
-      user  = @user
+      user = @user
 
       current_fiscal_year_url = "/litgoals/goals/#{current_fiscal_year}"
 
@@ -255,11 +238,11 @@ class LITGoalsApp < Roda
           year = yearstring.to_i
 
           locals[:year] = year
-          goals =  goal_list_for_display(interesting_owners, user)
+          goals = goal_list_for_display(interesting_owners, user)
           allgoals = goals
 
           # Filter to just the wanted year
-          goals = goals.select{|g| g['goal-fiscal-year'] == year}
+          goals = goals.select { |g| g['goal-fiscal-year'] == year }
 
           locals[:goal_list_for_display] = goals.to_json
           locals[:goal_year_string] = "#{year}"
@@ -271,10 +254,10 @@ class LITGoalsApp < Roda
 
       r.on "create" do
         r.get do
-          locals .merge!  goal_form_locals(user, flash[:bad_goal])
+          locals.merge! goal_form_locals(user, flash[:bad_goal])
 
           year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
-               map{|y| ["FY July #{y}-June #{y + 1}", y]}
+              map { |y| ["FY July #{y}-June #{y + 1}", y] }
           locals[:two_years_of_fy_options] = year_options
 
           @pagetitle = 'Create a new goal'
@@ -284,26 +267,26 @@ class LITGoalsApp < Roda
         # Submit for saving
         r.post do
           validation = GoalsViz::GoalSchema.(r.params)
-          errors     = validation.messages(full: true)
+          errors = validation.messages(full: true)
 
-          agIDString   = r.params.delete('associated-goals')
-          ags = agIDString.split(/\s*,\s*/).delete_if(&:empty?).map{|agid| GoalsViz::Goal[agid.to_i]}
-          ownerIDs     = r.params.delete('associated-owners')
+          agIDString = r.params.delete('associated-goals')
+          ags = agIDString.split(/\s*,\s*/).delete_if(&:empty?).map { |agid| GoalsViz::Goal[agid.to_i] }
+          ownerIDs = r.params.delete('associated-owners')
           owners = GoalsViz::GoalOwner.where(id: ownerIDs).all
 
-          g          = goal_from_params(r.params)
+          g = goal_from_params(r.params)
           g.creator_uniqname ||= user.uniqname
           is_newgoal = g.id.nil?
 
           if errors.size > 0
             LOG.warn "Problem: #{errors.values}"
             flash[:error_msg] = errors.values
-            flash[:bad_goal]  = g
+            flash[:bad_goal] = g
             r.redirect
           else
             LOG.warn "Saving goal #{g.id}"
             save_goal(g, ags, owners)
-            action                 = is_newgoal ? "added" : "edited"
+            action = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal <span class=\"goal-title\">#{g.title}</span> #{action}"
             sleep 0.5
             r.redirect current_fiscal_year_url
@@ -319,10 +302,10 @@ class LITGoalsApp < Roda
         end
 
         r.get do
-          goal       = GoalsViz::Goal.find(id: goalid.to_i)
-          locals     = goal_form_locals(user, goal)
+          goal = GoalsViz::Goal.find(id: goalid.to_i)
+          locals = goal_form_locals(user, goal)
           year_options = (@current_fiscal_year..(@current_fiscal_year + 1)).
-               map{|y| ["FY July #{y}-June #{y + 1}", y]}
+              map { |y| ["FY July #{y}-June #{y + 1}", y] }
           locals[:two_years_of_fy_options] = year_options
           @pagetitle = "Edit '#{goal.title}'"
           view "create", locals: locals
@@ -344,7 +327,7 @@ class LITGoalsApp < Roda
 
       r.on 'api' do
         r.on 'env' do
-          "<pre>" + r.env.keys.sort.map{|k| "#{k} => #{r.env[k]}"}.join("\n") + "</pre>"
+          "<pre>" + r.env.keys.sort.map { |k| "#{k} => #{r.env[k]}" }.join("\n") + "</pre>"
         end
 
         r.get 'user/:uniqname' do |uniqname|

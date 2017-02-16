@@ -1,9 +1,12 @@
 require 'sequel'
-require_relative 'sql_dbh'
+require_relative 'db'
 
 
 
 module GoalsViz
+
+  DB = new_db_connection
+
   # Pre-declare everything so the associations work
   class GoalOwner < Sequel::Model;
   end
@@ -12,8 +15,6 @@ module GoalsViz
     def self.all_unit_goals
       where(owner: GoalsViz::Unit.all)
     end
-
-
 
   end
 
@@ -42,7 +43,7 @@ module GoalsViz
   end
 
   class GoalOwner < Sequel::Model
-    set_dataset DB.db[:goalowner]
+    set_dataset DB[:goalowner]
     plugin :after_initialize
 
     many_to_many :goals, :class=>Goal, :left_key => :goalid, :right_key => :ownerid,
@@ -86,7 +87,7 @@ module GoalsViz
   end
 
   class Unit < GoalOwner
-    set_dataset DB.db[:goalowner].where(is_unit: true)
+    set_dataset DB[:goalowner].where(is_unit: true)
 
     one_to_many :subunits, class: Unit, primary_key: :uniqname, key: :parent_uniqname
     many_to_one :parent_unit, class: Unit, primary_key: :parent_uniqname, key: :uniqname
@@ -120,7 +121,7 @@ module GoalsViz
   end
 
   class Person < GoalOwner
-    set_dataset DB.db[:goalowner].where(is_unit: false)
+    set_dataset DB[:goalowner].where(is_unit: false)
 
     one_to_many :children, class: self, primary_key: :uniqname, key: :parent_uniqname
     many_to_one :parent, class: Unit, primary_key: :uniqname, key: :parent_uniqname
@@ -142,11 +143,11 @@ module GoalsViz
 
 
   class Status < Sequel::Model
-    set_dataset DB.db[:status]
+    set_dataset DB[:status]
   end
 
   class Goal
-    set_dataset DB.db[:goal]
+    set_dataset DB[:goal]
 
     many_to_many :parent_goals, :class => Goal, :right_key=>:childgoalid, :left_key=>:parentgoalid,
                  :join_table=>:goaltogoal

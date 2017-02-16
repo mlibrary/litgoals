@@ -29,7 +29,7 @@ group :development do
   gem "yard", ">= 0.9.5"
   gem 'guard-puma'
   gem 'sqlite3'
-  gem 'neo4j', '~>4.0'
+  # gem 'neo4j', '~>4.0'
   gem 'pry'
 
 end

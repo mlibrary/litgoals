@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS goal (
   title text,
   description TEXT,
   notes TEXT,
-  goal_year INTEGER UNSIGNED,
+  goal_year INTEGER,
   status VARCHAR(255),
   target_date DATE,
   draft TINYINT DEFAULT 0,
@@ -40,11 +40,11 @@ CREATE TABLE IF NOT EXISTS goal (
 
 
 CREATE TABLE IF NOT EXISTS goaltogoal (
-  childgoalid INTEGER UNSIGNED,
-  parentgoalid INTEGER UNSIGNED
+  childgoalid INTEGER,
+  parentgoalid INTEGER
 ) ;
 
 CREATE table IF NOT EXISTS goaltoowner (
-  goalid INTEGER UNSIGNED,
-  ownerid INTEGER UNSIGNED
+  goalid INTEGER,
+  ownerid INTEGER
 );
