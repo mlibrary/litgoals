@@ -16,6 +16,10 @@ module GoalsViz
       "FY July #{year} -- June #{year + 1}"
     end
 
+    def range_string_html
+      range_string.gsub(/--/, '—')
+    end
+
     def goals_url
       "/litgoals/goals/#{year}"
     end
