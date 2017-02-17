@@ -4,28 +4,21 @@ require 'roda'
 require 'forme'
 require 'json'
 require 'date'
-
 require 'logger'
-LOG = Logger.new(STDERR)
-
-
 require_relative "lib/sql_models"
 require_relative "lib/json_graph"
 require_relative 'lib/constants'
 require_relative 'lib/Utils/fiscal_year'
 
-
 Sequel::Model.plugin :json_serializer
 
-
+LOG = Logger.new(STDERR)
+DEFAULT_USER_UNIQNAME = 'dueberb'
 UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
   acc[u.uniqname] = u
 end
 SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
 
-COSIGN_LOGOUT="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu/"
-
-DEFAULT_USER_UNIQNAME = 'jweise'
 
 
 def goal_form_locals(user, goal=nil)
@@ -65,7 +58,7 @@ def goal_from_params(params)
   ags = params.delete('associated-goals')
   newowners = params.delete('associated_owners')
   bad_date = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
-  goal = (goal_id != '') ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
+  goal = (goal_id.strip =~ /\A\d+\Z/) ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
 
   draft = params.delete('draft')
 
@@ -178,7 +171,6 @@ class LITGoalsApp < Roda
 
   route do |r|
 
-
     r.root do
       r.redirect '/litgoals/'
     end
@@ -196,7 +188,6 @@ class LITGoalsApp < Roda
           user: user,
           current_fiscal_year: currentFY
       }
-
 
       r.root do
         r.redirect currentFY.goals_url
