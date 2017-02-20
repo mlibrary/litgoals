@@ -2,10 +2,10 @@ require 'sequel'
 require_relative 'db'
 
 
-
 module GoalsViz
 
   DB = new_db_connection
+
 
   # Pre-declare everything so the associations work
   class GoalOwner < Sequel::Model;
@@ -13,13 +13,17 @@ module GoalsViz
 
   class Goal < GoalOwner;
 
-    def self.all_unit_goals
-      where(owner: GoalsViz::Unit.all)
-    end
-
     # Which ones can we link to as a parent_goal?
     def self.parent_goals_for(user)
 
+    end
+
+    def self.goals_owned_by(goalowners)
+      self.where(owner: Array[goalowners])
+    end
+
+    def self.published_unit_goals
+      self.where(draft: false).find_all{|g| g.owners.any?{|x| x.kind_of? Unit}}
     end
 
     def viewable_by?(user)
@@ -30,6 +34,10 @@ module GoalsViz
       # puts "#{owners} does not include #{user}"
       return true if user.is_admin and !draft?
       return false
+    end
+
+    def self.all_viewable_by(user)
+      self.all.find_all{|g| g.viewable_by? user}
     end
 
   end
@@ -62,8 +70,8 @@ module GoalsViz
     set_dataset DB[:goalowner]
     plugin :after_initialize
 
-    many_to_many :goals, :class=>Goal, :left_key => :goalid, :right_key => :ownerid,
-                 :join_table => :goaltoowner
+    many_to_many :goals, :class => Goal, :left_key => :goalid, :right_key => :ownerid,
+                 :join_table    => :goaltoowner
 
     def parent
       self.class.find(uniqname: parent_uniqname)
@@ -76,10 +84,10 @@ module GoalsViz
 
     def ancestors
       case parent
-        when nil
-          []
-        else
-          parent.ancestors.unshift(parent)
+      when nil
+        []
+      else
+        parent.ancestors.unshift(parent)
       end
     end
 
@@ -109,8 +117,13 @@ module GoalsViz
     many_to_one :parent_unit, class: Unit, primary_key: :parent_uniqname, key: :uniqname
     one_to_many :people, class: Person, primary_key: :uniqname, key: :parent_uniqname
 
+
     def tagged_id
       "u#{self.id}"
+    end
+
+    def self.abbreviation_to_unit_map
+      self.all.inject({}) { |h, u| h[u.abbreviation] = u; h }
     end
 
     def after_initialize # or after_initialize
@@ -124,13 +137,13 @@ module GoalsViz
 
     def depth_first_subunits
       case self.subunits
-        when []
-          []
-        else
-          self.subunits.reduce([]) do |acc, u|
-            acc.push(u).concat(u.depth_first_subunits)
-          end
+      when []
+        []
+      else
+        self.subunits.reduce([]) do |acc, u|
+          acc.push(u).concat(u.depth_first_subunits)
         end
+      end
     end
 
 
@@ -165,14 +178,14 @@ module GoalsViz
   class Goal
     set_dataset DB[:goal]
 
-    many_to_many :parent_goals, :class => Goal, :right_key=>:childgoalid, :left_key=>:parentgoalid,
-                 :join_table=>:goaltogoal
+    many_to_many :parent_goals, :class => Goal, :right_key => :childgoalid, :left_key => :parentgoalid,
+                 :join_table           => :goaltogoal
 
-    many_to_many :child_goals, :class => Goal, :left_key=>:childgoalid, :right_key=>:parentgoalid,
-                 :join_table=>:goaltogoal
+    many_to_many :child_goals, :class => Goal, :left_key => :childgoalid, :right_key => :parentgoalid,
+                 :join_table          => :goaltogoal
 
-    many_to_many :associated_owners, :class=>GoalOwner, :right_key => :goalid, :left_key => :ownerid,
-                 :join_table => :goaltoowner
+    many_to_many :associated_owners, :class => GoalOwner, :right_key => :goalid, :left_key => :ownerid,
+                 :join_table                => :goaltoowner
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
@@ -186,17 +199,17 @@ module GoalsViz
     end
 
     def owners
-      self.associated_owners.map{|x| person_or_unit(x.uniqname)}
+      self.associated_owners.map { |x| person_or_unit(x.uniqname) }
     end
 
     def owners=(x)
       LOG.warn "Trying to add owners #{x}"
       self.remove_all_associated_owners
-      Array(x).each {|owner| self.add_associated_owner owner; LOG.warn "Added owner #{owner.uniqname}"}
+      Array(x).each { |owner| self.add_associated_owner owner; LOG.warn "Added owner #{owner.uniqname}" }
     end
 
     def owner_names
-      self.owners.map{|x| x.name}
+      self.owners.map { |x| x.name }
     end
 
     def creator
@@ -214,7 +227,7 @@ module GoalsViz
 
     def draft!
       self.draft = 1
-      end
+    end
 
     def publish!
       self.draft = 0

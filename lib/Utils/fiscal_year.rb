@@ -4,6 +4,7 @@ module GoalsViz
   class FiscalYear
 
     attr_accessor :year
+
     def initialize(year = current_fiscal_year)
       @year = year.to_i
     end
@@ -24,8 +25,12 @@ module GoalsViz
       "/litgoals/goals/#{year}"
     end
 
-    def next
-      self.class.new(year + 1)
+    def next(i = 1)
+      self.class.new(year + i)
+    end
+
+    def select_list(n = 2)
+      (0..(n-1)).map{|i| y =self.next(i); [y.range_string, y.year]}
     end
 
     def current_fiscal_year

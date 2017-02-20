@@ -27,7 +27,6 @@ group :development do
   gem "minitest", "~> 5.0"
   gem "minitest-hooks"
   gem "yard", ">= 0.9.5"
-  gem 'guard-puma'
   gem 'sqlite3'
   # gem 'neo4j', '~>4.0'
   gem 'pry'

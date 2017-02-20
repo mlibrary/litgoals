@@ -12,12 +12,15 @@ require_relative 'lib/Utils/fiscal_year'
 
 Sequel::Model.plugin :json_serializer
 
+
+# Set up logging and defaults for testing
+
 LOG = Logger.new(STDERR)
 DEFAULT_USER_UNIQNAME = 'dueberb'
-UNITS = GoalsViz::Unit.each_with_object({}) do |u, acc|
-  acc[u.uniqname] = u
-end
-SORTED_UNITS = UNITS.to_a.map { |a| a[1] }.sort { |a, b| a.name <=> b.name }
+
+#
+UNITS = GoalsViz::Unit.abbreviation_to_unit_map
+SORTED_UNITS = UNITS.values.sort { |a, b| a.abbreviation <=> b.abbreviation }
 
 
 
@@ -91,11 +94,11 @@ def goal_list_for_display(list_of_owners, user)
   LOG.warn "list_of_owners is nil" if list_of_owners.nil?
   LOG.warn "user is nil" if user.nil?
 
-  ownergoals = list_of_owners.map(&:reload).map(&:goals)
-  mygoals = GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
-  allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort { |a, b| a.id <=> b.id }
+  # ownergoals = list_of_owners.map(&:reload).map(&:goals)
+  # mygoals = GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
+  # allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort { |a, b| a.id <=> b.id }
 
-  goals = allgoals.select { |g| g.viewable_by?(user) }
+  goals = GoalsViz::Goal.all_viewable_by(user)
 
   LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
 
@@ -117,21 +120,6 @@ def goal_list_for_display(list_of_owners, user)
   end
 end
 
-# "Unit Name" => [list,of,goals]
-def division_goal_tree
-
-  h = Hash.new { [] }
-
-  GoalsViz::Goal.all_unit_goals.each do |g|
-    g.owners.each do |owner|
-      h[UNITS[owner.uniqname].name] << g
-    end
-
-  end
-
-  h
-end
-
 def save_goal(goal, associated_goals, associated_owners)
 
   goal.save
@@ -149,8 +137,11 @@ def save_goal(goal, associated_goals, associated_owners)
 end
 
 def allunits
-  GoalsViz::Unit.all.sort { |a, b| a.name <=> b.name }
+  SORTED_UNITS
 end
+
+
+
 
 class LITGoalsApp < Roda
   use Rack::Session::Cookie, :secret => ENV['SECRET']
@@ -178,10 +169,9 @@ class LITGoalsApp < Roda
 
     r.on "litgoals" do
 
+      # Set up some useful data for later on
       uniqname = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
       user = GoalsViz::Person.find(uniqname: uniqname)
-
-
       currentFY = GoalsViz::FiscalYear.new
 
       common_locals= {
@@ -189,21 +179,23 @@ class LITGoalsApp < Roda
           current_fiscal_year: currentFY
       }
 
+      # Redirect to current year of goals if no year given.
       r.root do
         r.redirect currentFY.goals_url
       end
 
+      # Give the full graph if asked for
       r.on "jsongraph" do
         GoalsViz::JSONGraph.simple_graph
       end
 
       r.on 'goals' do
-        interesting_owners = allunits.unshift(user) #SORTED_UNITS.dup.unshift(user)
 
-
+        # Show the archive page is no year given
         r.is do
           view 'archive', locals: common_locals
         end
+
 
         r.get /(\d+)/ do |yearstring|
           year = yearstring.to_i
@@ -227,10 +219,7 @@ class LITGoalsApp < Roda
       r.on "create" do
         r.get do
           locals = common_locals.merge goal_form_locals(user, flash[:bad_goal])
-
-          year_options = [currentFY, currentFY.next].map{|x| [x.range_string, x.year]}
-
-          locals[:two_years_of_fy_options] = year_options
+          locals[:two_years_of_fy_options] = currentFY.select_list(2)
 
           @pagetitle = 'Create a new goal'
           view "create", locals: locals
@@ -276,28 +265,11 @@ class LITGoalsApp < Roda
         r.get do
           goal = GoalsViz::Goal.find(id: goalid.to_i)
           locals = common_locals.merge goal_form_locals(user, goal)
-          year_options = [currentFY, currentFY.next].map{|x| [x.range_string, x.year]}
-
-          LOG.warn "Here I am!"
-          LOG.warn year_options
-          puts "Whoo"
-          locals[:two_years_of_fy_options] = year_options
+          locals[:two_years_of_fy_options] = currentFY.select_list(2)
           @pagetitle = "Edit '#{goal.title}'"
           view "create", locals: locals
         end
       end
-
-      # r.get "goal/:goalid" do |goalid|
-      #   gid  = goalid.to_i
-      #   goal = GoalsViz::Goal[gid]
-      #   unless user.is_admin or goal.owner.is_admin or user.goals.include?(goal)
-      #     flash[:error_msg] = "You're not allowed to view that goal (must be owner or admin)"
-      #     r.redirect "/goals"
-      #   end
-      #
-      #   view "goal", locals: {goal: goal}
-      #
-      # end
 
 
       r.on 'api' do
