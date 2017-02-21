@@ -12,36 +12,7 @@ module GoalsViz
   end
 
   class Goal < GoalOwner;
-
-    # Which ones can we link to as a parent_goal?
-    def self.parent_goals_for(user)
-
-    end
-
-    def self.goals_owned_by(goalowners)
-      self.where(owner: Array[goalowners])
-    end
-
-    def self.published_unit_goals
-      self.where(draft: false).find_all{|g| g.owners.any?{|x| x.kind_of? Unit}}
-    end
-
-    def viewable_by?(user)
-      # puts "Checking #{title} against #{user.name}"
-      return true if creator_uniqname == user.uniqname
-      # puts "#{creator_uniqname} is not the same as #{user.uniqname}"
-      return true if owners.include? user
-      # puts "#{owners} does not include #{user}"
-      return true if user.is_admin and !draft?
-      return false
-    end
-
-    def self.all_viewable_by(user)
-      self.all.find_all{|g| g.viewable_by? user}
-    end
-
   end
-
 
   class Unit < GoalOwner;
   end
@@ -52,13 +23,16 @@ module GoalsViz
       "p#{self.id}"
     end
 
+
     def self.admins
       where(is_admin: true)
     end
 
+
     def admin!
       self.is_admin = true
     end
+
 
     def admin?
       self.is_admin
@@ -73,9 +47,11 @@ module GoalsViz
     many_to_many :goals, :class => Goal, :left_key => :goalid, :right_key => :ownerid,
                  :join_table    => :goaltoowner
 
+
     def parent
       self.class.find(uniqname: parent_uniqname)
     end
+
 
     def lowest_unit
       self.is_unit ? self : self.parent
@@ -91,13 +67,16 @@ module GoalsViz
       end
     end
 
+
     def self_and_ancestors
       self.ancestors.unshift self
     end
 
+
     def people
       Person.where(parent_uniqname: self.uniqname).all
     end
+
 
     def higher_orgchart_goals
       ancestors.map(&:goals).flatten
@@ -122,18 +101,22 @@ module GoalsViz
       "u#{self.id}"
     end
 
+
     def self.abbreviation_to_unit_map
       self.all.inject({}) { |h, u| h[u.abbreviation] = u; h }
     end
+
 
     def after_initialize # or after_initialize
       super
       self.is_unit = true if self.is_unit.nil?
     end
 
+
     alias_method :abbreviation, :uniqname
     alias_method :name, :lastname
     alias_method :parent_unit, :parent
+
 
     def depth_first_subunits
       case self.subunits
@@ -160,10 +143,12 @@ module GoalsViz
 
     plugin :after_initialize
 
+
     def after_initialize # or after_initialize
       super
       self.is_unit = false if self.is_unit.nil?
     end
+
 
     def name
       "#{firstname} #{lastname}"
@@ -190,27 +175,69 @@ module GoalsViz
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
 
+    def self.for_ids(ids)
+      self.where(id: ids)
+    end
+
+
+    def self.goals_owned_by(goalowners)
+      self.where(owner: Array[goalowners])
+    end
+
+
+    def self.published_unit_goals
+      self.where(draft: false).find_all { |g| g.owners.any? { |x| x.kind_of? Unit } }
+    end
+
+
+    def self.all_viewable_by(user)
+      self.all.find_all { |g| g.viewable_by? user }
+    end
+
+
+    def viewable_by?(user)
+      # puts "Checking #{title} against #{user.name}"
+      return true if creator_uniqname == user.uniqname
+      # puts "#{creator_uniqname} is not the same as #{user.uniqname}"
+      return true if owners.include? user
+      # puts "#{owners} does not include #{user}"
+      return true if user.is_admin and !draft?
+      return false
+    end
+
+
+    def replace_owners(new_owners)
+      remove_all_owners
+      Array(new_owners).each { |o| owners << o }
+      self
+    end
+
+
+    def replace_associated_goals(newgoals)
+      remove_all_parent_goals
+      Array(newgoals).each { |g| parent_goals << g }
+      self
+    end
+
+
     def tagged_id
       "g#{self.id}"
     end
+
 
     def person_or_unit(uniqname)
       Person.find(uniqname: uniqname) || Unit.find(uniqname: uniqname)
     end
 
+
     def owners
       self.associated_owners.map { |x| person_or_unit(x.uniqname) }
-    end
-
-    def owners=(x)
-      LOG.warn "Trying to add owners #{x}"
-      self.remove_all_associated_owners
-      Array(x).each { |owner| self.add_associated_owner owner; LOG.warn "Added owner #{owner.uniqname}" }
     end
 
     def owner_names
       self.owners.map { |x| x.name }
     end
+
 
     def creator
       person_or_unit(creator_uniqname)
@@ -221,13 +248,16 @@ module GoalsViz
       self.creator_uniqname = goalowner.uniqname
     end
 
+
     def draft?
       self.draft == 1
     end
 
+
     def draft!
       self.draft = 1
     end
+
 
     def publish!
       self.draft = 0

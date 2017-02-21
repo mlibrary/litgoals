@@ -192,12 +192,13 @@ class LITGoalsApp < Roda
       r.on 'goals' do
 
         # Show the archive page is no year given
+        # GET /goals
         r.is do
           view 'archive', locals: common_locals
         end
 
-
-        r.get /(\d+)/ do |yearstring|
+        # GET /goals/YYYY
+        r.get /(\d{4})/ do |yearstring|
           year = yearstring.to_i
 
           locals = common_locals.merge({year: year})

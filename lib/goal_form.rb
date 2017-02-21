@@ -2,22 +2,39 @@ require_relative 'sql_models'
 
 module GoalsViz
   class GoalForm
-    def self.goal_from_params
+    def self.goal_from_form(params)
       # Pull out the goal id,
-      goal_id = begin
+      goal = begin
         g = params.delete('goal_id').strip
         g = Integer(g)
         Goal[g]
-      rescue
+      rescue ArgumentError #not an integer
         Goal.new
       end
 
+      # Get and replace associated goals
+      # Goals come in on the params as a comma-delimited list.
+      # Hmmm. This should be smarter so I don't have to do this here
       new_associated_goal_ids = params.delete('associated_owner').split(/\s*,\s*/).delete_if(&:empty).map(&:to_i)
-      new_associated_goals    = Goals.where(id: new_associated_goal_ids)
+      new_associated_goals    = Goals.for_ids(new_associated_goal_ids)
+      goal.replace_associated_goals(new_associated_goals)
+
+      # Get and replace owners
+      goal.replace_owners(GoalsViz::GoalOwner.where(id: params.delete('associated-owners')))
+      
+
+      # get and check date
+      # get draft status
+      # goal.set_all(whatever_is_left_in_params_but_should_be_explicit_probably)
+
 
 
 
     end
+
+
+
+
 
   end
 end
