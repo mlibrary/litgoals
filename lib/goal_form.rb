@@ -1,39 +1,85 @@
 require_relative 'sql_models'
 
 module GoalsViz
+
+  class FormData
+    DEFAULT_DATE = '2017/06'
+
+    attr_reader :goal_id, :associated_goal_ids, :owner_ids, :date
+
+    def initialize(params_orig)
+      @errors              = []
+      params               = params_orig.dup
+      @goal_id             = params['goal_id']
+      @associated_goal_ids = parse_associated_goal_ids(params.delete('associated_goals'))
+      @owner_ids           = params.delete('associated-owners')
+      @draft               = params.delete('draft')
+
+      date_string = params.delete('target_date')
+      if (GoalsViz::DATEFORMAT.match date_string)
+        @date = date_string
+      else
+        @errors.push ["Illegal Date", date_string]
+        @date = DEFAULT_DATE
+      end
+
+      @rest = params
+    end
+
+    def unahandled_args
+      @rest
+    end
+
+    def draft?
+      @draft.nil? or @draft.empty?
+    end
+
+    def parse_associated_goal_ids(str)
+      str.split(/\s*,\s*/).delete_if(&:empty).map(&:to_i)
+    end
+
+    def associated_goals
+      Goals.where(id: associated_goal_ids)
+    end
+
+    def owners
+      GoalOwner.where(id: owner_ids)
+    end
+
+  end
+
   class GoalForm
     def self.goal_from_form(params)
+
+      d    = FormData.new(params)
+
       # Pull out the goal id,
       goal = begin
-        g = params.delete('goal_id').strip
-        g = Integer(g)
+        g = Integer(d.goal_id)
         Goal[g]
       rescue ArgumentError #not an integer
         Goal.new
       end
 
-      # Get and replace associated goals
-      # Goals come in on the params as a comma-delimited list.
-      # Hmmm. This should be smarter so I don't have to do this here
-      new_associated_goal_ids = params.delete('associated_owner').split(/\s*,\s*/).delete_if(&:empty).map(&:to_i)
-      new_associated_goals    = Goals.for_ids(new_associated_goal_ids)
-      goal.replace_associated_goals(new_associated_goals)
 
-      # Get and replace owners
-      goal.replace_owners(GoalsViz::GoalOwner.where(id: params.delete('associated-owners')))
-      
+      goal.replace_associated_goals(d.associated_goals)
+      goal.replace_owners(d.owners)
+
+      if d.draft?
+        goal.draft!
+      else
+        goal.publish!
+      end
+
+
+      goal.set_all(d.unahandled_args.to_h)
+
 
       # get and check date
-      # get draft status
       # goal.set_all(whatever_is_left_in_params_but_should_be_explicit_probably)
 
 
-
-
     end
-
-
-
 
 
   end

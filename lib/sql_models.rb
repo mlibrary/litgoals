@@ -175,10 +175,6 @@ module GoalsViz
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
 
-    def self.for_ids(ids)
-      self.where(id: ids)
-    end
-
 
     def self.goals_owned_by(goalowners)
       self.where(owner: Array[goalowners])
