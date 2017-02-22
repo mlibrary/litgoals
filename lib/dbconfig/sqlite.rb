@@ -1,6 +1,7 @@
 require 'dry-container'
 require 'dry-auto_inject'
 require_relative 'general'
+require_relative '../constants'
 
 
 module GoalsViz

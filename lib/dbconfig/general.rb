@@ -36,6 +36,8 @@ module GoalsViz
         end
 
 
+
+
         # Add the people
         # Adler	Richard	rcadler	ASSOC LIBRARIAN	LibraryInfoTech	Digital Content & Collections
         def seed_people(db)

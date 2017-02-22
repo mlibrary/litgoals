@@ -192,6 +192,7 @@ module GoalsViz
 
 
     def viewable_by?(user)
+      return true if owners.any?{|o| o.kind_of? Unit}
       # puts "Checking #{title} against #{user.name}"
       return true if creator_uniqname == user.uniqname
       # puts "#{creator_uniqname} is not the same as #{user.uniqname}"
@@ -203,8 +204,9 @@ module GoalsViz
 
 
     def replace_owners(new_owners)
-      remove_all_owners
-      Array(new_owners).each { |o| owners << o }
+      remove_all_associated_owners
+      Array(new_owners).each { |o| associated_owners << o }
+      save
       self
     end
 

@@ -80,16 +80,46 @@ module GoalsViz
 
   end
 
-  class FormFillObject
-    def initialize(goal)
+  class GoalListDisplay
+    DEFAULT_DATE = '2017/06'
+
+    attr_reader :goal, :user
+    def initialize(goal, user)
       @goal = goal
+      @user = user
     end
 
     def goal_published_status
-
+      @goal.status
     end
 
-    def to_json
+
+    def owner_names
+      @goal.owners.map(&:name)
+    end
+
+    def editable?
+      user.is_admin or goal.owners.include?(user)
+    end
+
+    def mygoal?
+
+      goal.owners.include?(user)
+    end
+
+    def to_h
+      {
+          "goal-published-status" => goal_published_status,
+          "goal-fiscal-year" => goal.goal_year,
+          "goal-target-date-timestamp" => goal.target_date_string,
+          "goal-target-date" => goal.target_date_string,
+          "goal-owners" => owner_names.join("<br>"),
+          'goal-title' => goal.title,
+          'goal-description' => goal.description,
+          'goal-edit-href' => "/litgoals/edit_goal/#{@goal.id}",
+          'goal-edit-show' => editable?,
+          'goal-my-goal' => mygoal? ? "My Goal" : ""
+      }
 
     end
 
@@ -97,19 +127,6 @@ module GoalsViz
 
   end
 end
-
-# {
-#   "goal-published-status" : "Not started",
-#   "goal-fiscal-year" : 2015,
-#   "goal-target-date-timestamp" : "2016/6",
-#   "goal-owners" : "Architecture & Engineering<br/>Learning Technologies Incubation Group",
-#   "goal-target-date" : "2016/6",
-#   "goal-title" : "Library Credential Badging Investigation Team ",
-#   "goal-edit-show" : "",
-#   "goal-description" : "Lorum whatever",
-#   "goal-edit-href" : "/litgoals/edit_goal/19",
-#   "goal-my-goal" : ""
-# }
 
 # {
 #   forme: forme,

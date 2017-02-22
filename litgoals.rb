@@ -9,6 +9,7 @@ require_relative "lib/sql_models"
 require_relative "lib/json_graph"
 require_relative 'lib/constants'
 require_relative 'lib/Utils/fiscal_year'
+require_relative 'lib/goal_form'
 
 Sequel::Model.plugin :json_serializer
 
@@ -17,6 +18,7 @@ Sequel::Model.plugin :json_serializer
 
 LOG = Logger.new(STDERR)
 DEFAULT_USER_UNIQNAME = 'dueberb'
+DEFAULT_USER_UNIQNAME = 'rsteg'
 
 #
 UNITS = GoalsViz::Unit.abbreviation_to_unit_map
@@ -32,7 +34,7 @@ def goal_form_locals(user, goal=nil)
 
   forme = Forme::Form.new
   units = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
-  interesting_goal_owners = allunits.unshift(user)
+  interesting_goal_owners = SORTED_UNITS.unshift(user)
   status_options = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
 
   {
@@ -90,37 +92,6 @@ def goal_list_for_selectize(list_of_owners)
   end.to_json
 end
 
-
-def goal_list_for_display(list_of_owners, user)
-  LOG.warn "list_of_owners is nil" if list_of_owners.nil?
-  LOG.warn "user is nil" if user.nil?
-
-  # ownergoals = list_of_owners.map(&:reload).map(&:goals)
-  # mygoals = GoalsViz::Goal.where(creator_uniqname: user.uniqname).to_a
-  # allgoals = (ownergoals.concat(mygoals)).flatten.uniq.sort { |a, b| a.id <=> b.id }
-
-  goals = GoalsViz::Goal.all_viewable_by(user)
-
-  LOG.warn "User #{user.uniqname} is an admin" if user.is_admin
-
-  goals.map do |g|
-    td = g.target_date ? [g.target_date.year, g.target_date.month].join('/') : '2017/06'
-    is_editor = (user.is_admin or g.owners.include?(user) or g.creator_uniqname == user.uniqname)
-    {
-        'goal-owners' => g.owners.map(&:name).join('<br/>'),
-        'goal-target-date' => td,
-        'goal-target-date-timestamp' => td,
-        'goal-title' => g.title,
-        'goal-description' => g.description,
-        'goal-my-goal' => g.owners.include?(user) ? 'My Goal' : '',
-        'goal-edit-show' => is_editor ? '' : 'display: none;',
-        'goal-edit-href' => is_editor ? "/litgoals/edit_goal/#{g.id}" : '',
-        'goal-published-status' => g.draft? ? 'Draft' : g.status,
-        'goal-fiscal-year' => g.goal_year
-    }
-  end
-end
-
 def save_goal(goal, associated_goals, associated_owners)
 
   goal.save
@@ -131,16 +102,13 @@ def save_goal(goal, associated_goals, associated_owners)
     goal.save
   end
 
+  associated_owners = associated_owners.unshift(goal.creator).uniq
   unless associated_owners.empty?
-    goal.owners = associated_owners
+    LOG.warn "Adding owners #{associated_owners}"
+    goal.replace_owners associated_owners
     goal.save
   end
 end
-
-def allunits
-  SORTED_UNITS
-end
-
 
 
 
@@ -162,7 +130,6 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
-
     r.root do
       r.redirect '/litgoals/'
     end
@@ -198,19 +165,35 @@ class LITGoalsApp < Roda
           view 'archive', locals: common_locals
         end
 
-        # GET /goals/YYYY
+        # # GET /goals/YYYY
+        # r.get /(\d{4})/ do |yearstring|
+        #   year = yearstring.to_i
+        #
+        #   locals = common_locals.merge({year: year})
+        #   goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}
+        #
+        #
+        #   goals = goal_list_for_display(SORTED_UNITS, user)
+        #
+        #   locals[:goal_list_for_display] = goals.to_json
+        #   locals[:goal_year_string] = "#{year}"
+        #   view 'goals', locals: locals
+        # end
+
+
+        #####
         r.get /(\d{4})/ do |yearstring|
           year = yearstring.to_i
-
-          locals = common_locals.merge({year: year})
           goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}
+          display_list = goals.map{|g| GoalsViz::GoalListDisplay.new(g, user).to_h}
+          locals = common_locals.merge ({
+              year: year,
+              goal_year_string: "#{year}",
+              goal_list_for_display: display_list.to_json
+          })
 
-
-          goals = goal_list_for_display(interesting_owners, user)
-
-          locals[:goal_list_for_display] = goals.to_json
-          locals[:goal_year_string] = "#{year}"
           view 'goals', locals: locals
+
         end
 
       end
@@ -228,7 +211,7 @@ class LITGoalsApp < Roda
         # Submit for saving
         r.post do
 
-          log.warn r.params.to_json
+          LOG.warn r.params.to_json
 
           validation = GoalsViz::GoalSchema.(r.params)
           errors = validation.messages(full: true)
