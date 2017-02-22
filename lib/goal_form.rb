@@ -64,6 +64,8 @@ module GoalsViz
 
       goal.replace_associated_goals(d.associated_goals)
       goal.replace_owners(d.owners)
+      goal.target_date = d.date
+
 
       if d.draft?
         goal.draft!
@@ -71,40 +73,79 @@ module GoalsViz
         goal.publish!
       end
 
-
       goal.set_all(d.unahandled_args.to_h)
-
-
-      # get and check date
-      # goal.set_all(whatever_is_left_in_params_but_should_be_explicit_probably)
-
 
     end
 
 
   end
-end
-# Turn a form submission into a goal
+
+  class FormFillObject
+    def initialize(goal)
+      @goal = goal
+    end
+
+    def goal_published_status
+
+    end
+
+    def to_json
+
+    end
 
 
-# noinspection RubyInterpreterInspection
-def goal_from_params(params)
-  LOG.warn params
-  goal_id   = params.delete('goal_id')
-  ags       = params.delete('associated-goals')
-  newowners = params.delete('associated_owners')
-  bad_date  = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
-  goal      = (goal_id.strip =~ /\A\d+\Z/) ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
 
-  draft = params.delete('draft')
-
-  if (draft.nil? or draft.empty?)
-    goal.publish!
-  else
-    LOG.warn "Saving as a draft"
-    goal.draft!
   end
-
-  goal.set_all(params)
-  goal
 end
+
+# {
+#   "goal-published-status" : "Not started",
+#   "goal-fiscal-year" : 2015,
+#   "goal-target-date-timestamp" : "2016/6",
+#   "goal-owners" : "Architecture & Engineering<br/>Learning Technologies Incubation Group",
+#   "goal-target-date" : "2016/6",
+#   "goal-title" : "Library Credential Badging Investigation Team ",
+#   "goal-edit-show" : "",
+#   "goal-description" : "Lorum whatever",
+#   "goal-edit-href" : "/litgoals/edit_goal/19",
+#   "goal-my-goal" : ""
+# }
+
+# {
+#   forme: forme,
+#   user: user,
+#   units: units,
+#   status_options: status_options,
+#   selected_status: goal.status.nil? ? status_options[0][0] : goal.status,
+#   goal: goal,
+#   gforme: gforme,
+#   goalowners_to_show_goals_for: interesting_goal_owners,
+#   selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners),
+#   parent_goal_ids: goal.parent_goals.map(&:id)
+#
+#
+# }
+# Turn a form submission into a goal
+#
+#
+# # noinspection RubyInterpreterInspection
+# def goal_from_params(params)
+#   LOG.warn params
+#   goal_id   = params.delete('goal_id')
+#   ags       = params.delete('associated-goals')
+#   newowners = params.delete('associated_owners')
+#   bad_date  = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
+#   goal      = (goal_id.strip =~ /\A\d+\Z/) ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
+#
+#   draft = params.delete('draft')
+#
+#   if (draft.nil? or draft.empty?)
+#     goal.publish!
+#   else
+#     LOG.warn "Saving as a draft"
+#     goal.draft!
+#   end
+#
+#   goal.set_all(params)
+#   goal
+# end

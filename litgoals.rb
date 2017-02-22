@@ -21,6 +21,7 @@ DEFAULT_USER_UNIQNAME = 'dueberb'
 #
 UNITS = GoalsViz::Unit.abbreviation_to_unit_map
 SORTED_UNITS = UNITS.values.sort { |a, b| a.abbreviation <=> b.abbreviation }
+STATUS_OPTIONS = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
 
 
 
@@ -202,12 +203,10 @@ class LITGoalsApp < Roda
           year = yearstring.to_i
 
           locals = common_locals.merge({year: year})
+          goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}
+
 
           goals = goal_list_for_display(interesting_owners, user)
-          LOG.debug goals.map{|g| "#{g['goal-id']} -- #{g['goal-fiscal-year']}: #{g['goal-title']}"}
-
-          # Filter to just the wanted year
-          goals = goals.select { |g| g['goal-fiscal-year'] == year }
 
           locals[:goal_list_for_display] = goals.to_json
           locals[:goal_year_string] = "#{year}"
@@ -228,6 +227,9 @@ class LITGoalsApp < Roda
 
         # Submit for saving
         r.post do
+
+          log.warn r.params.to_json
+
           validation = GoalsViz::GoalSchema.(r.params)
           errors = validation.messages(full: true)
 
@@ -249,7 +251,7 @@ class LITGoalsApp < Roda
             LOG.warn "Saving goal #{g.id}"
             save_goal(g, ags, owners)
             action = is_newgoal ? "added" : "edited"
-            flash[:goal_added_msg] = "Goal "<span class=\"goal-title\">#{g.title}</span>" #{action}"
+            flash[:goal_added_msg] = "Goal \"<span class=\"goal-title\">#{g.title}</span>\" #{action}"
             sleep 0.5
             r.redirect currentFY.goals_url
           end
