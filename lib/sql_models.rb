@@ -208,7 +208,7 @@ module GoalsViz
       LOG.error("Replace owners given a nil") if new_owners.any? {|x| x.nil?}
       remove_all_associated_owners
       goalowners = Array(new_owners).push(creator).uniq
-      goalowners.each { |o| associated_owners << o }
+      goalowners.each { |o| add_associated_owner(o) }
       save
       self
     end
@@ -216,7 +216,7 @@ module GoalsViz
 
     def replace_associated_goals(newgoals)
       remove_all_parent_goals
-      Array(newgoals).each { |g| parent_goals << g }
+      Array(newgoals).each { |g| add_parent_goal(g) }
       self
     end
 
