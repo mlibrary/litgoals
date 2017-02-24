@@ -90,7 +90,7 @@ module GoalsViz
     end
 
     def goal_published_status
-      @goal.status
+      goal.draft? ? "Draft" : ""
     end
 
 
