@@ -99,7 +99,7 @@ module GoalsViz
     end
 
     def editable?
-      user.is_admin or goal.owners.include?(user)
+      user.is_admin or goal.owners.include?(user) or goal.creator == user
     end
 
     def mygoal?
@@ -117,7 +117,7 @@ module GoalsViz
           'goal-title' => goal.title,
           'goal-description' => goal.description,
           'goal-edit-href' => "/litgoals/edit_goal/#{@goal.id}",
-          'goal-edit-show' => editable?,
+          'goal-edit-show' => editable? ? "" : "display: none",
           'goal-my-goal' => mygoal? ? "My Goal" : ""
       }
 

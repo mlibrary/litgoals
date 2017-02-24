@@ -209,9 +209,7 @@ module GoalsViz
       save if id.nil?
       remove_all_associated_owners
       goalowners = Array(new_owners)
-      unless goalowners.map(&:id).include? creator.id
-         goalowners.push(creator)
-      end
+
       goalowners.each { |o| add_associated_owner(o) }
       save
       self
