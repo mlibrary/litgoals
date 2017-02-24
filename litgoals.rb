@@ -98,7 +98,7 @@ def save_goal(goal, associated_goals, associated_owners)
   ags = Array(associated_goals)
   unless ags.empty?
     goal.remove_all_parent_goals
-    ags.each {|x| goal.add_parent_goal(x)}
+    ags.each { |x| goal.add_parent_goal(x) }
     goal.save
   end
 
@@ -165,21 +165,6 @@ class LITGoalsApp < Roda
           view 'archive', locals: common_locals
         end
 
-        # # GET /goals/YYYY
-        # r.get /(\d{4})/ do |yearstring|
-        #   year = yearstring.to_i
-        #
-        #   locals = common_locals.merge({year: year})
-        #   goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}
-        #
-        #
-        #   goals = goal_list_for_display(SORTED_UNITS, user)
-        #
-        #   locals[:goal_list_for_display] = goals.to_json
-        #   locals[:goal_year_string] = "#{year}"
-        #   view 'goals', locals: locals
-        # end
-
 
         #####
         r.get /(\d{4})/ do |yearstring|
@@ -232,7 +217,9 @@ class LITGoalsApp < Roda
             r.redirect
           else
             LOG.warn "Saving goal #{g.id}"
-            save_goal(g, ags, owners)
+            g.replace_owners(owners)
+            g.replace_associated_goals(ags)
+            g.save
             action = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal \"<span class=\"goal-title\">#{g.title}</span>\" #{action}"
             sleep 0.5
