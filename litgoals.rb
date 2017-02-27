@@ -18,7 +18,7 @@ Sequel::Model.plugin :json_serializer
 
 LOG = Logger.new(STDERR)
 DEFAULT_USER_UNIQNAME = 'dueberb'
-# DEFAULT_USER_UNIQNAME = 'rsteg'
+DEFAULT_USER_UNIQNAME = 'rsteg'
 
 #
 UNITS = GoalsViz::Unit.abbreviation_to_unit_map
@@ -55,31 +55,7 @@ def goal_form_locals(user, goal=nil)
 end
 
 
-# Turn a form submission into a goal
-
-# noinspection RubyInterpreterInspection
-def goal_from_params(params)
-  LOG.warn params
-  goal_id = params.delete('goal_id')
-  ags = params.delete('associated-goals')
-  newowners = params.delete('associated_owners')
-  bad_date = params.delete('target_date') unless (GoalsViz::DATEFORMAT.match params['target_date'])
-  goal = (goal_id.strip =~ /\A\d+\Z/) ? GoalsViz::Goal[goal_id.to_i] : GoalsViz::Goal.new
-
-  draft = params.delete('draft')
-
-  if (draft.nil? or draft.empty?)
-    goal.publish!
-  else
-    LOG.warn "Saving as a draft"
-    goal.draft!
-  end
-
-  goal.set_all(params)
-  goal
-end
-
-
+# restrict to those of the currently-selected year.
 def goal_list_for_selectize(list_of_owners)
 
   list_of_owners.map(&:reload).map(&:goals).flatten.uniq.map do |g|
@@ -91,25 +67,6 @@ def goal_list_for_selectize(list_of_owners)
     }
   end.to_json
 end
-
-def save_goal(goal, associated_goals, associated_owners)
-
-  goal.save
-  ags = Array(associated_goals)
-  unless ags.empty?
-    goal.remove_all_parent_goals
-    ags.each { |x| goal.add_parent_goal(x) }
-    goal.save
-  end
-
-  associated_owners = associated_owners.unshift(goal.creator).uniq
-  unless associated_owners.empty?
-    LOG.warn "Adding owners #{associated_owners}"
-    goal.replace_owners associated_owners
-    goal.save
-  end
-end
-
 
 
 class LITGoalsApp < Roda
@@ -201,14 +158,11 @@ class LITGoalsApp < Roda
           validation = GoalsViz::GoalSchema.(r.params)
           errors = validation.messages(full: true)
 
-          agIDString = r.params.delete('associated-goals')
-          ags = agIDString.split(/\s*,\s*/).delete_if(&:empty?).map { |agid| GoalsViz::Goal[agid.to_i] }
-          ownerIDs = r.params.delete('associated-owners')
-          owners = GoalsViz::GoalOwner.where(id: ownerIDs).all
 
-          g = goal_from_params(r.params)
+          is_newgoal = r.params['goal_id'].nil?
+
+          g = GoalsViz::GoalForm.goal_from_form(r.params)
           g.creator_uniqname ||= user.uniqname
-          is_newgoal = g.id.nil?
 
           if errors.size > 0
             LOG.warn "Problem: #{errors.values}"
@@ -216,9 +170,6 @@ class LITGoalsApp < Roda
             flash[:bad_goal] = g
             r.redirect
           else
-            LOG.warn "Saving goal #{g.id}"
-            g.replace_owners(owners)
-            g.replace_associated_goals(ags)
             g.save
             action = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal \"<span class=\"goal-title\">#{g.title}</span>\" #{action}"
@@ -231,7 +182,7 @@ class LITGoalsApp < Roda
       r.on "edit_goal/:goalid" do |goalid|
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
-          flash[:error_msg] = "You're not allowed to edit that goal (must be owner or admin)"
+          flash[:error_msg] = "You're not allowed to edit that goal (must be owner/creator or admin)"
           r.redirect currentFY.goals_url
         end
 

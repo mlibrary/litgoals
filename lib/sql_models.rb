@@ -191,6 +191,11 @@ module GoalsViz
     end
 
 
+    def editable_by?(user)
+      user.is_admin or owners.include?(user) or creator == user
+    end
+
+
     def viewable_by?(user)
       return true if owners.any?{|o| o.kind_of? Unit}
       # puts "Checking #{title} against #{user.name}"

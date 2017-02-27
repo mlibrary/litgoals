@@ -5,15 +5,15 @@ module GoalsViz
   class FormData
     DEFAULT_DATE = '2017/06'
 
-    attr_reader :goal_id, :associated_goal_ids, :owner_ids, :date
+    attr_reader :goal_id, :associated_goal_ids, :owner_ids, :date, :id
 
     def initialize(params_orig)
       @errors              = []
       params               = params_orig.dup
-      @goal_id             = params['goal_id']
-      @associated_goal_ids = parse_associated_goal_ids(params.delete('associated_goals'))
+      @associated_goal_ids = parse_associated_goal_ids(params.delete('associated-goals'))
       @owner_ids           = params.delete('associated-owners')
       @draft               = params.delete('draft')
+      @id                  = params.delete('goal_id')
 
       date_string = params.delete('target_date')
       if (GoalsViz::DATEFORMAT.match date_string)
@@ -31,35 +31,47 @@ module GoalsViz
     end
 
     def draft?
-      @draft.nil? or @draft.empty?
+      !(@draft.nil? or @draft.empty? or @draft == 0)
     end
 
-    def parse_associated_goal_ids(str)
-      str.split(/\s*,\s*/).delete_if(&:empty).map(&:to_i)
+    def parse_associated_goal_ids(str = "")
+      return [] unless str =~ /\d/
+      str.split(/\s*,\s*/).delete_if(&:empty?).map(&:to_i)
     end
 
     def associated_goals
-      Goals.where(id: associated_goal_ids)
+      Goal.where(id: associated_goal_ids)
     end
 
     def owners
       GoalOwner.where(id: owner_ids)
     end
 
+    def is_new?
+      id.nil? or id.empty?
+    end
+
+
   end
 
+
   class GoalForm
+
+    attr_reader :goal, :user
+    def initialize(goal: goal, user: user)
+
+    end
+
     def self.goal_from_form(params)
 
       d    = FormData.new(params)
 
       # Pull out the goal id,
-      goal = begin
-        g = Integer(d.goal_id)
-        Goal[g]
-      rescue ArgumentError #not an integer
-        Goal.new
-      end
+      goal = if d.is_new?
+               Goal.new
+             else
+               Goal[d.id.to_i]
+             end
 
 
       goal.replace_associated_goals(d.associated_goals)
@@ -74,8 +86,11 @@ module GoalsViz
       end
 
       goal.set_all(d.unahandled_args.to_h)
+      goal
 
     end
+
+
 
 
   end
@@ -99,7 +114,7 @@ module GoalsViz
     end
 
     def editable?
-      user.is_admin or goal.owners.include?(user) or goal.creator == user
+      goal.editable_by?(user)
     end
 
     def mygoal?
@@ -109,7 +124,7 @@ module GoalsViz
 
     def to_h
       {
-          "goal-published-status" => goal_published_status,
+          "goal-published-status" => goal.draft? ? "Draft" : "Published",
           "goal-fiscal-year" => goal.goal_year,
           "goal-target-date-timestamp" => goal.target_date_string,
           "goal-target-date" => goal.target_date_string,
