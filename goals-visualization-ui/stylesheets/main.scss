@@ -4,18 +4,21 @@
 
 // Partials
 @import "partials/reset";
-@import "partials/grid";
 @import "partials/base";
 @import "partials/typography";
 @import "partials/form";
 @import "partials/buttons";
-@import "partials/alerts";
 @import "partials/navigation";
-@import "partials/utilities";
+@import "partials/utility";
+@import "partials/header";
+@import "partials/footer";
+@import "partials/callout";
+@import "partials/alerts";
+@import "partials/site_messages";
 
 // Specific to Goals Visualization
-@import "partials/sort";
-@import "partials/goals";
+@import "goals/sort";
+@import "goals/goals";
 
 // Vendor and Third-party
 @import "vendor/selectize";

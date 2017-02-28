@@ -1,28 +1,42 @@
-input[type="text"],
-textarea,
+label {
+  margin-bottom: 0.1rem;
+  color: $grey-1;
+  display: block;
+  font-weight: 600;
+}
+
+.fieldset-label {
+  font-weight: 700;
+}
+
+input,
+button,
+textarea, {
+  font-size: $font-size-base;
+  font-family: $font-family-1;
+  color: $grey-1;
+}
+
 select {
   font-size: $font-size-base;
   border: solid 1px rgba(0,0,0,0.3);
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
   border-radius: 4px;
-  padding: 0.75rem;
+  padding: 0.6rem;
+  line-height: 1.4;
   width: 100%;
+  background: $grey-6;
+  height: 2.5rem;
 }
 
-fieldset {
-  width: 24rem;
-}
-
-select {
-  height: 2.75rem;
-  padding: 0;
-}
-
-label,
-legend {
-  color: $grey-2;
-  display: block;
-  font-weight: $font-weight-bold;
+input[type="text"] {
+  font-size: $font-size-base;
+  border: solid 1px rgba(0,0,0,0.3);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  padding: 0.6rem;
+  line-height: 1.4;
+  width: 100%;
 }
 
 input[type="text"]:disabled,
@@ -33,20 +47,12 @@ input[type="text"]:read-only {
   cursor: not-allowed;
 }
 
-input[type="checkbox"] {
-  cursor: pointer;
-  margin-right: 0.5rem;
-  padding: 0 0.5rem;
-}
-
 fieldset {
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 }
 
-.help-text,
-.validation-text {
+.help-text {
   margin: 0;
-  font-size: 1rem;
 }
 
 fieldset.field-valid {
@@ -54,8 +60,9 @@ fieldset.field-valid {
     border-color: $green-2;
   }
 
-  .validation-text {
+  .help-text {
     color: $green-2;
+    font-size: 0.9rem;
   }
 }
 
@@ -64,8 +71,9 @@ fieldset.field-error {
     border-color: $red-2;
   }
 
-  .validation-text  {
+  .help-text {
     color: $red-2;
+    font-size: 0.9rem;
   }
 }
 
@@ -74,31 +82,22 @@ fieldset.field-warning {
     border-color: $orange-2;
   }
 
-  .validation-text  {
+  .help-text {
     color: $orange-2;
+    font-size: 0.9rem;
   }
 }
 
 textarea {
-  min-height: 10rem;
+  display: block;
+  padding: 0.6rem;
+  border: solid 1px rgba(0,0,0,0.3);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+  border-radius: 4px;
   width: 100%;
-  resize: vertical;
+  min-height: 9rem;
 }
 
-input[type="text"]:focus,
-textarea:focus,
-select:focus {
-  border-color: $main-2;
-}
-
-@media (max-width: 28rem) {
-  fieldset {
-    width: 100%;
-  }
-}
-
-.radio-label,
-label.option {
-  color: $grey-1;
+.option {
   font-weight: 400;
 }

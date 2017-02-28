@@ -14,10 +14,10 @@
 
 
 </head>
-<body>
+<body class="site-min-width">
 
     <% if flash[:error_msg] %>
-      <div class="alert alert-warning alert-site-banner">
+      <div class="site-message site-message-warning">
         <div class="container">
           <h3>Please check:</h3>
           <% Array(flash[:error_msg]).flatten.each do |x| %>
@@ -28,7 +28,7 @@
     <% end %>
 
     <% if flash[:goal_added_msg] %>
-      <div class="alert alert-success alert-site-banner">
+      <div class="site-message site-message-info">
         <div class="container">
           <%= flash[:goal_added_msg] %>
         </div>
@@ -36,19 +36,29 @@
     <% end %>
 
     <header class="site-header">
-      <div class="container">
-        <a href="/" class="brand-link">
-          <img class="brand-image mlib-logo-image" src="http://www.lib.umich.edu/shared-files/graphics/logos/umlib_logo_white_72x442.png">
-        </a>
+      <div class="container container-space-between align-center">
+        <ul class="logo-item-list">
+          <li class="logo-block-m">
+            <a href="http://umich.edu" class="logo-link">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHsAAABYCAYAAADV/4jnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA8dJREFUeNrsnd9x2kAQxg+PJ8+UQDqACqJ0ICoIdKBUAFQgOog6MB2EDkwJpAM/8+LcOSsPhH+SkGC/ve+b0fDgGY+0P+99t7sn3Ht//TJxzv1wujTtjXZbBywf17n/+Kbpnp79NfBXoixWL/4aAYNO/cdM2309KY3X0AcsBwUdkueXxnt7Uhy3zAcuAeQdQPcJu8Fy7oH3gbJ6rtASYWD3xb8RQA81+jQS7KDEBzJTDhrijxIBdlAumaPZpweE3WJANfq39ClShAAiwQ6ZnSsDre6erMAOmkjDgmVWBLDL5XygIKtzWW0cYRsux6TZk6EFDhH2h39LA4NlVgSwg2YPaqe+IPm0Fdh3L8ekuZOgBgsd9sDdacKEVmZZhB2Udt1ORfZpa7BL/+6yDModQDs0Ftj9rvxbmjgTC0GyAvujHHMtjxg1nzqJHXZQ1nI7FbbMigF2a+WYNG2GlgJjEfbNO2dp1sysBcYi7KCkaTvVSpl1Sr0aQXgHfL5Rb7Tb1IQdQKdgz7nwzzmPNbM/N1h1/FuaM6nVYFiHXbl0QjgdStjXlco5sWs+DXXqhLDPK79yumVmrcyKGfbZHbY0YbIYghAL7KCjlwWttUMJ+1D/vyxo3qf39eziUyjHvsrSncT04DHCDpn8O4YNWezL+Kd/x/jQscJ2hE0RNkXYXWoJHtc3fxWEXU0Lf22AYf/01x/CrqDeaBcyYyoZgqbC33+h8cbUerYcOliAgd5IVtOzGwAP3r0Cgj2VVYmwmwbQX1sEn657BIqwT/v3WPltrmQVYull3L/LzSTr7BaBz/3HWuGtjTX7NCTsMrDKyrFwhHeNEjwo2Mr8e13lrDZh3wY8ZNKjN0MwPg0NW4CHxsUjyxzIf2uBPPV6lH8vPegVYsBgYUtm3bs1idjCNZHZTgYOxT19GqXMMgdbdC//Vt8ONQ97bxzapVZax5axZXbZTu3Kv7eIZZZZ2AK8q3HoGNmnTcIu61/X7jgU3qfNwm7Zv9cIY8uYM7tsp95aCyPM0AlbgM/dbeNQMz59EBf5CinE7xIJy+z3cz+Ud69fXf1XcpfSez/3exP378VAZrai7G5SMm0ugeYyrht4KMWqbrJM+nQ0sAV41XYq5NiSsE/X35c2XAXq2JKwj7P7UjtV9VschN0MeOGOx6HwY0vCPq+Qwfu+vLDUDiXsw+ze33GvrLVDCfu0f4+dkbFlHcX41Vguhp03MztyETZhU4RNETZF2BRhU4RNETZF2BRhU4RNEXZsClOvrdP5/WLX9KhDB2+g8XJ/BRgAnv80rcL5FKcAAAAASUVORK5CYII=" alt="Go to the University of Michigan Library homepage">
+            </a>
+          </li>
+          <li class="logo-library">
+            <a href="http://lib.umich.edu">Library</a>
+          </li>
+          <li class="logo-site-title">
+            <a href="/">LIT Goals</a>
+          </li>
+        </ul>
 
-        <nav>
-          <ul class="nav-list">
+        <nav class="navigation">
+          <ul class="navigation-list">
             <li>
               <a href="/litgoals/create">Create</a>
             </li>
-            <li style="color: #fff">
+            <li>
               <% #require 'pry'; binding.pry %>
-              <a href="<%= current_fiscal_year.goals_url%>">Current Year Goals</a>
+              <a href="<%= current_fiscal_year.goals_url%>">FY Goals</a>
             </li>
             <li>
               <a href="/litgoals/goals/">Archive</a>
@@ -71,14 +81,6 @@
         <p>
           Created by M-Library LIT to help LIT understand and track the big picture of the division.
         </p>
-
-        <nav>
-          <ul class="nav-list">
-            <li>
-              <a href="/litgoals/goals">Goal Archive by Fiscal Year</a></a>
-            </li>
-          </ul>
-        </nav>
       </div>
     </footer>
 

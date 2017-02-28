@@ -1,14 +1,13 @@
-<div class="callout">
+<div class="callout no-border">
   <div class="container">
-    <h1 class="no-spacing">LIT Goals &ndash; <%= "#{current_fiscal_year.class.new(year).range_string_html}"%></h1>
+    <h1 class="no-spacing"><%= "#{current_fiscal_year.class.new(year).range_string_html}"%></h1>
   </div>
 </div>
 
 <div id="goal-list-container">
 
-  <div class="callout no-spacing-top">
+  <div class="callout list-search-container">
     <div class="container">
-
       <div class="facet-container">
         <fieldset class="no-spacing facet-title-search">
           <label for="search-by-title">Search</label>
@@ -17,16 +16,15 @@
 
         <p class="facet-sort">
           <label>Sort by</label>
-          <button class="facet sort" data-sort="goal-title" href="">Title</button>
-          <button class="facet sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
+          <button class="button button-small button-light sort" data-sort="goal-title" href="">Title</button>
+          <button class="button button-small button-light sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
         </p>
 
         <p class="facet-filter">
           <label>Filter by</label>
-          <button id="filter-by-my-goals" class="facet filter" data-sort="goal-my-goal">My Goals</button>
+          <button id="filter-by-my-goals" class="button button-small button-light filter" data-sort="goal-my-goal">My Goals</button>
         </p>
       </div>
-
     </div>
   </div>
 
@@ -45,24 +43,30 @@
 
 <div style="display: none;">
   <li id="goal-item-template">
-    <a class="button-light button-small goal-edit goal-edit-show goal-edit-href" href="">Edit</a>
+    <a class="goal-edit" href="">Edit</a>
     <span class="goal-my-goal"></span>
     <h5 class="goal-title no-spacing"></h5>
     <p class="goal-description"></p>
-    <div class="goal-metadata-container">
-      <p class="goal-metadata">
-        Goal Scope<br />
-        <span class="goal-owners"></span>
-      </p>
-      <p class="goal-metadata">
-        Goal Status<br />
-        <span class="goal-published-status"></span>
-      </p>
-      <p class="goal-metadata">
-        Target Date<br />
-        <span class="goal-target-date goal-target-date-timestamp" data-timestamp=""></span>
-      </p>
-    </div>
+    <dl class="goal-metadata">
+      <dt>
+        Scope
+      </dt>
+      <dd class="goal-owners">
+
+      </dd>
+      <dt>
+        Status
+      </dt>
+      <dd class="goal-published-status">
+
+      </dd>
+      <dt>
+        Target Date
+      </dt>
+      <dd class="goal-target-date goal-target-date-timestamp" data-timestamp="">
+
+      </dd>
+    </dl>
     <div class="goal-associated-goals">
     </div>
   </li>
@@ -114,8 +118,6 @@
 
   var updateFacetInfo = function() {
     var text = 'Matched ' + goalList.matchingItems.length + ' goal'
-
-
 
     if (goalList.visibleItems.length != 1) {
       text = text + 's'

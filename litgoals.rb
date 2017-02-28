@@ -175,7 +175,7 @@ class LITGoalsApp < Roda
           else
             g.save
             action = is_newgoal ? "added" : "edited"
-            flash[:goal_added_msg] = "Goal \"<span class=\"goal-title\">#{g.title}</span>\" #{action}"
+            flash[:goal_added_msg] = "Goal \"#{g.title}\" #{action}"
             sleep 0.5
             r.redirect currentFY.goals_url
           end

@@ -1,0 +1,62 @@
+.site-header {
+  background: $main-1;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.logo-item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  align-items: center;
+  display: flex;
+
+  & > li {
+    display: inline-block;
+    margin: 0;
+    height: 1.8rem;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.logo-link {
+  display: inline-block;
+  vertical-align: top;
+  height: 1.8rem;
+
+  img {
+    height: 100%;
+    width: auto;
+  }
+}
+
+.logo-block-m {
+  padding-right: 0.8rem;
+  padding-left: 0;
+}
+
+.logo-library,
+.logo-site-title {
+  font-size: 1.3rem;
+  color: white;
+  padding-left: 0.8rem;
+}
+
+.logo-site-title a {
+  color: white;
+}
+
+.logo-library {
+  border-right: solid 1px rgba(white, 0.5);
+  border-left: solid 1px rgba(white, 0.5);
+  padding-right: 0.8rem;
+
+  a {
+    color: rgba(white, 0.5);
+  }
+}

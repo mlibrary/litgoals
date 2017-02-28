@@ -1,13 +1,13 @@
 <div class="callout">
   <div class="container">
-    <h1 class="no-spacing">LIT Goals &mdash; Archive</h1>
-    <p>
-      Access goals by fiscal year.
-    </p>
+    <h1 class="no-spacing">Goals Archive</h1>
   </div>
 </div>
 
 <div class="container">
+  <p>
+    Access goals by fiscal year:
+  </p>
   <ul>
     <% (-1..1).each do |delta| %>
         <% fy = current_fiscal_year.next(delta) %>
@@ -15,7 +15,5 @@
           <a href="<%= fy.goals_url%>"><%= fy.range_string_html%></a> (<%= GoalsViz::Goal.all_viewable_by(user, fy.year).count %>)
         </li>
     <% end %>
-
   </ul>
 </div>
-

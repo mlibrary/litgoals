@@ -1,27 +1,29 @@
 .button {
   display: inline-block;
   margin: 0;
-  margin-right: 0.5rem;
   padding-right: 1rem;
   padding-left: 1rem;
   padding-top: 0.65rem;
   padding-bottom: 0.55rem;
   background: $main-3;
+  border: 1px solid $main-2;
+  border-bottom: 3px solid $main-2;
   color: #fff;
   font-size: $font-size-base;
-  border: none;
   border-radius: 4px;
-  border-bottom: 3px solid $main-2;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .button:active {
   color: $grey-6;
   background: $main-2;
   border-color: $main-1;
-  position: relative;
-  top: 2px;
-  border-bottom-width: 1px;
+}
+
+.button:active,
+.button:hover {
+  text-decoration: none;
 }
 
 .button-disabled:hover,
@@ -30,15 +32,19 @@
 }
 
 .button-light {
-  background: $grey-5;
-  color: $grey-2;
-  border-color: $grey-4;
+  background: $grey-6;
+  color: $grey-1;
+  border-color: $grey-5;
 }
 
 .button-light:active {
-  background: $grey-4;
-  color: $grey-2;
-  border-color: $grey-5;
+  background: $grey-5;
+  color: $grey-1;
+  border-color: $grey-4;
+}
+
+.button-small {
+  padding: 0.4rem 0.8rem;
 }
 
 .button-radio {
@@ -48,4 +54,16 @@
   background: $grey-6;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.button-link {
+  border: none;
+  display: inline-block;
+  margin: 0;
+  color: $main-3;
+  background: none;
+  font-size: 1rem;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0;
 }

@@ -1,9 +1,10 @@
 .alert {
-  margin: 2rem 0;
+  margin: 1rem 0;
   padding: 1rem;
 
   border: solid 2px $grey-5;
   background: $grey-6;
+  border-radius: 4px;
 }
 
 .alert-success {
@@ -27,12 +28,5 @@
 }
 
 .alert *:first-child {
-  margin-top: 0;
-}
-
-.alert-site-banner {
   margin: 0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
 }
