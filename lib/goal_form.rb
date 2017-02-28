@@ -1,4 +1,5 @@
 require_relative 'sql_models'
+require 'kramdown'
 
 module GoalsViz
 
@@ -130,7 +131,7 @@ module GoalsViz
           "goal-target-date" => goal.target_date_string,
           "goal-owners" => owner_names.join("<br>"),
           'goal-title' => goal.title,
-          'goal-description' => goal.description,
+          'goal-description' => Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html,
           'goal-edit-href' => "/litgoals/edit_goal/#{@goal.id}",
           'goal-edit-show' => editable? ? "" : "display: none",
           'goal-my-goal' => mygoal? ? "My Goal" : ""
