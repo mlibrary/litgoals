@@ -606,6 +606,9 @@ footer {
   font-weight: 600;
   font-size: 1.2rem; }
 
+.goal-metadata {
+  margin-bottom: 1rem; }
+
 .goal-metadata dd {
   margin-left: 2rem; }
 

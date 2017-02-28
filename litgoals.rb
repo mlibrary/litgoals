@@ -5,6 +5,7 @@ require 'forme'
 require 'json'
 require 'date'
 require 'logger'
+
 require_relative "lib/sql_models"
 require_relative "lib/json_graph"
 require_relative 'lib/constants'
