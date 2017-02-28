@@ -186,8 +186,10 @@ module GoalsViz
     end
 
 
-    def self.all_viewable_by(user)
-      self.all.find_all { |g| g.viewable_by? user }
+    def self.all_viewable_by(user, year = nil)
+      q = self
+      q = q.where(goal_year: year) unless year.nil?
+      q.all.find_all { |g| g.viewable_by? user }
     end
 
 

@@ -62,6 +62,7 @@ def goal_list_for_selectize(list_of_owners)
     {
         title: g.title,
         uid: g.id,
+        year: g.goal_year,
         domain: g.owner_names.join(', '),
         description: g.description || "[no description given]"
     }
@@ -124,6 +125,8 @@ class LITGoalsApp < Roda
 
 
         #####
+        # GET /goals/YYYY
+        #
         r.get /(\d{4})/ do |yearstring|
           year = yearstring.to_i
           goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}

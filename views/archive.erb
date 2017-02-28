@@ -9,15 +9,13 @@
 
 <div class="container">
   <ul>
-    <li>
-      <a href="/litgoals/goals/2017">July 2017 to June 2018</a>
-    </li>
-    <li>
-      <a href="/litgoals/goals/2016">July 2016 to June 2017</a>
-    </li>
+    <% (-1..1).each do |delta| %>
+        <% fy = current_fiscal_year.next(delta) %>
+        <li>
+          <a href="<%= fy.goals_url%>"><%= fy.range_string_html%></a> (<%= GoalsViz::Goal.all_viewable_by(user, fy.year).count %>)
+        </li>
+    <% end %>
 
-    <li>
-      <a href="/litgoals/goals/2015">July 2015 to June 2016</a>
-    </li>
   </ul>
 </div>
+
