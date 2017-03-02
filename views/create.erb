@@ -105,15 +105,17 @@
 </div>
 </main>
 <script>
-  var all_goals = <%= selectize_associated_goal_options %>
-
+  var goals = _.chain(<%= selectize_associated_goal_options %>)
+    .groupBy('year')
+    .value();
+  var initial_year = $("#goal-year option:selected")[0].value;
   var options = {
     persist: false,
     maxItems: null,
     valueField: 'uid',
     searchField: ['title'],
     items: <%= parent_goal_ids %>,
-    options: all_goals,
+    options: goals[initial_year],
     render: {
       item: function (item, escape) {
         return '<div><span>' +
@@ -129,18 +131,19 @@
       }
     }
   }
-
   var $select = $('#associated-goals').selectize(options);
-  var goal_year_select = $select[0].selectize;
 
   $('#goal-year').change(function(e) {
-    var option_selected = $("option:selected", this);
-    var value_selected = this.value;
+    var selectize = $select[0].selectize;
+    var year = $("#goal-year option:selected")[0].value;
 
-    console.log('select', goal_year_select, value_selected)
-
-    //select.updateOptions(options);
+    selectize.disable()
+    selectize.clearOptions()
+    _.each(goals[year], function(goal) {
+      selectize.addOption(goal)
+    })
+    selectize.refreshOptions()
+    selectize.enable()
   })
-
   //var selectize = $select[0].selectize;
 </script>
