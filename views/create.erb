@@ -9,9 +9,7 @@
 </div>
 
 <div class="container">
-
   <form action="/litgoals/create" method="post">
-
     <input type="hidden" name="goal_id" value="<%= goal.id %>">
 
     <fieldset>
@@ -42,9 +40,12 @@
 
     <fieldset class="full-width">
       <label for="goal_year">Fiscal Year</label>
-      <%=  forme.input(:select, multiple: false, name: 'goal_year',
-           options: two_years_of_fy_options,
-           selected: 2016
+      <%=  forme.input(:select,
+            multiple: false,
+            name: 'goal_year',
+            options: two_years_of_fy_options,
+            selected: 2016,
+            id: 'goal-year'
            ) %>
     </fieldset>
     <fieldset class="full-width">
@@ -56,23 +57,21 @@
     </fieldset>
 
     <fieldset class="full-width">
-      <label for="description">Description (parsed as github-flavored markdown)</label>
+      <label for="description">Description</label>
       <p class="help-text">
-        Write down and explain relevant details.
+        Write down and explain relevant details. Markdown friendly.
       </p>
       <%= forme.input(:textarea, name: 'description', value: goal.description) %>
-
     </fieldset>
 
     <fieldset class="full-width">
       <label for="associated-goals">Associated Goals</label>
       <p class="help-text">
         Search for and associate other goals with this goal.
-        <a target="_blank.html" href="goals">View list of goals.</a>
+        <a target="_blank.html" href="goals" class="underline">View list of goals.</a>
       </p>
       <input id="associated-goals" name="associated-goals" type="text" placeholder="Type to search"/>
     </fieldset>
-
 
     <fieldset>
       <label>Status</label>
@@ -81,7 +80,6 @@
       </p>
 
       <div class="radioset">
-
         <%= forme.input(:radioset, name: 'status', options: status_options, selected: selected_status) %>
       </div>
 
@@ -98,7 +96,6 @@
     <fieldset class="full-width">
       <label for="notes">Notes</label>
       <textarea name="notes" id="notes"><%= goal.notes %></textarea>
-
     </fieldset>
 
     <input type="submit" value="Save and publish" class="button"/>
@@ -108,14 +105,15 @@
 </div>
 </main>
 <script>
-  $('#associated-goals').selectize({
+  var all_goals = <%= selectize_associated_goal_options %>
+
+  var options = {
     persist: false,
     maxItems: null,
     valueField: 'uid',
     searchField: ['title'],
     items: <%= parent_goal_ids %>,
-    options: <%= selectize_associated_goal_options %>,
-
+    options: all_goals,
     render: {
       item: function (item, escape) {
         return '<div><span>' +
@@ -130,5 +128,19 @@
         '</span></div>';
       }
     }
-  });
+  }
+
+  var $select = $('#associated-goals').selectize(options);
+  var goal_year_select = $select[0].selectize;
+
+  $('#goal-year').change(function(e) {
+    var option_selected = $("option:selected", this);
+    var value_selected = this.value;
+
+    console.log('select', goal_year_select, value_selected)
+
+    //select.updateOptions(options);
+  })
+
+  //var selectize = $select[0].selectize;
 </script>
