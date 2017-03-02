@@ -652,6 +652,11 @@ footer {
     border: solid 1px #E5E5E5;
     border-radius: 4px; }
 
+.pagination .active a {
+  color: white;
+  border-color: #0C5292;
+  background: #126DC1; }
+
 /**
  * selectize.css (v0.12.2)
  * Copyright (c) 2013–2015 Brian Reavis & contributors

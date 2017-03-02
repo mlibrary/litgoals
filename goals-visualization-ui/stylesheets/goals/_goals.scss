@@ -78,3 +78,9 @@
     border-radius: 4px;
   }
 }
+
+.pagination .active a {
+  color: white;
+  border-color: $main-2;
+  background: $main-3;
+}
