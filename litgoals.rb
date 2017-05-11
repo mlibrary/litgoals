@@ -19,7 +19,7 @@ Sequel::Model.plugin :json_serializer
 
 LOG = Logger.new(STDERR)
 DEFAULT_USER_UNIQNAME = 'dueberb'
-DEFAULT_USER_UNIQNAME = 'rsteg'
+# DEFAULT_USER_UNIQNAME = 'rsteg'
 
 #
 UNITS = GoalsViz::Unit.abbreviation_to_unit_map

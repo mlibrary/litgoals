@@ -134,12 +134,12 @@ module GoalsViz
           'goal-description' => Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html,
           'goal-edit-href' => "/litgoals/edit_goal/#{@goal.id}",
           'goal-edit-show' => editable? ? "" : "display: none",
-          'goal-my-goal' => mygoal? ? "My Goal" : ""
+          'goal-my-goal' => mygoal? ? "My Goal" : "",
+          'goal-published-status' => goal.draft? ? 'Draft' : goal.status,
+          'goal-fiscal-year' => goal.goal_year
       }
 
     end
-
-
 
   end
 end
