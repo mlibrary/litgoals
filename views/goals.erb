@@ -1,17 +1,229 @@
-<div class="callout no-border">
-  <div class="container">
-    <h1 class="no-spacing">Search Goals</h1>
+<div class="callout search-heading">
+  <div class="container container-narrow">
+    <h1 class="page-heading">Library Information Technology Goals</h1>
+
+    <form class="search-form" role="search">
+      <div class="flex-container">
+        <label class="search-label">
+          <span class="search-label-text">Search Goals</span>
+          <div class="flex-container">
+            <input type="text" class="search-input" />
+            <button class="button">Search</button>
+          </div>
+        </label>
+      </div>
+    </form>
   </div>
 </div>
 
-<div>
-  <form>
-    <label>
-      Search terms
-      <div class="flex-container">
-        <input type="text" />
-        <button class="button">Search</button>
-      </div>
-    </label>
-  </form>
+<div class="container flex-container">
+  <aside class="filter-container">
+    <ul class="filter-group-list">
+      <li class="filter-group">
+        <h2 class="filter-group-heading">Filter Scope</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              My Goals Only
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Division
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li class="filter-group">
+        <h2 class="filter-group-heading">Filter Year</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              2016-2017
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              2017-2018
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li class="filter-group">
+        <h2 class="filter-group-heading">Filter Department</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Architecture &amp; Engineering
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Design &amp; Discovery
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Digital Content &amp; Collections
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Digital Library Applications
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Library Systems
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li class="filter-group">
+        <h2 class="filter-group-heading">Current Status</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Not Started
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              In Progress
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              On Hold
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Completed
+            </label>
+          </li>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" />
+              Abandonded
+            </label>
+          </li>
+        </ul>
+      </li>
+      <li class="filter-group">
+        <h2 class="filter-group-heading filter-group-heading-no-border">Filter Person</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <p class="screen-reader-text">
+                Select person to filter results by
+              </p>
+              <select name="select">
+                <option value="earleyj">Earley, Jon</option>
+                <option value="tdobias" selected>Dobias, Trevor</option>
+                <option value="bdueber">Dueber, Bill</option>
+              </select>
+            </label>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="goal-result-container">
+    <div class="goal-result-summary-container">
+      <p class="goal-result-summary">
+        <b>24 results</b> for &ldquo;search term&rdquo;
+      </p>
+      <fieldset class="view-type-fieldset">
+        <label class="view-type-label">
+          <input type="radio" name="viewtype" value="full" checked />
+          Info View
+        </label>
+        <label class="view-type-label">
+          <input type="radio" name="viewtype" value="full" />
+          List View
+        </label>
+      </fieldset>
+    </div>
+
+    <ul class="goal-result-list">
+      <li class="goal-result">
+        <h2 class="goal-title">
+          <a class="goal-link" href="">Build and Expand a Robust Repository Solution</a>
+        </h2>
+        <dl class="goal-metadata-list">
+          <dt>
+            Why
+          </dt>
+          <dd>
+            The library's repository infrastructure is twenty years old and no longer meets the evolving needs of its users.
+
+            Long-term direction: LIT will develop a modern repository infrastructure with complementary applications and services in order to sustainably support the management, preservation, and access of digital data/content for the library, its partners, and users.
+
+            Intention for this year: In order to make progress on the establishment of repository services for the areas of greatest need, LIT in close collaboration with library and campus stakeholders, such as Publishing and the The Bentley Historical Library, will investigate, design, and develop repository solutions while assessing their viability. We will simultaneously grow the division?s skills and expertise to solve problems of increasing scope and complexity, so that immediate needs are met with an eye toward future consolidation.
+          </dd>
+
+          <dt>
+            Stewards
+          <dt>
+          <dd>
+            John Weise, Sebastien Korner
+          </dd>
+
+          <dt>
+            Scope
+          <dt>
+          <dd>
+            Library Information &amp; Technology
+          </dd>
+
+          <dt>
+            Status
+          <dt>
+          <dd>
+            In Progress
+          </dd>
+
+          <dt>
+            Target Date
+          <dt>
+          <dd>
+            2017/06
+          </dd>
+
+          <dt>
+            Associated Goals
+          <dt>
+          <dd>
+            <ul class="associated-goals-list">
+              <li>
+                <a href="">Improve Discovery and Document Delivery Across the Library Web Presence</a>
+              </li>
+              <li>
+                <a href="">Establish a Library Analytics Program</a>
+              </li>
+              <li>
+                <a href="">Plan for the Future Migration from Aleph to a New ILS Solution</a>
+              </li>
+            </ul>
+          </dd>
+        </dl>
+
+      </li>
+    </ul>
+  </main>
 </div>

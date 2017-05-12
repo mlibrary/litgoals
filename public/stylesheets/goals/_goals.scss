@@ -1,86 +1,88 @@
-.goal-list-info {
-  margin-top: 1rem;
-  padding: 1rem 0;
-  background: white;
-  border-radius: 4px 4px 0 0;
-  border-bottom: solid 2px $grey-5;
+.page-heading {
+  margin-top: 0;
 }
 
-.goal-list {
+/*
+  Goal result page layout
+*/
+
+.filter-container {
+  min-width: 16rem;
+  margin-right: 2rem;
+}
+
+.goal-result-container {
+  width: 100%;
+}
+
+
+/*
+  Goal result specific styling
+*/
+
+.goal-result-summary-container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 2px $grey-5;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+}
+
+.goal-result-summary {
   margin: 0;
+}
+
+.goal-result-list {
   list-style: none;
+  margin: 0;
+  padding: 0;
 
   & > li {
     padding: 0;
-    margin: 2rem 0;
-    padding-bottom: 1rem;
-    border-bottom: solid 2px $grey-5;
   }
+}
+
+.goal-result {
+  border-bottom: solid 2px $grey-5;
 }
 
 .goal-title {
+  font-size: 1.25rem;
   font-weight: 600;
-  font-size: 1.2rem;
 }
 
-.goal-metadata {
-  margin-bottom: 1rem;
-}
+.goal-link {
+  color: $main-3;
+  border-bottom: 2px solid rgba(18,109,193,.4);
 
-.goal-metadata dd {
-  margin-left: 2rem;
-}
-
-.list-search-container {
-  padding: 0;
-  padding-bottom: 1rem;
-}
-
-.filter.active {
-  background: $main-3;
-  border-color: $main-2;
-  color: #fff;
-}
-
-.sort.asc {
-  background: $main-3;
-  border-color: $main-2;
-  color: #fff;
-}
-
-.goal-edit {
-  float: right;
-  margin-left: 1rem;
-  text-decoration: underline;
-}
-
-.goal-my-goal {
-  float: right;
-  color: white;
-  background: $main-3;
-  border-color: #0C5292;
-  border-radius: 4px;
-  padding: 0 0.5rem;
-}
-
-.pagination {
-  margin: 0;
-}
-.pagination > li {
-  display: inline-block;
-  padding-left: 0;
-  margin-right: 0.5rem;
-
-  a {
-    padding: 0.4rem 0.8rem;
-    background: $grey-6;
-    border: solid 1px $grey-5;
-    border-radius: 4px;
+  &:hover {
+    background: $main-5;
   }
 }
 
-.pagination .active a {
-  color: white;
-  border-color: $main-2;
-  background: $main-3;
+.goal-metadata-list {
+  dt {
+    font-size: 0.9rem;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  dd {
+    margin-bottom: 1rem;
+  }
+}
+
+.associated-goals-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    padding: 0;
+    margin: 0;
+
+    a {
+      text-decoration: underline;
+    }
+  }
 }

@@ -1,11 +1,15 @@
 .site-min-width {
-  min-width: 20rem;
+  min-width: 24rem;
 }
 
 .container {
-  max-width: 48rem;
+  max-width: 56rem;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+.container-narrow {
+  max-width: 42rem;
 }
 
 .container-space-between {
