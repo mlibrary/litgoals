@@ -1,134 +1,17 @@
 <div class="callout no-border">
   <div class="container">
-    <h1 class="no-spacing"><%= "#{current_fiscal_year.class.new(year).range_string_html}"%></h1>
+    <h1 class="no-spacing">Search Goals</h1>
   </div>
 </div>
 
-<div id="goal-list-container">
-
-  <div class="callout list-search-container">
-    <div class="container">
-      <div class="facet-container">
-        <fieldset class="no-spacing facet-title-search">
-          <label for="search-by-title">Search</label>
-          <input id="search-by-title" class="search" type="text" />
-        </fieldset>
-
-        <p class="facet-sort">
-          <label>Sort by</label>
-          <button class="button button-small button-light sort" data-sort="goal-title" href="">Title</button>
-          <button class="button button-small button-light sort" data-sort="goal-target-date-timestamp" href="">Target Date</button>
-        </p>
-
-        <p class="facet-filter">
-          <label>Filter by</label>
-          <button id="filter-by-my-goals" class="button button-small button-light filter" data-sort="goal-my-goal">My Goals</button>
-        </p>
+<div>
+  <form>
+    <label>
+      Search terms
+      <div class="flex-container">
+        <input type="text" />
+        <button class="button">Search</button>
       </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <p id="goal-list-info" class="goal-list-info">
-    </p>
-
-    <ul class="list-alternative list goal-list"></ul>
-
-    <ul class="pagination">
-
-    </ul>
-  </div>
-
+    </label>
+  </form>
 </div>
-
-<div style="display: none;">
-  <li id="goal-item-template">
-    <a class="goal-edit goal-edit-href goal-edit-show" style="" href="">Edit</a>
-    <span class="goal-my-goal"></span>
-    <h5 class="goal-title no-spacing"></h5>
-    <p class="goal-description"></p>
-    <dl class="goal-metadata">
-      <dt>
-        Scope
-      </dt>
-      <dd class="goal-owners">
-
-      </dd>
-      <dt>
-        Status
-      </dt>
-      <dd class="goal-published-status">
-
-      </dd>
-      <dt>
-        Target Date
-      </dt>
-      <dd class="goal-target-date goal-target-date-timestamp" data-timestamp="">
-
-      </dd>
-    </dl>
-    <div class="goal-associated-goals">
-    </div>
-  </li>
-</div>
-
-<script>
-  var options = {
-    item: 'goal-item-template',
-    valueNames: [
-      'goal-owners',
-      { name: 'goal-target-date-timestamp', attr: 'data-timestamp'},
-      'goal-target-date',
-      'goal-title',
-      'goal-published-status',
-      'goal-description',
-      'goal-my-goal',
-      'goal-fiscal-year',
-      { name: 'goal-edit-href', attr: 'href' },
-      { name: 'goal-edit-show', attr: 'style'}
-    ],
-    page: 10,
-    plugins: [
-      ListPagination({})
-    ]
-  }
-
-  var values = <%= goal_list_for_display %>
-  var goalList = new List('goal-list-container', options, values);
-  var filter_by_my_goals = document.getElementById('filter-by-my-goals');
-
-  filter_by_my_goals.addEventListener('click', function(event) {
-    if (filter_by_my_goals.classList.contains('active')) {
-      filter_by_my_goals.classList.remove('active')
-      goalList.filter()
-    } else {
-      filter_by_my_goals.classList.add('active')
-      goalList.filter(function(item) {
-        if (item.values()['goal-my-goal'] == 'My Goal') { return true } else { return false }
-      })
-    }
-  })
-
-  goalList.on('updated', function(e) {
-    updateFacetInfo()
-  })
-
-  var goal_list_info = document.getElementById('goal-list-info')
-
-  var updateFacetInfo = function() {
-    var text = 'Matched ' + goalList.matchingItems.length + ' goal'
-
-    if (goalList.visibleItems.length != 1) {
-      text = text + 's'
-    }
-
-    if (goalList.visibleItems.length == 0) {
-      text = 'No goals match your search.'
-    }
-
-    goal_list_info.textContent = text
-  }
-
-  updateFacetInfo()
-
-</script>

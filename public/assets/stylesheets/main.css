@@ -395,6 +395,9 @@ nav {
   margin-bottom: 0;
   padding-bottom: 0; }
 
+.flex-container {
+  display: flex; }
+
 .site-header {
   background: #00274C;
   padding-top: 1rem;
