@@ -1,22 +1,10 @@
-<div class="callout search-heading">
-  <div class="container container-narrow">
-    <h1 class="page-heading">Library Information Technology Goals</h1>
 
-    <form class="search-form" role="search">
-      <div class="flex-container">
-        <label class="search-label">
-          <span class="search-label-text">Search Goals</span>
-          <div class="flex-container">
-            <input type="text" class="search-input" />
-            <button class="button">Search</button>
-          </div>
-        </label>
-      </div>
-    </form>
-  </div>
-</div>
+
+<%= render 'layout/search_ribbon', locals: locals%>
 
 <div class="container flex-container">
+
+  <!-- facets -->
   <aside class="filter-container">
     <ul class="filter-group-list">
       <li class="filter-group">
@@ -160,6 +148,7 @@
       </fieldset>
     </div>
 
+    <!-- goal list -->
     <ul class="goal-result-list">
       <li class="goal-result">
         <h2 class="goal-title">
