@@ -1,0 +1,20 @@
+<li class="goal-result">
+  <h2 class="goal-title">
+    <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
+  </h2>
+  <dl class="goal-metadata-list">
+    <dt>
+      Why
+    </dt>
+    <dd>
+      <%= goal.description %>
+   </dd>
+
+    <dt>
+      Stewards
+    <dt>
+    <dd>
+      <%= goal.stewards.map(&:name).join(", ")%>
+    </dd>
+  </dl>
+</li>

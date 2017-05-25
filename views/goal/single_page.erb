@@ -1,0 +1,59 @@
+<li class="goal-result">
+  <h2 class="goal-title">
+    <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
+  </h2>
+  <dl class="goal-metadata-list">
+    <dt>
+      Why
+    </dt>
+    <dd>
+      <%= goal.description %>
+    </dd>
+
+    <dt>
+      Stewards
+    <dt>
+    <dd>
+      <%= goal.owners %>
+    </dd>
+
+    <dt>
+      Scope
+    <dt>
+    <dd>
+      <% goal.scopes.each do |scope| %>
+        <a href="/litgoals/goals/<%= scope.uniqname %>"><%= scope.lastname %></a><br/>
+      <% end %>
+    </dd>
+
+    <dt>
+      Status
+    <dt>
+    <dd>
+      <%= goal.status %>
+    </dd>
+
+    <dt>
+      Target Date
+    <dt>
+    <dd>
+      <%= goal.target_date %>
+    </dd>
+
+    <dt>
+      Associated Goals
+    <dt>
+    <dd>
+      <ul class="associated-goals-list">
+        <% goal.associated_goals.each do |ag| %>
+          <li>
+            <a href="<%= ag.url %>"><%= ag.title%></a>
+          </li>
+        <% end %>
+
+
+      </ul>
+    </dd>
+  </dl>
+
+</li>

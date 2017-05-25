@@ -1,0 +1,89 @@
+<!-- facets -->
+<aside class="filter-container">
+  <ul class="filter-group-list">
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Scope</h2>
+      <ul class="filter-item-list">
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="whose_goals" value="mine" />
+            My Goals Only
+          </label>
+        </li>
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="whose_goals" value="divison" />
+            Division
+          </label>
+        </li>
+      </ul>
+    </li>
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Year</h2>
+      <ul class="filter-item-list">
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="year" value="2016" />
+            2016-2017
+          </label>
+        </li>
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="year" value="2017"/>
+            2017-2018
+          </label>
+        </li>
+      </ul>
+    </li>
+
+
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Department</h2>
+      <ul class="filter-item-list">
+        <% units.each do |unit| %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="unit" value="<%= unit.abbreviation %>"/>
+              <%= unit.name %>
+            </label>
+          </li>
+        <% end %>
+
+       </ul>
+    </li>
+
+
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Current Status</h2>
+      <ul class="filter-item-list">
+
+        <% statuses.each do |status_option| %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="status" value="<%= status_option %>" />
+              <%= status_option %>
+            </label>
+          </li>
+        <% end %>
+
+      </ul>
+    </li>
+    <li class="filter-group">
+      <h2 class="filter-group-heading filter-group-heading-no-border">Filter Person</h2>
+      <ul class="filter-item-list">
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <p class="screen-reader-text">
+              Select person to filter results by
+            </p>
+            <select name="select">
+              <option value="earleyj">Earley, Jon</option>
+              <option value="tdobias" selected>Dobias, Trevor</option>
+              <option value="bdueber">Dueber, Bill</option>
+            </select>
+          </label>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>

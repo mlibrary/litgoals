@@ -11,6 +11,7 @@ require_relative "lib/json_graph"
 require_relative 'lib/constants'
 require_relative 'lib/Utils/fiscal_year'
 require_relative 'lib/goal_form'
+require_relative 'lib/goal_search_result'
 
 Sequel::Model.plugin :json_serializer
 
@@ -19,12 +20,13 @@ Sequel::Model.plugin :json_serializer
 
 LOG = Logger.new(STDERR)
 DEFAULT_USER_UNIQNAME = 'dueberb'
-DEFAULT_USER_UNIQNAME = 'rsteg'
+# DEFAULT_USER_UNIQNAME = 'rsteg'
 
 #
 UNITS = GoalsViz::Unit.abbreviation_to_unit_map
 SORTED_UNITS = UNITS.values.sort { |a, b| a.abbreviation <=> b.abbreviation }
 STATUS_OPTIONS = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
+STATUS_LIST = STATUS_OPTIONS.map(&:first)
 
 
 
@@ -35,13 +37,13 @@ def goal_form_locals(user, goal=nil)
 
   forme = Forme::Form.new
   units = GoalsViz::Unit.all.sort { |a, b| a.lastname <=> b.lastname }
-  interesting_goal_owners = SORTED_UNITS.unshift(user)
+  interesting_goal_owners = SORTED_UNITS + [user]
   status_options = GoalsViz::Status.order_by(:id).map { |s| [s.name, s.name] }
 
   {
       forme: forme,
       user: user,
-      units: units,
+      units: SORTED_UNITS,
       status_options: status_options,
       selected_status: goal.status.nil? ? status_options[0][0] : goal.status,
       goal: goal,
@@ -130,14 +132,16 @@ class LITGoalsApp < Roda
         #
         r.get /(\d{4})/ do |yearstring|
           year = yearstring.to_i
-          goals = GoalsViz::Goal.all_viewable_by(user).select{|g| g.goal_year == year}
+          goals = GoalsViz::Goal.all_viewable_by(user)
           display_list = goals.map{|g| GoalsViz::GoalListDisplay.new(g, user).to_h}
           locals = common_locals.merge ({
               year: year,
               goal_year_string: "#{year}",
-              goal_list_for_display: display_list.to_json
+              goals: goals.map{|g| GoalsViz::GoalSearchResult.new(g)},
+              # goal_list_for_display: display_list.to_json,
+              units: SORTED_UNITS,
+              statuses: STATUS_LIST,
           })
-
           view 'goals', locals: locals
 
         end
@@ -156,8 +160,6 @@ class LITGoalsApp < Roda
 
         # Submit for saving
         r.post do
-
-          LOG.warn r.params.to_json
 
           validation = GoalsViz::GoalSchema.(r.params)
           errors = validation.messages(full: true)
