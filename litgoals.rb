@@ -111,7 +111,7 @@ class LITGoalsApp < Roda
 
       # Redirect to current year of goals if no year given.
       r.is do
-        r.redirect currentFY.goals_url
+        r.redirect "goals"
       end
 
       # Give the full graph if asked for
@@ -127,9 +127,6 @@ class LITGoalsApp < Roda
       end
 
       r.on 'goals' do
-
-        # Show the archive page is no year given
-        # GET /goals
         r.is do
           goals = GoalsViz::Goal.all_viewable_by(user)
           locals = common_locals.merge ({
