@@ -55,8 +55,9 @@ module GoalsViz
       goal.status
     end
 
-    def scopes
-      goal.associated_owners
+    Scope = Struct.new(:url, :name)
+    def scope_links
+      goal.associated_owners.map{|o| Scope.new("/litgoals/goals/#{o.uniqname}", o.lastname)}
     end
 
     def description
@@ -71,8 +72,8 @@ module GoalsViz
       goal.owners.map(&:name).join("<br>")
     end
 
-    def stewards
-      goal.owners.unshift goal.creator
+    def stewards_list
+      goal.owners.unshift(goal.creator).uniq.map(&:name).join(", ")
     end
   end
 end

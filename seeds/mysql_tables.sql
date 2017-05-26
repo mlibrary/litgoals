@@ -1,26 +1,27 @@
 CREATE TABLE status (
-  id  int(10) unsigned NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255) unique,
+  id   INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) UNIQUE,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+)
+  ENGINE = InnoDB;
 
 -- SPLIT
 
 CREATE TABLE `goal` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `creator_uniqname` varchar(255) DEFAULT NULL,
-  `title` text,
-  `description` text,
-  `status` varchar(255) DEFAULT NULL,
-  `target_date` date DEFAULT NULL,
-  `draft` tinyint(4) DEFAULT '0',
-  `created` date DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `notes` text,
-  `goal_year` int(11) DEFAULT NULL,
+  `id`               INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `creator_uniqname` VARCHAR(255)              DEFAULT NULL,
+  `title`            TEXT,
+  `description`      TEXT,
+  `status`           VARCHAR(255)              DEFAULT NULL,
+  `target_date`      DATE                      DEFAULT NULL,
+  `draft`            TINYINT(4)                DEFAULT '0',
+  `created`          DATE                      DEFAULT NULL,
+  `updated`          TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `notes`            TEXT,
+  `goal_year`        INT(11)                   DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
+)
+  ENGINE = InnoDB;
 
 --
 -- Table structure for table `goalowner`
@@ -30,19 +31,19 @@ CREATE TABLE `goal` (
 
 
 CREATE TABLE `goalowner` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uniqname` varchar(255) DEFAULT NULL,
-  `lastname` varchar(255) DEFAULT NULL,
-  `firstname` varchar(255) DEFAULT NULL,
-  `parent_uniqname` varchar(255) DEFAULT NULL,
-  `created` date DEFAULT NULL,
-  `is_unit` tinyint(1) DEFAULT NULL,
-  `is_admin` tinyint(1) DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id`              INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uniqname`        VARCHAR(255)              DEFAULT NULL,
+  `lastname`        VARCHAR(255)              DEFAULT NULL,
+  `firstname`       VARCHAR(255)              DEFAULT NULL,
+  `parent_uniqname` VARCHAR(255)              DEFAULT NULL,
+  `created`         DATE                      DEFAULT NULL,
+  `is_unit`         TINYINT(1)                DEFAULT NULL,
+  `is_admin`        TINYINT(1)                DEFAULT NULL,
+  `updated`         TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqname` (`uniqname`)
-) ENGINE=InnoDB;
-
+)
+  ENGINE = InnoDB;
 
 --
 -- Table structure for table `goaltogoal`
@@ -51,10 +52,10 @@ CREATE TABLE `goalowner` (
 
 
 CREATE TABLE `goaltogoal` (
-  `childgoalid` int(10) unsigned DEFAULT NULL,
-  `parentgoalid` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB;
-
+  `childgoalid`  INT(10) UNSIGNED DEFAULT NULL,
+  `parentgoalid` INT(10) UNSIGNED DEFAULT NULL
+)
+  ENGINE = InnoDB;
 
 --
 -- Table structure for table `goaltoowner`
@@ -62,7 +63,13 @@ CREATE TABLE `goaltogoal` (
 -- SPLIT
 
 CREATE TABLE `goaltoowner` (
-  `goalid` int(10) unsigned DEFAULT NULL,
-  `ownerid` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB;
+  `goalid`  INT(10) UNSIGNED DEFAULT NULL,
+  `ownerid` INT(10) UNSIGNED DEFAULT NULL
+)
+  ENGINE = InnoDB;
 ;
+
+CREATE TABLE goaltosteward (
+  goalid    INT(10) UNSIGNED DEFAULT NULL,
+  stewardid INT(10) UNSIGNED DEFAULT NULL
+) ENGINE = InnoDB;

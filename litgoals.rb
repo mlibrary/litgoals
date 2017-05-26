@@ -12,6 +12,7 @@ require_relative 'lib/constants'
 require_relative 'lib/Utils/fiscal_year'
 require_relative 'lib/goal_form'
 require_relative 'lib/goal_search_result'
+require_relative 'lib/filter'
 
 Sequel::Model.plugin :json_serializer
 
@@ -109,7 +110,7 @@ class LITGoalsApp < Roda
       }
 
       # Redirect to current year of goals if no year given.
-      r.root do
+      r.is do
         r.redirect currentFY.goals_url
       end
 
@@ -118,32 +119,27 @@ class LITGoalsApp < Roda
         GoalsViz::JSONGraph.simple_graph
       end
 
+      r.on 'goal' do
+        r.get /(\d+)/ do |id|
+          g = GoalsViz::GoalSearchResult.new(GoalsViz::Goal[id.to_i])
+          view 'goal/single_page', locals: common_locals.merge(goal: g)
+        end
+      end
+
       r.on 'goals' do
 
         # Show the archive page is no year given
         # GET /goals
         r.is do
-          view 'archive', locals: common_locals
-        end
-
-
-        #####
-        # GET /goals/YYYY
-        #
-        r.get /(\d{4})/ do |yearstring|
-          year = yearstring.to_i
           goals = GoalsViz::Goal.all_viewable_by(user)
-          display_list = goals.map{|g| GoalsViz::GoalListDisplay.new(g, user).to_h}
           locals = common_locals.merge ({
-              year: year,
-              goal_year_string: "#{year}",
               goals: goals.map{|g| GoalsViz::GoalSearchResult.new(g)},
               # goal_list_for_display: display_list.to_json,
               units: SORTED_UNITS,
               statuses: STATUS_LIST,
+              filter: Filter.new(r.params)
           })
           view 'goals', locals: locals
-
         end
 
       end

@@ -172,6 +172,9 @@ module GoalsViz
     many_to_many :associated_owners, :class => GoalOwner, :right_key => :goalid, :left_key => :ownerid,
                  :join_table                => :goaltoowner
 
+    many_to_many :stewards, :class => GoalOwner, :right_key => :goalid, :left_key => :stewardid,
+                 :join_table                => :goaltosteward
+
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
 

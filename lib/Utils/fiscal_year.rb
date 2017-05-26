@@ -18,7 +18,7 @@ module GoalsViz
     end
 
     def range_string_html
-      range_string.gsub(/--/, '—')
+      range_string.gsub(/--/, '&mdash;')
     end
 
     def goals_url

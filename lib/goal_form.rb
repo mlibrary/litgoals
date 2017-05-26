@@ -87,18 +87,15 @@ module GoalsViz
       end
 
       goal.set_all(d.unahandled_args.to_h)
-      clean_up_bad_chars(goal)
+      clean_up_text(goal)
       goal
 
     end
 
     # look for windows-style single/double quotes
     # in title/desc
-    WINDOWS_SINGLE_QUOTE = /â€™/mix
-    def self.clean_up_bad_chars(goal)
-      puts "Cleaning up"
-      goal.set(title:  goal.title.gsub(WINDOWS_SINGLE_QUOTE, "'"))
-      goal.set(description: goal.description.gsub(WINDOWS_SINGLE_QUOTE, "'").gsub(/\n([^\n])/, "\n\n\1"))
+    def self.clean_up_text(goal)
+      goal.set(description: goal.description.gsub(/\n([^\n])/, "\n\n\1"))
       goal
     end
 
