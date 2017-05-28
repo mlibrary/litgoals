@@ -92,7 +92,7 @@ class LITGoalsApp < Roda
 
   route do |r|
     r.root do
-      r.redirect '/litgoals/'
+      r.redirect '/litgoals/goals'
     end
 
 

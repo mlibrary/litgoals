@@ -1,39 +1,39 @@
+<form id="mainform" method="GET" class="search-form" role="search">
 
-<%= render 'layout/search_ribbon', locals: locals %>
+  <%= render 'layout/search_ribbon', locals: locals %>
 
-<form method="GET">
-<div class="container flex-container">
+  <div class="container flex-container">
 
-  <%= render 'layout/facets', locals: locals %>
+    <%= render 'layout/facets', locals: locals %>
 
 
-  <main class="goal-result-container">
-    <div class="goal-result-summary-container">
-      <p class="goal-result-summary">
-        <b>24 results</b> for &ldquo;search term&rdquo;
-      </p>
-      <fieldset class="view-type-fieldset">
-        <label class="view-type-label">
-          <input type="radio" name="viewtype" value="full" checked />
-          Info View
-        </label>
-        <label class="view-type-label">
-          <input type="radio" name="viewtype" value="full" />
-          List View
-        </label>
-      </fieldset>
-    </div>
+    <main class="goal-result-container">
+      <div class="goal-result-summary-container">
+        <p class="goal-result-summary">
+          <b>24 results</b> for &ldquo;search term&rdquo;
+        </p>
+        <fieldset class="view-type-fieldset">
+          <label class="view-type-label">
+            <input type="radio" name="viewtype" value="full" checked/>
+            Info View
+          </label>
+          <label class="view-type-label">
+            <input type="radio" name="viewtype" value="full"/>
+            List View
+          </label>
+        </fieldset>
+      </div>
 
-    <!-- goal list -->
-    <ul class="goal-result-list">
+      <!-- goal list -->
+      <ul class="goal-result-list">
 
-      <% goals.each do |goal| %>
+        <% goals.each do |goal| %>
 
-        <%= render 'goal/search_result', locals: {goal: goal} %>
-      <% end %>
+          <%= render 'goal/search_result', locals: {goal: goal} %>
+        <% end %>
 
-    </ul>
-  </main>
-</div>
+      </ul>
+    </main>
+  </div>
 
 </form>
