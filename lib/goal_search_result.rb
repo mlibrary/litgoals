@@ -1,6 +1,7 @@
 require_relative 'sql_models'
 require 'kramdown'
 require_relative 'Utils/fiscal_year'
+require 'forwardable'
 
 # def to_h
 #   {
@@ -19,6 +20,9 @@ require_relative 'Utils/fiscal_year'
 
 module GoalsViz
   class GoalSearchResult
+
+    extend Forwardable
+    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners
 
     attr_reader :goal
 
@@ -61,14 +65,14 @@ module GoalsViz
     end
 
     def description
-      Kramdown::Document.new(goal.description.strip.gsub(/\n\s+/, "\n"), input: 'GFM', header_offset: 4).to_html
+      Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html
     end
 
     def abstract
       Kramdown::Document.new(goal.description[0..100].strip, input: 'GFM', header_offset: 4).to_html
     end
 
-    def owners
+    def owners_list
       goal.owners.map(&:name).join("<br>")
     end
 

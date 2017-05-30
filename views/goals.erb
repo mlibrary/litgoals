@@ -8,9 +8,13 @@
 
 
     <main class="goal-result-container">
+      <div class="goal-result-description">
+        <%= filter.selected_description %>
+      </div>
       <div class="goal-result-summary-container">
+
         <p class="goal-result-summary">
-          <b>24 results</b> for &ldquo;search term&rdquo;
+          <b><%= goals.size%> results</b>
         </p>
         <fieldset class="view-type-fieldset">
           <label class="view-type-label">
