@@ -143,6 +143,20 @@ class LITGoalsApp < Roda
           view 'goals', locals: locals
         end
 
+        r.on 'goallist' do
+          r.is do
+            f = Filter.new(r.params, user)
+            goals  = f.filtered_goals.find_all{|g| g.viewable_by?(user)}
+            locals = common_locals.merge ({
+                goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
+                units:    SORTED_UNITS,
+                statuses: STATUS_LIST,
+                filter:   f
+            })
+            render 'goals', locals: locals
+          end
+        end
+
       end
 
 

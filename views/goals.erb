@@ -8,9 +8,6 @@
 
 
     <main class="goal-result-container">
-      <div class="goal-result-description">
-        <%= filter.selected_description %>
-      </div>
       <div class="goal-result-summary-container">
 
         <p class="goal-result-summary">
@@ -26,6 +23,13 @@
             List View
           </label>
         </fieldset>
+
+      </div>
+
+      <div class="goal-result-description">
+        <% filter.selected_description_pairs.each do |k,v | %>
+          <b><%=k%></b>: <%=v%>;
+        <% end %>
       </div>
 
       <!-- goal list -->
@@ -41,3 +45,5 @@
   </div>
 
 </form>
+
+

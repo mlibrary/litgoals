@@ -11,12 +11,12 @@
             My Goals Only
           </label>
         </li>
-        <li class="filter-item">
-          <label class="filter-item-label">
-            <input type="checkbox" name="whose[]" value="divison" <%= filter.checked_for(:whose, :divison)%>/>
-            Division
-          </label>
-        </li>
+        <!--<li class="filter-item">-->
+          <!--<label class="filter-item-label">-->
+            <!--<input type="checkbox" name="whose[]" value="divison" <%= filter.checked_for(:whose, :divison)%>/>-->
+            <!--Division-->
+          <!--</label>-->
+        <!--</li>-->
       </ul>
     </li>
     <li class="filter-group">
@@ -91,5 +91,5 @@
 </aside>
 
 <script>
-  $('.filter-container').on('change', '.filter-item input[type=checkbox]', function() { $('#mainform').submit() } )
+    $('.filter-container').on('click', '.filter-item input[type=checkbox]', function() { alert("hey"); $('main').load('/litgoals/goals/goallist?' + $('#mainform').serialize()) })
 </script>

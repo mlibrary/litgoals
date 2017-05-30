@@ -19,24 +19,24 @@ class Filter
     define_method(k.to_sym) { @f[k.to_s] }
   end
 
-  def whose_selected_description
-    whose.empty? ? nil : 'owner: me'
+  def whose_selected_description_pair
+    whose.empty? ? nil : %w(owner me)
   end
 
-  def year_selected_description
-    year.empty? ? nil : "year: #{year.join(',')}"
+  def year_selected_description_pair
+    year.empty? ? nil : ["year",  year.join(',')]
   end
 
-  def unit_selected_description
-    unit.empty? ? nil : "unit: #{unit.sort.join(',')}"
+  def unit_selected_description_pair
+    unit.empty? ? nil : ["unit", unit.sort.join(',')]
   end
 
-  def status_selected_description
-    status.empty? ? nil : "status: #{status.join(',')}"
+  def status_selected_description_pair
+    status.empty? ? nil : ["status", status.join(',')]
   end
 
-  def selected_description
-    [whose_selected_description, year_selected_description, unit_selected_description, status_selected_description].compact.join('&nbsp;')
+  def selected_description_pairs
+    [whose_selected_description_pair, year_selected_description_pair, unit_selected_description_pair, status_selected_description_pair].compact
   end
 
 
@@ -50,7 +50,6 @@ class Filter
     goals = filter_by_mine(goals)
     goals = filter_by_unit(goals)
     # goals = filter_by_person(goals)
-    puts goals.sql
     goals
   end
 
