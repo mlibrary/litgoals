@@ -93,6 +93,23 @@
       <%= forme.input(:text, name: 'target_date', placeholder: 'YYYY/MM', value: goal.target_date_string) %>
     </fieldset>
 
+    <% if user.is_admin %>
+      <fieldset class="full-width">
+        <label for="stewards">Stewards</label>
+
+        <%=  forme.input(:select,
+                         multiple: true,
+                         name: 'stewards[]',
+                         options: [["None", ""]] + stewards.map{|x| ["#{x.lastname}, #{x.firstname}", x.uniqname]},
+                         selected: goal.stewards.map(&:uniqname),
+                         id: 'stewards',
+                         style: "height: 10em",
+             ) %>
+      </fieldset>
+    <% end %>
+
+
+
     <fieldset class="full-width">
       <label for="notes">Notes</label>
       <textarea name="notes" id="notes"><%= goal.notes %></textarea>

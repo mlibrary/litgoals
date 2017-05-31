@@ -172,7 +172,7 @@ module GoalsViz
     many_to_many :associated_owners, :class => GoalOwner, :right_key => :goalid, :left_key => :ownerid,
                  :join_table                => :goaltoowner
 
-    many_to_many :stewards, :class => GoalOwner, :right_key => :goalid, :left_key => :stewardid,
+    many_to_many :associated_stewards, :class => GoalOwner, :right_key => :goalid, :left_key => :stewardid,
                  :join_table                => :goaltosteward
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
@@ -225,6 +225,16 @@ module GoalsViz
       self
     end
 
+    def replace_stewards(new_stewards)
+      save if id.nil?
+      remove_all_associated_stewards
+      stewards = Array(new_stewards).map{|s| GoalsViz::Person.first(uniqname: s)}
+
+      stewards.each { |o| add_associated_steward(o) }
+      save
+      self
+    end
+
 
     def replace_associated_goals(newgoals)
       save if id.nil?
@@ -246,6 +256,10 @@ module GoalsViz
 
     def owners
       self.associated_owners.map { |x| person_or_unit(x.uniqname) }
+    end
+
+    def stewards
+      self.associated_stewards.map{ |x| person_or_unit(x.uniqname) }
     end
 
     def owner_names

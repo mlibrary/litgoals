@@ -3,50 +3,55 @@
 <div class="container flex-container">
 
 
-
   <main class="goal-result-container">
     <ul class="goal-result-list">
 
-        <li class="goal-result">
-          <h2 class="goal-title"><%= goal.title %></h2>
-          <dl class="goal-metadata-list">
-            <dt>
+      <li class="goal-result">
+        <h2 class="goal-title">Goal: <%= goal.title %></h2>
+        <dl class="goal-metadata-list">
+          <dt>Scope</dt>
+          <dd>
+            <% if goal.scope_links.empty? %>
+              <%= goal.creator.name %>
+            <% else %>
+              <% goal.scope_links.each do |scope| %>
+                <a href="<%= scope.url %>"><%= scope.name %></a><br>
+              <% end %>
+            <% end %>
+          </dd>
 
-            </dt>
-            <dd>
-              <%= goal.description %>
-            </dd>
 
+          <dt>
+
+          </dt>
+          <dd>
+            <%= goal.description %>
+          </dd>
+
+          <% if !goal.stewards_list.empty? %>
             <dt>
               Stewards
             <dt>
             <dd>
               <%= goal.stewards_list %>
             </dd>
+          <% end %>
 
-            <dt>
-              Scope
-            <dt>
-            <dd>
-              <% goal.scope_links.each do |scope| %>
-                <a href="<%= scope.url%>"><%= scope.name%></a><br>
-              <% end %>
-            </dd>
+          <dt>
+            Status
+          <dt>
+          <dd>
+            <%= goal.status %>
+          </dd>
 
-            <dt>
-              Status
-            <dt>
-            <dd>
-              <%= goal.status %>
-            </dd>
+          <dt>
+            Target Date
+          <dt>
+          <dd>
+            <%= goal.target_date %>
+          </dd>
 
-            <dt>
-              Target Date
-            <dt>
-            <dd>
-              <%= goal.target_date %>
-            </dd>
-
+          <% if !goal.associated_goals.empty? %>
             <dt>
               Associated Goals
             <dt>
@@ -54,14 +59,15 @@
               <ul class="associated-goals-list">
                 <% goal.associated_goals.each do |ag| %>
                   <li>
-                    <a href="<%= ag.url %>"><%= ag.title%></a>
+                    <a href="<%= ag.url %>"><%= ag.title %></a>
                   </li>
                 <% end %>
               </ul>
             </dd>
-          </dl>
+          <% end %>
+        </dl>
 
-        </li>
+      </li>
 
     </ul>
   </main>

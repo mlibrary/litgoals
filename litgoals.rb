@@ -138,9 +138,7 @@ class LITGoalsApp < Roda
         r.is do
           f     = Filter.new(r.params, user)
           goals = f.filtered_goals.all
-          puts "Got #{goals.size} filtered goals"
           goals = goals.find_all {|g| g.viewable_by?(user)}
-          puts "Got #{goals.size} filtered goals after checking user"
           locals = common_locals.merge ({
               goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
               units:    SORTED_UNITS,
@@ -171,6 +169,7 @@ class LITGoalsApp < Roda
         r.get do
           locals                           = common_locals.merge goal_form_locals(user, flash[:bad_goal])
           locals[:two_years_of_fy_options] = currentFY.select_list(2)
+          locals[:stewards] = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
 
           @pagetitle = 'Create a new goal'
           view "create", locals: locals
@@ -198,7 +197,7 @@ class LITGoalsApp < Roda
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal \"#{g.title}\" #{action}"
             sleep 0.5
-            r.redirect currentFY.goals_url
+            r.redirect '/litgoals/goals/'
           end
         end
       end
@@ -214,6 +213,7 @@ class LITGoalsApp < Roda
           goal                             = GoalsViz::Goal.find(id: goalid.to_i)
           locals                           = common_locals.merge goal_form_locals(user, goal)
           locals[:two_years_of_fy_options] = currentFY.select_list(2)
+          locals[:stewards] = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
           @pagetitle                       = "Edit '#{goal.title}'"
           view "create", locals: locals
         end

@@ -55,7 +55,7 @@ class Filter
 
   def filter_by_mine(goals)
     if whose.include? @user.uniqname
-      goals.where(associated_owners: @user)
+      goals.where(associated_owners: @user).or(associated_stewards: @user)
     else
       goals
     end

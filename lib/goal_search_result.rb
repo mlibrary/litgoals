@@ -22,7 +22,7 @@ module GoalsViz
   class GoalSearchResult
 
     extend Forwardable
-    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners
+    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners, :creator
 
     attr_reader :goal
 
@@ -62,7 +62,7 @@ module GoalsViz
     Scope = Struct.new(:url, :name)
     require 'cgi'
     def scope_links
-      goal.associated_owners.map{|o| Scope.new("/litgoals/goals?unit=#{CGI.escape(o.uniqname)}", o.lastname)}
+      units = goal.owners.find_all{|u| u.is_unit}.map{|o| Scope.new("/litgoals/goals?unit=#{CGI.escape(o.uniqname)}", o.name)}
     end
 
     def description
@@ -78,7 +78,7 @@ module GoalsViz
     end
 
     def stewards_list
-      goal.owners.unshift(goal.creator).uniq.map(&:name).join(", ")
+      goal.stewards.map(&:name).join(", ")
     end
   end
 end
