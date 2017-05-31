@@ -60,8 +60,9 @@ module GoalsViz
     end
 
     Scope = Struct.new(:url, :name)
+    require 'cgi'
     def scope_links
-      goal.associated_owners.map{|o| Scope.new("/litgoals/goals/#{o.uniqname}", o.lastname)}
+      goal.associated_owners.map{|o| Scope.new("/litgoals/goals?unit=#{CGI.escape(o.uniqname)}", o.lastname)}
     end
 
     def description
