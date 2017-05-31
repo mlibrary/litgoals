@@ -66,11 +66,11 @@ module GoalsViz
     end
 
     def description
-      Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html
+      Kramdown::Document.new((goal.description or ""), input: 'GFM', header_offset: 4).to_html
     end
 
     def abstract
-      Kramdown::Document.new(goal.description[0..100].strip, input: 'GFM', header_offset: 4).to_html
+      Kramdown::Document.new((goal.description[0..100] or "").strip, input: 'GFM', header_offset: 4).to_html
     end
 
     def owners_list

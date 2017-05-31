@@ -14,7 +14,7 @@ module GoalsViz
     end
 
     def range_string
-      "FY July #{year} -- June #{year + 1}"
+      "FY July #{year - 1} -- June #{year}"
     end
 
     def range_string_html
@@ -35,8 +35,8 @@ module GoalsViz
 
     def current_fiscal_year
       d = DateTime.now
-      if d.month <= 6
-        d.year - 1
+      if d.month > 6
+        d.year + 1
       else
         d.year
       end

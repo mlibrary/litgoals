@@ -91,6 +91,10 @@ class LITGoalsApp < Roda
   end
 
   route do |r|
+    r.is "litgoals" do
+      r.redirect "/litgoals/goals"
+    end
+
     r.root do
       r.redirect '/litgoals/goals'
     end
@@ -109,8 +113,8 @@ class LITGoalsApp < Roda
       }
 
       # Redirect to current year of goals if no year given.
-      r.is do
-        r.redirect "goals"
+      r.root do
+        r.redirect "/litgoals/goals"
       end
 
       # Give the full graph if asked for
@@ -132,8 +136,11 @@ class LITGoalsApp < Roda
 
       r.on 'goals' do
         r.is do
-          f = Filter.new(r.params, user)
-          goals  = f.filtered_goals.find_all{|g| g.viewable_by?(user)}
+          f     = Filter.new(r.params, user)
+          goals = f.filtered_goals.all
+          puts "Got #{goals.size} filtered goals"
+          goals = goals.find_all {|g| g.viewable_by?(user)}
+          puts "Got #{goals.size} filtered goals after checking user"
           locals = common_locals.merge ({
               goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
               units:    SORTED_UNITS,
@@ -145,8 +152,8 @@ class LITGoalsApp < Roda
 
         r.on 'goallist' do
           r.is do
-            f = Filter.new(r.params, user)
-            goals  = f.filtered_goals.find_all{|g| g.viewable_by?(user)}
+            f      = Filter.new(r.params, user)
+            goals  = f.filtered_goals.find_all {|g| g.viewable_by?(user)}
             locals = common_locals.merge ({
                 goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
                 units:    SORTED_UNITS,
