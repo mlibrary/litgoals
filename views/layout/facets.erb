@@ -91,5 +91,5 @@
 </aside>
 
 <script>
-    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', function() { $('main').load('/litgoals/goals/goallist?' + $('#mainform').serialize()) })
+    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', function() { $('main').load('/litgoals/goals/goallist?' + $('#mainform').serialize()); $(window).scrollTop($('#count').offset().top); })
 </script>
