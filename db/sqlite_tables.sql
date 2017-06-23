@@ -35,6 +35,8 @@ CREATE TABLE IF NOT EXISTS goal (
   updated          DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+create fulltext index title_desc_fulltext on goal(title, description);
+
 
 CREATE TABLE IF NOT EXISTS goaltogoal (
   childgoalid  INTEGER,

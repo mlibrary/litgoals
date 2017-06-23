@@ -30,6 +30,12 @@ STATUS_OPTIONS        = GoalsViz::Status.order_by(:id).map {|s| [s.name, s.name]
 STATUS_LIST           = STATUS_OPTIONS.map(&:first)
 
 
+# given a user (and possibly a goal), get a bunch
+# of stuff we'd like to send to the templates to
+# fill in forms and such
+#
+# Should probably be using a form builder, but that's
+# a bigger refactoring than I'm willing to do at this point.
 def goal_form_locals(user, goal=nil)
   goal ||= GoalsViz::Goal.new
 
@@ -58,7 +64,6 @@ def goal_form_locals(user, goal=nil)
 end
 
 
-# restrict to those of the currently-selected year.
 def goal_list_for_selectize(list_of_owners)
 
   list_of_owners.map(&:reload).map(&:goals).flatten.uniq.map do |g|
@@ -90,6 +95,7 @@ class LITGoalsApp < Roda
 
   end
 
+  # Redirect root-like stuff to goals
   route do |r|
     r.is "litgoals" do
       r.redirect "/litgoals/goals"
@@ -112,7 +118,7 @@ class LITGoalsApp < Roda
           current_fiscal_year: currentFY
       }
 
-      # Redirect to current year of goals if no year given.
+      # Redirect to goals if nothing else given
       r.root do
         r.redirect "/litgoals/goals"
       end
@@ -122,6 +128,7 @@ class LITGoalsApp < Roda
         GoalsViz::JSONGraph.simple_graph
       end
 
+      # Look at a particular goal
       r.on 'goal' do
         r.get /(\d+)/ do |id|
           g = GoalsViz::GoalSearchResult.new(GoalsViz::Goal[id.to_i])
@@ -134,6 +141,7 @@ class LITGoalsApp < Roda
         end
       end
 
+      # Look at a list of goals
       r.on 'goals' do
         r.is do
           f     = Filter.new(r.params, user)
@@ -148,6 +156,9 @@ class LITGoalsApp < Roda
           view 'goals', locals: locals
         end
 
+        # AJAX-able route that just sends the list of goals without a
+        # layout, useful for just updating the main list of goals
+        # when a facet is clicked
         r.on 'goallist' do
           r.is do
             f      = Filter.new(r.params, user)
@@ -165,6 +176,7 @@ class LITGoalsApp < Roda
       end
 
 
+      # Create a new goal
       r.on "create" do
         r.get do
           locals                           = common_locals.merge goal_form_locals(user, flash[:bad_goal])
