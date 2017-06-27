@@ -1,6 +1,9 @@
 <!-- facets -->
 
+
 <aside class="filter-container">
+  <button id="clear_search_button">Start new search</button>
+
   <ul class="filter-group-list">
     <li class="filter-group">
       <h2 class="filter-group-heading">Filter Scope</h2>
@@ -92,27 +95,42 @@
 </aside>
 
 <script>
-//     Load the new set of results via ajax and mess with the URL and push/popstate
-//     so the back button works.
-        $(document).on('click', '.filter-group .filter-item input[type=checkbox]', function() {
-            var formdata = $('#mainform').serialize();
-            var querydata;
-            if (formdata === "") {
-                querydata = "";
-            } else {
-                querydata = "?" + formdata;
-            }
-            var ajaxurl = '/litgoals/goals/goallist/' + querydata;
-            var newurl  = '/litgoals/goals/'  + querydata;
-            window.history.pushState(newurl, null, newurl);
-            $('main').load(ajaxurl);
-            $(window).scrollTop($('#count').offset().top); });
 
-        window.addEventListener('popstate', function(e) {
-            if (e.state !== null) {
-                window.location = e.state;
-            } else {
-                window.location.reload();
-            }
-        })
+    //   Allow clearing the form
+
+    function clear_search() {
+        $('.filter-group .filter-item input[type=checkbox]').prop('checked', false)
+        $('.search-input').val('');
+        true;
+    }
+
+    $('#clear_search_button').on('click', function () {
+        clear_search();
+    });
+
+
+    //     Load the new set of results via ajax and mess with the URL and push/popstate
+    //     so the back button works.
+    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', function () {
+        var formdata = $('#mainform').serialize();
+        var querydata;
+        if (formdata === "") {
+            querydata = "";
+        } else {
+            querydata = "?" + formdata;
+        }
+        var ajaxurl = '/litgoals/goals/goallist/' + querydata;
+        var newurl = '/litgoals/goals/' + querydata;
+        window.history.pushState(newurl, null, newurl);
+        $('main').load(ajaxurl);
+//            $(window).scrollTop($('#count').offset().top);
+    });
+
+    window.addEventListener('popstate', function (e) {
+        if (e.state !== null) {
+            window.location = e.state;
+        } else {
+            window.location.reload();
+        }
+    });
 </script>

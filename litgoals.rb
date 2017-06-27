@@ -151,7 +151,8 @@ class LITGoalsApp < Roda
               goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
               units:    SORTED_UNITS,
               statuses: STATUS_LIST,
-              filter:   f
+              filter:   f,
+              querystring: r.params['search-input']
           })
           view 'goals', locals: locals
         end
@@ -167,7 +168,8 @@ class LITGoalsApp < Roda
                 goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
                 units:    SORTED_UNITS,
                 statuses: STATUS_LIST,
-                filter:   f
+                filter:   f,
+                querystring: r.params['search-input']
             })
             render 'goals', locals: locals
           end

@@ -45,6 +45,7 @@ CREATE TABLE `goalowner` (
 )
   ENGINE = InnoDB;
 
+
 --
 -- Table structure for table `goaltogoal`
 --

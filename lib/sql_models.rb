@@ -9,6 +9,7 @@ module GoalsViz
 
   # Pre-declare everything so the associations work
   class GoalOwner < Sequel::Model;
+    set_dataset DB[:goalowner]
   end
 
   class Goal < GoalOwner;
@@ -41,10 +42,10 @@ module GoalsViz
   end
 
   class GoalOwner < Sequel::Model
-    set_dataset DB[:goalowner]
+    # set_dataset DB[:goalowner]
     plugin :after_initialize
 
-    many_to_many :goals, :class => Goal, :left_key => :goalid, :right_key => :ownerid,
+    many_to_many :goals, :class => Goal, :left_key => :ownerid, :right_key => :goalid,
                  :join_table    => :goaltoowner
 
 
@@ -163,16 +164,16 @@ module GoalsViz
   class Goal
     set_dataset DB[:goal]
 
-    many_to_many :parent_goals, :class => Goal, :right_key => :childgoalid, :left_key => :parentgoalid,
+    many_to_many :parent_goals, :class => Goal, :left_key => :childgoalid, :right_key => :parentgoalid,
                  :join_table           => :goaltogoal
 
-    many_to_many :child_goals, :class => Goal, :left_key => :childgoalid, :right_key => :parentgoalid,
+    many_to_many :child_goals, :class => Goal, :left_key => :parentgoalid, :right_key => :childgoalid,
                  :join_table          => :goaltogoal
 
-    many_to_many :associated_owners, :class => GoalOwner, :right_key => :goalid, :left_key => :ownerid,
+    many_to_many :associated_owners, :class => GoalOwner, :left_key => :goalid, :right_key => :ownerid,
                  :join_table                => :goaltoowner
 
-    many_to_many :associated_stewards, :class => GoalOwner, :right_key => :goalid, :left_key => :stewardid,
+    many_to_many :associated_stewards, :class => GoalOwner, :left_key => :goalid, :right_key => :stewardid,
                  :join_table                => :goaltosteward
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname

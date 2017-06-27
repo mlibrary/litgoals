@@ -42,7 +42,8 @@ class Filter
 
   # Build up the set of goals
   def filtered_goals
-    # do the easy stuff -- year and status
+    # do the easy stuff -- year and status and keyword
+
     goals = GoalsViz::Goal.where(year_filterhash.merge(status_filterhash))
 
     # Now the personal / division stuff. How should that work? Creator? Owner?
