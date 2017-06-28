@@ -22,7 +22,7 @@ module GoalsViz
   class GoalSearchResult
 
     extend Forwardable
-    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners, :creator
+    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :human_stewards, :associated_owners, :creator
 
     attr_reader :goal
 

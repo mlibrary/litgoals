@@ -1,12 +1,14 @@
 require_relative 'sql_models'
 
 class Filter
-  KEYS = %w[whose year unit status person]
+  ARRAY_KEYS = %w[whose year unit status]
+  SCALAR_KEYS = %w[person searchkeywords]
 
   def initialize(params, user)
-    @f = {}
+    @f    = {}
     @user = user
-    KEYS.each {|k| @f[k] = Array(params[k])}
+    ARRAY_KEYS.each {|k| @f[k] = Array(params[k])}
+    SCALAR_KEYS.each {|k| @f[k] = params[k]}
     @unit_objects = GoalsViz::Unit.where(uniqname: self.unit)
   end
 
@@ -15,16 +17,17 @@ class Filter
   end
 
   # Create the accessors for the arrays
-  KEYS.each do |k|
-    define_method(k.to_sym) { @f[k.to_s] }
+  [ARRAY_KEYS, SCALAR_KEYS].flatten.each do |k|
+    define_method(k.to_sym) {@f[k.to_s]}
   end
+
 
   def whose_selected_description_pair
     whose.empty? ? nil : %w(owner me)
   end
 
   def year_selected_description_pair
-    year.empty? ? nil : ["year",  year.join(',')]
+    year.empty? ? nil : ["year", year.join(',')]
   end
 
   def unit_selected_description_pair
@@ -36,22 +39,67 @@ class Filter
   end
 
   def selected_description_pairs
-    [whose_selected_description_pair, year_selected_description_pair, unit_selected_description_pair, status_selected_description_pair].compact
+    [whose_selected_description_pair,
+     year_selected_description_pair,
+     unit_selected_description_pair,
+     status_selected_description_pair].compact
+  end
+
+  def filter_pairs
+    sd =      selected_description_pairs
+
+    if searchkeywords and searchkeywords =~ /\S/
+      sd.unshift(['keywords', searchkeywords])
+    end
+
+    if person and person =~ /\S/
+      sd.unshift ['owner', GoalsViz::Person.where(uniqname: person).first.name]
+    end
+
+    sd
   end
 
 
   # Build up the set of goals
+
+  # a little helper
+  def ilike_person(str)
+    Sequel.ilike(:people, '%' + str + '%')
+  end
+
   def filtered_goals
     # do the easy stuff -- year and status and keyword
 
-    goals = GoalsViz::Goal.where(year_filterhash.merge(status_filterhash))
+
+    goals = GoalsViz::Goal
+    goals = goals.where(year_filterhash)
+    goals = goals.where(status_filterhash)
+
+    # If we've got keywords, build up a search of the fulltext index as well
+    # as the people
+    if searchkeywords =~ /\S/
+      words = searchkeywords.split(/\s+/)
+      firstword = words.shift
+      peoplesearch = words.inject(goals.db[:goalsearch].select(:id).where(ilike_person(firstword))) {|acc, k| acc.or(ilike_person(k))}
+      goals        = goals.where(keyword_filter(searchkeywords)).or(id: peoplesearch)
+    end
+
 
     # Now the personal / division stuff. How should that work? Creator? Owner?
     # Steward? All of the above?
     goals = filter_by_mine(goals)
     goals = filter_by_unit(goals)
-    # goals = filter_by_person(goals)
+    goals = filter_by_person(goals)
     goals
+  end
+
+  def filter_by_person(goals)
+    # Are we restricted to a particular person?
+    if person and person =~ /\S/
+      goals.all.find_all{|g| g.owners.map(&:uniqname).concat(g.stewards.map(&:uniqname)).include? person}
+    else
+      goals
+    end
   end
 
   def filter_by_mine(goals)
@@ -90,6 +138,15 @@ class Filter
     else
       {status: status}
     end
+  end
+
+  def keyword_filter(kw)
+    if kw and kw =~ /\S/
+      Sequel.lit("match (title, description) against(? in natural language mode)", kw)
+    else
+      {} # null search
+    end
+
   end
 
 end

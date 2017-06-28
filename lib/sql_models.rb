@@ -143,6 +143,21 @@ module GoalsViz
     alias_method :unit, :parent
 
     plugin :after_initialize
+    
+    
+    def self.select_options(selected_person)
+      if selected_person.nil? or selected_person.empty?
+        no_one_is_selected = 'selected'
+      else
+        no_one_is_selected = ''
+      end
+      opts = [['', '(Anyone)', no_one_is_selected ]]
+      self.order(:lastname).each do |p|
+        selected = p.uniqname == selected_person ? "selected" : ""
+        opts.push [p.uniqname, "#{p.lastname}, #{p.firstname}", selected]
+      end
+      opts
+    end
 
 
     def after_initialize # or after_initialize

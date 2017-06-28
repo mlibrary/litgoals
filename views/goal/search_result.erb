@@ -2,16 +2,19 @@
   <h2 class="goal-title">
     <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
   </h2>
-  <div class="goal-scope">
-    <% if goal.scope_links.empty? %>
-      <%= goal.creator.name %>
-    <% else %>
-      <% goal.scope_links.each do |scope| %>
-        <a href="<%= scope.url %>"><%= scope.name %></a><br>
-      <% end %>
-    <% end %>
-  </div>
+
   <dl class="goal-metadata-list">
+    <% if goal.scope_links.empty? %>
+      <dt>Owners:</dt>
+      <dd><%= goal.owners.map(&:name).join(', ') %></dd>
+    <% else %>
+      <dt>Scope:</dt>
+      <dd>
+        <% goal.scope_links.each do |scope| %>
+          <a href="<%= scope.url %>"><%= scope.name %></a><br>
+        <% end %>
+      </dd>
+    <% end %>
     <dt>
       Why
     </dt>

@@ -2,18 +2,39 @@
 
 
 <aside class="filter-container">
-  <button id="clear_search_button">Start new search</button>
+<button><a href="/litgoals/goals">Clear all</a></button>
 
   <ul class="filter-group-list">
     <li class="filter-group">
       <h2 class="filter-group-heading">Filter Scope</h2>
       <ul class="filter-item-list">
-        <li class="filter-item">
-          <label class="filter-item-label">
-            <input type="checkbox" name="whose[]" value="<%= user.uniqname %>" <%= filter.checked_for(:whose, user.uniqname) %> />
-            My Goals Only
-          </label>
-        </li>
+        <% if user.is_admin or user.uniqname == 'dueberb' %>
+          <li class="filter-group">
+            <h2 class="filter-group-heading filter-group-heading-no-border">Filter
+              Person</h2>
+            <ul class="filter-item-list">
+              <li class="filter-item">
+                <label class="filter-item-label">
+                  <p class="screen-reader-text">
+                    Select person to filter results by
+                  </p>
+                  <select name="person" id="person-select">
+                    <% people_opts.each do |uniqname, name, selected| %>
+                      <option value="<%= uniqname %>" <%=selected%>><%= name %></option>
+                    <% end %>
+                  </select>
+                </label>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="whose[]" value="<%= user.uniqname %>" <%= filter.checked_for(:whose, user.uniqname) %> />
+              My Goals Only
+            </label>
+          </li>
+        <% end %>
         <!--<li class="filter-item">-->
         <!--<label class="filter-item-label">-->
         <!--<input type="checkbox" name="whose[]" value="divison" <%= filter.checked_for(:whose, :divison) %>/>-->
@@ -73,24 +94,7 @@
 
       </ul>
     </li>
-    <li class="filter-group">
-      <h2 class="filter-group-heading filter-group-heading-no-border">Filter
-        Person</h2>
-      <ul class="filter-item-list">
-        <li class="filter-item">
-          <label class="filter-item-label">
-            <p class="screen-reader-text">
-              Select person to filter results by
-            </p>
-            <select name="select">
-              <option value="earleyj">Earley, Jon</option>
-              <option value="tdobias" selected>Dobias, Trevor</option>
-              <option value="bdueber">Dueber, Bill</option>
-            </select>
-          </label>
-        </li>
-      </ul>
-    </li>
+
   </ul>
 </aside>
 
@@ -101,17 +105,17 @@
     function clear_search() {
         $('.filter-group .filter-item input[type=checkbox]').prop('checked', false)
         $('.search-input').val('');
-        true;
+        $('#person-select').val('')
     }
 
     $('#clear_search_button').on('click', function () {
         clear_search();
+        window.history.pushState('/litgoals/goals/', null, '/litgoals/goals/');
+        $('main').load('/litgoals/goals/goallist/');
+
     });
 
-
-    //     Load the new set of results via ajax and mess with the URL and push/popstate
-    //     so the back button works.
-    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', function () {
+    function fix_url_and_reload() {
         var formdata = $('#mainform').serialize();
         var querydata;
         if (formdata === "") {
@@ -123,8 +127,12 @@
         var newurl = '/litgoals/goals/' + querydata;
         window.history.pushState(newurl, null, newurl);
         $('main').load(ajaxurl);
-//            $(window).scrollTop($('#count').offset().top);
-    });
+    }
+
+    //     Load the new set of results via ajax and mess with the URL and push/popstate
+    //     so the back button works.
+    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', fix_url_and_reload)
+    $(document).on('change', '.filter-group .filter-item select', fix_url_and_reload)
 
     window.addEventListener('popstate', function (e) {
         if (e.state !== null) {

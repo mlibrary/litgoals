@@ -13,20 +13,20 @@
         <p id="count" class="goal-result-summary">
           <b><%= goals.size%> results</b>
         </p>
-        <fieldset class="view-type-fieldset">
-          <label class="view-type-label">
-            <input type="radio" name="viewtype" value="full" checked/>
-            Info View
-          </label>
-          <label class="view-type-label">
-            <input type="radio" name="viewtype" value="full"/>
-            List View
-          </label>
-        </fieldset>
+        <!--<fieldset class="view-type-fieldset">-->
+          <!--<label class="view-type-label">-->
+            <!--<input type="radio" name="viewtype" value="full" checked/>-->
+            <!--Info View-->
+          <!--</label>-->
+          <!--<label class="view-type-label">-->
+            <!--<input type="radio" name="viewtype" value="full"/>-->
+            <!--List View-->
+          <!--</label>-->
+        <!--</fieldset>-->
       </div>
 
       <div class="goal-result-description">
-        <% filter.selected_description_pairs.each do |k,v | %>
+        <% filter.filter_pairs.each do |k,v | %>
           <b><%=k%></b>: <%=v%>;
         <% end %>
       </div>

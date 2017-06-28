@@ -143,17 +143,20 @@ class LITGoalsApp < Roda
 
       # Look at a list of goals
       r.on 'goals' do
+        f     = Filter.new(r.params, user)
+        selected_person = r.params['person']
+        goals = f.filtered_goals.to_a
+        goals = goals.find_all {|g| g.viewable_by?(user)}
+        locals = common_locals.merge ({
+            goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
+            units:    SORTED_UNITS,
+            statuses: STATUS_LIST,
+            filter:   f,
+            querystring: r.params['searchkeywords'],
+            people_opts: GoalsViz::Person.select_options(selected_person)
+        })
+
         r.is do
-          f     = Filter.new(r.params, user)
-          goals = f.filtered_goals.all
-          goals = goals.find_all {|g| g.viewable_by?(user)}
-          locals = common_locals.merge ({
-              goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
-              units:    SORTED_UNITS,
-              statuses: STATUS_LIST,
-              filter:   f,
-              querystring: r.params['search-input']
-          })
           view 'goals', locals: locals
         end
 
@@ -162,15 +165,6 @@ class LITGoalsApp < Roda
         # when a facet is clicked
         r.on 'goallist' do
           r.is do
-            f      = Filter.new(r.params, user)
-            goals  = f.filtered_goals.find_all {|g| g.viewable_by?(user)}
-            locals = common_locals.merge ({
-                goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
-                units:    SORTED_UNITS,
-                statuses: STATUS_LIST,
-                filter:   f,
-                querystring: r.params['search-input']
-            })
             render 'goals', locals: locals
           end
         end
@@ -183,7 +177,7 @@ class LITGoalsApp < Roda
         r.get do
           locals                           = common_locals.merge goal_form_locals(user, flash[:bad_goal])
           locals[:two_years_of_fy_options] = currentFY.select_list(2)
-          locals[:stewards] = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
+          locals[:human_stewards]          = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
 
           @pagetitle = 'Create a new goal'
           view "create", locals: locals
@@ -227,7 +221,7 @@ class LITGoalsApp < Roda
           goal                             = GoalsViz::Goal.find(id: goalid.to_i)
           locals                           = common_locals.merge goal_form_locals(user, goal)
           locals[:two_years_of_fy_options] = currentFY.select_list(2)
-          locals[:stewards] = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
+          locals[:human_stewards]          = GoalsViz::Person.where(is_admin: true).sort{|a,b| a.lastname <=> b.lastname}
           @pagetitle                       = "Edit '#{goal.title}'"
           view "create", locals: locals
         end
