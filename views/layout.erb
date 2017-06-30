@@ -52,17 +52,10 @@
         <nav class="navigation">
           <ul class="navigation-list">
             <li>
-              <a href="/litgoals/create">Create</a>
+              <a href="/litgoals/create">Create a new goal</a>
             </li>
-            <li>
-              <% #require 'pry'; binding.pry %>
-              <a href="<%= current_fiscal_year.goals_url%>">FY Goals</a>
-            </li>
-            <li>
-              <a href="/litgoals/goals/">Archive</a>
-            </li>
-            <li>
-              <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= user.uniqname %></a>
+]            <li>
+              <a href="https://weblogin.umich.edu/cgi-bin/logout?http://www.lib.umich.edu">Log out, <%= user.name %></a>
             </li>
           </ul>
         </nav>

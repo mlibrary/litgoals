@@ -2,6 +2,7 @@
   <h2 class="goal-title">
     <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
   </h2>
+  <%= render "goal/edit_button", locals: locals %>
 
   <%= render 'goal/ownership_and_scope', locals: locals %>
 
