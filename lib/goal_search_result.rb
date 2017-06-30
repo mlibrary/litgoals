@@ -22,9 +22,17 @@ module GoalsViz
   class GoalSearchResult
 
     extend Forwardable
-    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :human_stewards, :associated_owners, :creator
+    def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners, :creator, :draft?
 
     attr_reader :goal
+
+    def editors
+      @editors ||= owners.concat stewards
+    end
+
+    def editable_by?(p)
+      editors.include? p
+    end
 
     def initialize(goal)
       @goal = goal
