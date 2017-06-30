@@ -3,18 +3,9 @@
     <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
   </h2>
 
+  <%= render 'goal/ownership_and_scope', locals: locals %>
+
   <dl class="goal-metadata-list">
-    <% if goal.scope_links.empty? %>
-      <dt>Owners:</dt>
-      <dd><%= goal.owners.map(&:name).join(', ') %></dd>
-    <% else %>
-      <dt>Scope:</dt>
-      <dd>
-        <% goal.scope_links.each do |scope| %>
-          <a href="<%= scope.url %>"><%= scope.name %></a><br>
-        <% end %>
-      </dd>
-    <% end %>
     <dt>
       Why
     </dt>
@@ -22,13 +13,5 @@
       <%= goal.description %>
     </dd>
 
-    <% if !goal.stewards_list.empty? %>
-      <dt>
-        Stewards
-      <dt>
-      <dd>
-        <%= goal.stewards_list %>
-      </dd>
-    <% end %>
   </dl>
 </li>

@@ -1,10 +1,14 @@
 <!-- layout/search_form -->
-  <div class="flex-container">
-    <label class="search-label">
-      <span class="search-label-text">Search Goals</span>
-      <div class="flex-container">
-        <input type="text" name="searchkeywords" class="search-input" value="<%= querystring %>"/>
+<div class="flex-container">
+  <label class="search-label">
+    <span class="search-label-text">Search Goals</span>
+    <div class="flex-container">
+      <input type="text" name="searchkeywords" class="search-input" value="<%= querystring %>"/>
+      <% if defined? ajax and ajax %>
         <button class="button">Search</button>
-      </div>
-    </label>
-  </div>
+      <% else %>
+       <input type="submit" value="Search"/>
+      <% end %>
+    </div>
+  </label>
+</div>

@@ -1,6 +1,6 @@
-<form id="mainform" method="GET" class="search-form" role="search">
+<form id="mainform" method="GET" class="search-form" role="search" href="/litgoals/goals">
 
-  <%= render 'layout/search_ribbon', locals: locals %>
+  <%= render 'layout/search_ribbon', locals: locals.merge({ajax: true}) %>
 
   <div class="container flex-container">
 
@@ -13,16 +13,6 @@
         <p id="count" class="goal-result-summary">
           <b><%= goals.size%> results</b>
         </p>
-        <!--<fieldset class="view-type-fieldset">-->
-          <!--<label class="view-type-label">-->
-            <!--<input type="radio" name="viewtype" value="full" checked/>-->
-            <!--Info View-->
-          <!--</label>-->
-          <!--<label class="view-type-label">-->
-            <!--<input type="radio" name="viewtype" value="full"/>-->
-            <!--List View-->
-          <!--</label>-->
-        <!--</fieldset>-->
       </div>
 
       <div class="goal-result-description">

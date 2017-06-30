@@ -133,7 +133,7 @@ class LITGoalsApp < Roda
         r.get /(\d+)/ do |id|
           g = GoalsViz::GoalSearchResult.new(GoalsViz::Goal[id.to_i])
           if g.viewable_by?(user)
-            view 'goal/single_page', locals: common_locals.merge(goal: g)
+            view 'goal/single_page', locals: common_locals.merge(goal: g, querystring: r.params['searchkeywords'])
           else
             response.status = 404
           end

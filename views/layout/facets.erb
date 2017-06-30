@@ -116,6 +116,7 @@
     });
 
     function fix_url_and_reload() {
+        var search_keywords = $('.search_input').val()
         var formdata = $('#mainform').serialize();
         var querydata;
         if (formdata === "") {
@@ -127,6 +128,7 @@
         var newurl = '/litgoals/goals/' + querydata;
         window.history.pushState(newurl, null, newurl);
         $('main').load(ajaxurl);
+        $('.search_input').val(search_keywords)
     }
 
     //     Load the new set of results via ajax and mess with the URL and push/popstate

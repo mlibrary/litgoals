@@ -8,34 +8,17 @@
 
       <li class="goal-result">
         <h2 class="goal-title">Goal: <%= goal.title %></h2>
+
+
+        <%= render 'goal/ownership_and_scope', locals: locals %>
+
         <dl class="goal-metadata-list">
-          <dt>Scope</dt>
-          <dd>
-            <% if goal.scope_links.empty? %>
-              <%= goal.creator.name %>
-            <% else %>
-              <% goal.scope_links.each do |scope| %>
-                <a href="<%= scope.url %>"><%= scope.name %></a><br>
-              <% end %>
-            <% end %>
-          </dd>
-
-
           <dt>
 
           </dt>
           <dd>
             <%= goal.description %>
           </dd>
-
-          <% if !goal.stewards_list.empty? %>
-            <dt>
-              Stewards
-            <dt>
-            <dd>
-              <%= goal.stewards_list %>
-            </dd>
-          <% end %>
 
           <dt>
             Status

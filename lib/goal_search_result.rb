@@ -65,6 +65,10 @@ module GoalsViz
       units = goal.owners.find_all{|u| u.is_unit}.map{|o| Scope.new("/litgoals/goals?unit=#{CGI.escape(o.uniqname)}", o.name)}
     end
 
+    def owner_links
+      units = goal.owners.find_all{|u| !u.is_unit}.map{|o| Scope.new("/litgoals/goals?unit=#{CGI.escape(o.uniqname)}", o.name)}
+    end
+
     def description
       Kramdown::Document.new((goal.description or ""), input: 'GFM', header_offset: 4).to_html
     end
@@ -78,7 +82,7 @@ module GoalsViz
     end
 
     def stewards_list
-      goal.stewards.map(&:name).join(", ")
+      goal.stewards.map(&:name)
     end
   end
 end
