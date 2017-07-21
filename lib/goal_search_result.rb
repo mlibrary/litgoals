@@ -54,9 +54,14 @@ module GoalsViz
       goal.title
     end
 
-    def associated_goals
+    def child_goals
       goal.child_goals.map{|ag| self.class.new(ag)}
     end
+
+    def parent_goals
+      goal.parent_goals.map{|ag| self.class.new(ag)}
+    end
+
 
     def link
       %Q{<a href="/litgoals/goal/#{goal.id}">#{title}</a>}

@@ -79,7 +79,7 @@ class Filter
     # as the people
     if searchkeywords =~ /\S/
       words = searchkeywords.split(/\s+/)
-      firstword = words.shift
+      firstword = words.first
       peoplesearch = words.inject(goals.db[:goalsearch].select(:id).where(ilike_person(firstword))) {|acc, k| acc.or(ilike_person(k))}
       goals        = goals.where(keyword_filter(searchkeywords)).or(id: peoplesearch)
     end

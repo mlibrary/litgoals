@@ -38,14 +38,28 @@
           <dd>
             <%= goal.target_date %>
           </dd>
-
-          <% if !goal.associated_goals.empty? %>
+          <% if !goal.parent_goals.empty? %>
             <dt>
-              Associated Goals
+              This goal links to:
             <dt>
             <dd>
               <ul class="associated-goals-list">
-                <% goal.associated_goals.each do |ag| %>
+                <% goal.parent_goals.each do |ag| %>
+                  <li>
+                    <a href="<%= ag.url %>"><%= ag.title %></a>
+                  </li>
+                <% end %>
+              </ul>
+            </dd>
+          <% end %>
+
+          <% if !goal.child_goals.empty? %>
+            <dt>
+              This goal is linked to by:
+            <dt>
+            <dd>
+              <ul class="associated-goals-list">
+                <% goal.child_goals.each do |ag| %>
                   <li>
                     <a href="<%= ag.url %>"><%= ag.title %></a>
                   </li>
