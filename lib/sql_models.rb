@@ -244,7 +244,7 @@ module GoalsViz
     def replace_stewards(new_stewards)
       save if id.nil?
       remove_all_associated_stewards
-      stewards = Array(new_stewards).map{|s| GoalsViz::Person.first(uniqname: s)}
+      stewards = Array(new_stewards).map{|s| GoalsViz::Person.first(uniqname: s)}.compact
 
       stewards.each { |o| add_associated_steward(o) }
       save

@@ -13,6 +13,7 @@
       <li class="goal-result">
         <h2 class="goal-title">Goal: <%= goal.title %></h2>
 
+        <%= render "goal/edit_button", locals: locals %>
 
         <%= render 'goal/ownership_and_scope', locals: locals %>
 
