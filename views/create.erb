@@ -100,7 +100,7 @@
         <%=  forme.input(:select,
                          multiple: true,
                          name: 'stewards[]',
-                         options: [["None", ""]] + stewards.map{|x| ["#{x.lastname}, #{x.firstname}", x.uniqname]},
+                         options: [["None", ""]] + GoalsViz::Person.all.map{|x| ["#{x.lastname}, #{x.firstname}", x.uniqname]},
                          selected: goal.stewards.map(&:uniqname),
                          id: 'stewards',
                          style: "height: 10em",

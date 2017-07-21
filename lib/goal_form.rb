@@ -141,7 +141,7 @@ module GoalsViz
       }
 
     end
-    
+
   end
 end
 
