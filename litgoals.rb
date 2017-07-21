@@ -205,7 +205,7 @@ class LITGoalsApp < Roda
             action                 = is_newgoal ? "added" : "edited"
             flash[:goal_added_msg] = "Goal \"#{g.title}\" #{action}"
             sleep 0.5
-            r.redirect '/litgoals/goals/'
+            r.redirect "/litgoals/goal/#{g.id}"
           end
         end
       end
