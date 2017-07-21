@@ -6,7 +6,7 @@ module GoalsViz
   class FormData
     DEFAULT_DATE = '2017/06'
 
-    attr_reader :goal_id, :associated_goal_ids, :owner_ids, :date, :id
+    attr_reader :goal_id, :associated_goal_ids, :owner_ids, :date, :id, :stewards
 
     def initialize(params_orig)
       @errors              = []
@@ -15,6 +15,7 @@ module GoalsViz
       @owner_ids           = params.delete('associated-owners')
       @draft               = params.delete('draft')
       @id                  = params.delete('goal_id')
+      @stewards            = Array(params.delete('stewards'))
 
       date_string = params.delete('target_date')
       if (GoalsViz::DATEFORMAT.match date_string)
@@ -59,6 +60,7 @@ module GoalsViz
   class GoalForm
 
     attr_reader :goal, :user
+
     def initialize(goal: goal, user: user)
 
     end
@@ -77,6 +79,7 @@ module GoalsViz
 
       goal.replace_associated_goals(d.associated_goals)
       goal.replace_owners(d.owners)
+      goal.replace_stewards(d.stewards)
       goal.target_date = d.date
 
 
@@ -86,12 +89,10 @@ module GoalsViz
         goal.publish!
       end
 
-      goal.set_all(d.unahandled_args.to_h)
+      goal.set(d.unahandled_args.to_h)
       goal
 
     end
-
-
 
 
   end
@@ -100,6 +101,7 @@ module GoalsViz
     DEFAULT_DATE = '2017/06'
 
     attr_reader :goal, :user
+
     def initialize(goal, user)
       @goal = goal
       @user = user
@@ -125,22 +127,21 @@ module GoalsViz
 
     def to_h
       {
-          "goal-published-status" => goal.draft? ? "Draft" : "Published",
-          "goal-fiscal-year" => goal.goal_year,
+          "goal-published-status"      => goal.draft? ? "Draft" : "Published",
+          "goal-fiscal-year"           => goal.goal_year,
           "goal-target-date-timestamp" => goal.target_date_string,
-          "goal-target-date" => goal.target_date_string,
-          "goal-owners" => owner_names.join("<br>"),
-          'goal-title' => goal.title,
-          'goal-description' => Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html,
-          'goal-edit-href' => "/litgoals/edit_goal/#{@goal.id}",
-          'goal-edit-show' => editable? ? "" : "display: none",
-          'goal-my-goal' => mygoal? ? "My Goal" : "",
-          'goal-published-status' => goal.draft? ? 'Draft' : goal.status,
-          'goal-fiscal-year' => goal.goal_year
+          "goal-target-date"           => goal.target_date_string,
+          "goal-owners"                => owner_names.join("<br>"),
+          'goal-title'                 => goal.title,
+          'goal-description'           => Kramdown::Document.new(goal.description, input: 'GFM', header_offset: 4).to_html,
+          'goal-edit-href'             => "/litgoals/edit_goal/#{@goal.id}",
+          'goal-edit-show'             => editable? ? "" : "display: none",
+          'goal-my-goal'               => mygoal? ? "My Goal" : ""
+
       }
 
     end
-
+    
   end
 end
 

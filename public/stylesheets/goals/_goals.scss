@@ -1,0 +1,88 @@
+.page-heading {
+  margin-top: 0;
+}
+
+/*
+  Goal result page layout
+*/
+
+.filter-container {
+  min-width: 16rem;
+  margin-right: 2rem;
+}
+
+.goal-result-container {
+  width: 100%;
+}
+
+
+/*
+  Goal result specific styling
+*/
+
+.goal-result-summary-container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid 2px $grey-5;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  margin-top: 1.5rem;
+}
+
+.goal-result-summary {
+  margin: 0;
+}
+
+.goal-result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    padding: 0;
+  }
+}
+
+.goal-result {
+  border-bottom: solid 2px $grey-5;
+}
+
+.goal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.goal-link {
+  color: $main-3;
+  border-bottom: 2px solid rgba(18,109,193,.4);
+
+  &:hover {
+    background: $main-5;
+  }
+}
+
+.goal-metadata-list {
+  dt {
+    font-size: 0.9rem;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  dd {
+    margin-bottom: 1rem;
+  }
+}
+
+.associated-goals-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    padding: 0;
+    margin: 0;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+}

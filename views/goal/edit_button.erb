@@ -1,0 +1,3 @@
+<% if user.admin? or goal.editors.include? user %>
+  <button><a href="/litgoals/edit_goal/<%= goal.id %>">Edit</a></button>
+<% end %>

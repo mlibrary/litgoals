@@ -9,6 +9,7 @@ module GoalsViz
 
   # Pre-declare everything so the associations work
   class GoalOwner < Sequel::Model;
+    set_dataset DB[:goalowner]
   end
 
   class Goal < GoalOwner;
@@ -41,10 +42,10 @@ module GoalsViz
   end
 
   class GoalOwner < Sequel::Model
-    set_dataset DB[:goalowner]
+    # set_dataset DB[:goalowner]
     plugin :after_initialize
 
-    many_to_many :goals, :class => Goal, :left_key => :goalid, :right_key => :ownerid,
+    many_to_many :goals, :class => Goal, :left_key => :ownerid, :right_key => :goalid,
                  :join_table    => :goaltoowner
 
 
@@ -142,6 +143,21 @@ module GoalsViz
     alias_method :unit, :parent
 
     plugin :after_initialize
+    
+    
+    def self.select_options(selected_person)
+      if selected_person.nil? or selected_person.empty?
+        no_one_is_selected = 'selected'
+      else
+        no_one_is_selected = ''
+      end
+      opts = [['', '(Anyone)', no_one_is_selected ]]
+      self.order(:lastname).each do |p|
+        selected = p.uniqname == selected_person ? "selected" : ""
+        opts.push [p.uniqname, "#{p.lastname}, #{p.firstname}", selected]
+      end
+      opts
+    end
 
 
     def after_initialize # or after_initialize
@@ -163,14 +179,17 @@ module GoalsViz
   class Goal
     set_dataset DB[:goal]
 
-    many_to_many :parent_goals, :class => Goal, :right_key => :childgoalid, :left_key => :parentgoalid,
+    many_to_many :parent_goals, :class => Goal, :left_key => :childgoalid, :right_key => :parentgoalid,
                  :join_table           => :goaltogoal
 
-    many_to_many :child_goals, :class => Goal, :left_key => :childgoalid, :right_key => :parentgoalid,
+    many_to_many :child_goals, :class => Goal, :left_key => :parentgoalid, :right_key => :childgoalid,
                  :join_table          => :goaltogoal
 
-    many_to_many :associated_owners, :class => GoalOwner, :right_key => :goalid, :left_key => :ownerid,
+    many_to_many :associated_owners, :class => GoalOwner, :left_key => :goalid, :right_key => :ownerid,
                  :join_table                => :goaltoowner
+
+    many_to_many :associated_stewards, :class => GoalOwner, :left_key => :goalid, :right_key => :stewardid,
+                 :join_table                => :goaltosteward
 
     one_to_many :goals, class: Goal, primary_key: :id, key: :uniqname
 
@@ -222,6 +241,16 @@ module GoalsViz
       self
     end
 
+    def replace_stewards(new_stewards)
+      save if id.nil?
+      remove_all_associated_stewards
+      stewards = Array(new_stewards).map{|s| GoalsViz::Person.first(uniqname: s)}
+
+      stewards.each { |o| add_associated_steward(o) }
+      save
+      self
+    end
+
 
     def replace_associated_goals(newgoals)
       save if id.nil?
@@ -243,6 +272,10 @@ module GoalsViz
 
     def owners
       self.associated_owners.map { |x| person_or_unit(x.uniqname) }
+    end
+
+    def stewards
+      self.associated_stewards.map{ |x| person_or_unit(x.uniqname) }
     end
 
     def owner_names

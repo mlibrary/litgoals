@@ -15,10 +15,13 @@
 @import "partials/callout";
 @import "partials/alerts";
 @import "partials/site_messages";
+@import "partials/switch";
 
 // Specific to Goals Visualization
 @import "goals/sort";
 @import "goals/goals";
+@import "goals/search";
+@import "goals/filters";
 
 // Vendor and Third-party
 @import "vendor/selectize";

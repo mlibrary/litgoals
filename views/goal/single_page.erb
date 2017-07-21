@@ -1,0 +1,65 @@
+<form id="mainform" method="GET" class="search-form" role="search" action="/litgoals/goals">
+
+<%= render 'layout/search_ribbon', locals: locals %>
+
+</form>
+
+<div class="container flex-container">
+
+
+  <main class="goal-result-container">
+    <ul class="goal-result-list">
+
+      <li class="goal-result">
+        <h2 class="goal-title">Goal: <%= goal.title %></h2>
+
+
+        <%= render 'goal/ownership_and_scope', locals: locals %>
+
+        <dl class="goal-metadata-list">
+          <dt>
+
+          </dt>
+          <dd>
+            <%= goal.description %>
+          </dd>
+
+          <dt>
+            Status
+          <dt>
+          <dd>
+            <%= goal.status %>
+          </dd>
+
+          <dt>
+            Target Date
+          <dt>
+          <dd>
+            <%= goal.target_date %>
+          </dd>
+
+          <% if !goal.associated_goals.empty? %>
+            <dt>
+              Associated Goals
+            <dt>
+            <dd>
+              <ul class="associated-goals-list">
+                <% goal.associated_goals.each do |ag| %>
+                  <li>
+                    <a href="<%= ag.url %>"><%= ag.title %></a>
+                  </li>
+                <% end %>
+              </ul>
+            </dd>
+          <% end %>
+        </dl>
+
+      </li>
+
+    </ul>
+  </main>
+</div>
+
+
+
+

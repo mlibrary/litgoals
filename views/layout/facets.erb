@@ -1,0 +1,144 @@
+<!-- facets -->
+
+
+<aside class="filter-container">
+<button><a href="/litgoals/goals">Clear all</a></button>
+
+  <ul class="filter-group-list">
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Scope</h2>
+      <ul class="filter-item-list">
+        <% if user.is_admin%>
+          <li class="filter-group">
+            <h2 class="filter-group-heading filter-group-heading-no-border">Filter
+              Person</h2>
+            <ul class="filter-item-list">
+              <li class="filter-item">
+                <label class="filter-item-label">
+                  <p class="screen-reader-text">
+                    Select person to filter results by
+                  </p>
+                  <select name="person" id="person-select">
+                    <% people_opts.each do |uniqname, name, selected| %>
+                      <option value="<%= uniqname %>" <%=selected%>><%= name %></option>
+                    <% end %>
+                  </select>
+                </label>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="whose[]" value="<%= user.uniqname %>" <%= filter.checked_for(:whose, user.uniqname) %> />
+              My Goals Only
+            </label>
+          </li>
+        <% end %>
+        <!--<li class="filter-item">-->
+        <!--<label class="filter-item-label">-->
+        <!--<input type="checkbox" name="whose[]" value="divison" <%= filter.checked_for(:whose, :divison) %>/>-->
+        <!--Division-->
+        <!--</label>-->
+        <!--</li>-->
+      </ul>
+    </li>
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Year</h2>
+      <ul class="filter-item-list">
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="year[]" value="2018" <%= filter.checked_for(:year, 2018) %> />
+            2017-2018
+          </label>
+        </li>
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="year[]" value="2017" <%= filter.checked_for(:year, 2017) %>/>
+            2016-2017
+          </label>
+        </li>
+
+      </ul>
+    </li>
+
+
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Department</h2>
+      <ul class="filter-item-list">
+        <% units.each do |unit| %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="unit[]" value="<%= unit.abbreviation %>" <%= filter.checked_for(:unit, unit.abbreviation) %>/>
+              <%= unit.name %>
+            </label>
+          </li>
+        <% end %>
+
+      </ul>
+    </li>
+
+
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Current Status</h2>
+      <ul class="filter-item-list">
+
+        <% statuses.each do |status_option| %>
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <input type="checkbox" name="status[]" value="<%= status_option %>" <%= filter.checked_for(:status, status_option) %> />
+              <%= status_option %>
+            </label>
+          </li>
+        <% end %>
+
+      </ul>
+    </li>
+
+  </ul>
+</aside>
+
+<script>
+
+    //   Allow clearing the form
+
+    function clear_search() {
+        $('.filter-group .filter-item input[type=checkbox]').prop('checked', false)
+        $('.search-input').val('');
+        $('#person-select').val('')
+    }
+
+    $('#clear_search_button').on('click', function () {
+        clear_search();
+        window.history.pushState('/litgoals/goals/', null, '/litgoals/goals/');
+        $('main').load('/litgoals/goals/goallist/');
+
+    });
+
+    function fix_url_and_reload() {
+        var formdata = $('#mainform').serialize();
+        var querydata;
+        if (formdata === "") {
+            querydata = "";
+        } else {
+            querydata = "?" + formdata;
+        }
+        var ajaxurl = '/litgoals/goals/goallist/' + querydata;
+        var newurl = '/litgoals/goals/' + querydata;
+        window.history.pushState(newurl, null, newurl);
+        $('main').load(ajaxurl);
+    }
+
+    //     Load the new set of results via ajax and mess with the URL and push/popstate
+    //     so the back button works.
+    $(document).on('click', '.filter-group .filter-item input[type=checkbox]', fix_url_and_reload)
+    $(document).on('change', '.filter-group .filter-item select', fix_url_and_reload)
+
+    window.addEventListener('popstate', function (e) {
+        if (e.state !== null) {
+            window.location = e.state;
+        } else {
+            window.location.reload();
+        }
+    });
+</script>

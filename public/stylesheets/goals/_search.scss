@@ -1,0 +1,36 @@
+.search-heading {
+  padding: 1.5rem 0;
+}
+
+.search-form {
+}
+
+.search-label {
+  width: 100%;
+}
+
+.search-label-text {
+  display: block;
+  color: $grey-2;
+  margin-bottom: 0.5rem;
+}
+
+.search-input {
+  margin-right: 1rem;
+}
+
+.view-type-fieldset {
+  margin: 0;
+}
+
+.view-type-label {
+  font-weight: 400;
+  cursor: pointer;
+  display: inline-block;
+  margin-left: 0.5rem;
+
+  input {
+    margin: 0;
+    padding-right: 0.25rem;
+  }
+}

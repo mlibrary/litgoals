@@ -1,0 +1,31 @@
+<dl class="goal-metadata-list">
+  <% if !goal.scope_links.empty? %>
+    <dt>Scope:</dt>
+    <dd>
+      <% goal.scope_links.map do |scope| %>
+        <a href="<%= scope.url %>"><%= scope.name %></a><br>
+      <% end.join("<br>") %>
+    </dd>
+  <% end %>
+
+  <% if !goal.owner_links.empty? %>
+    <% owner_title  = goal.owner_links.size == 1 ? "Owner" : "Owners" %>
+
+    <dt><%= owner_title%>:</dt>
+    <dd>
+      <% goal.owner_links.map do |scope| %>
+        <a href="<%= scope.url %>"><%= scope.name %></a><br>
+      <% end.join("<br>") %>
+    </dd>
+  <% end %>
+
+  <% if !goal.stewards_list.empty? %>
+    <% steward_title  = goal.stewards_list.size == 1 ? "Steward" : "Stewards" %>
+    <dt>
+      <%= steward_title %>:
+    <dt>
+    <dd>
+      <%= goal.stewards_list.join(", ")%>
+    </dd>
+  <% end %>
+</dl>
