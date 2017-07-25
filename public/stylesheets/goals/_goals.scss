@@ -25,7 +25,7 @@
   justify-content: space-between;
   border-bottom: solid 2px $grey-5;
   padding-bottom: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   margin-top: 1.5rem;
 }
 
@@ -69,6 +69,14 @@
 
   dd {
     margin-bottom: 1rem;
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+  }
+
+  a {
+    text-decoration: underline;
   }
 }
 
@@ -85,4 +93,16 @@
       text-decoration: underline;
     }
   }
+}
+
+.goal-scope-link {
+  display: block;
+}
+
+/*
+  Goal Page
+*/
+
+.goal-page {
+  margin-top: 1.5rem;
 }

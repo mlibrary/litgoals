@@ -2,47 +2,9 @@
 
 
 <aside class="filter-container">
-<button><a href="/litgoals/goals">Clear all</a></button>
+  <a class="button button-light button-small clear-filters-button" href="/litgoals/goals">Clear filters</a>
 
   <ul class="filter-group-list">
-    <li class="filter-group">
-      <h2 class="filter-group-heading">Filter Scope</h2>
-      <ul class="filter-item-list">
-        <% if user.is_admin%>
-          <li class="filter-group">
-            <h2 class="filter-group-heading filter-group-heading-no-border">Filter
-              Person</h2>
-            <ul class="filter-item-list">
-              <li class="filter-item">
-                <label class="filter-item-label">
-                  <p class="screen-reader-text">
-                    Select person to filter results by
-                  </p>
-                  <select name="person" id="person-select">
-                    <% people_opts.each do |uniqname, name, selected| %>
-                      <option value="<%= uniqname %>" <%=selected%>><%= name %></option>
-                    <% end %>
-                  </select>
-                </label>
-              </li>
-            </ul>
-          </li>
-        <% else %>
-          <li class="filter-item">
-            <label class="filter-item-label">
-              <input type="checkbox" name="whose[]" value="<%= user.uniqname %>" <%= filter.checked_for(:whose, user.uniqname) %> />
-              My Goals Only
-            </label>
-          </li>
-        <% end %>
-        <!--<li class="filter-item">-->
-        <!--<label class="filter-item-label">-->
-        <!--<input type="checkbox" name="whose[]" value="divison" <%= filter.checked_for(:whose, :divison) %>/>-->
-        <!--Division-->
-        <!--</label>-->
-        <!--</li>-->
-      </ul>
-    </li>
     <li class="filter-group">
       <h2 class="filter-group-heading">Filter Year</h2>
       <ul class="filter-item-list">
@@ -58,11 +20,19 @@
             2016-2017
           </label>
         </li>
-
       </ul>
     </li>
-
-
+    <li class="filter-group">
+      <h2 class="filter-group-heading">Filter Scope</h2>
+      <ul class="filter-item-list">
+        <li class="filter-item">
+          <label class="filter-item-label">
+            <input type="checkbox" name="whose[]" value="<%= user.uniqname %>" <%= filter.checked_for(:whose, user.uniqname) %> />
+            My Goals Only
+          </label>
+        </li>
+      </ul>
+    </li>
     <li class="filter-group">
       <h2 class="filter-group-heading">Filter Department</h2>
       <ul class="filter-item-list">
@@ -77,12 +47,9 @@
 
       </ul>
     </li>
-
-
     <li class="filter-group">
       <h2 class="filter-group-heading">Current Status</h2>
       <ul class="filter-item-list">
-
         <% statuses.each do |status_option| %>
           <li class="filter-item">
             <label class="filter-item-label">
@@ -91,28 +58,43 @@
             </label>
           </li>
         <% end %>
-
       </ul>
     </li>
-
+    <% if user.is_admin%>
+      <li class="filter-group">
+        <h2 class="filter-group-heading filter-group-heading-no-border">Filter
+          Person</h2>
+        <ul class="filter-item-list">
+          <li class="filter-item">
+            <label class="filter-item-label">
+              <p class="screen-reader-text">
+                Select person to filter results by
+              </p>
+              <select name="person" id="filter-select-person">
+                <% people_opts.each do |uniqname, name, selected| %>
+                  <option value="<%= uniqname %>" <%=selected%>><%= name %></option>
+                <% end %>
+              </select>
+            </label>
+          </li>
+        </ul>
+      </li>
+    <% end %>
   </ul>
 </aside>
 
 <script>
-
-    //   Allow clearing the form
-
+    // Allow clearing the form
     function clear_search() {
         $('.filter-group .filter-item input[type=checkbox]').prop('checked', false)
         $('.search-input').val('');
-        $('#person-select').val('')
+        $('#filter-select-person').val('');
     }
 
     $('#clear_search_button').on('click', function () {
         clear_search();
         window.history.pushState('/litgoals/goals/', null, '/litgoals/goals/');
         $('main').load('/litgoals/goals/goallist/');
-
     });
 
     function fix_url_and_reload() {
