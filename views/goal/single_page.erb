@@ -1,80 +1,14 @@
 <form id="mainform" method="GET" class="search-form" role="search" action="/litgoals/goals">
-
-<%= render 'layout/search_ribbon', locals: locals %>
-
+  <%= render 'layout/search_ribbon', locals: locals %>
 </form>
 
-<div class="container flex-container">
+<main class="container container-narrow goal-page">
+  <%= render "goal/edit_link", locals: locals %>
+  <h2 class="goal-title"><%= goal.title %></h2>
 
-
-  <main class="goal-result-container">
-    <ul class="goal-result-list">
-
-      <li class="goal-result">
-        <h2 class="goal-title">Goal: <%= goal.title %></h2>
-
-        <%= render "goal/edit_button", locals: locals %>
-
-        <%= render 'goal/ownership_and_scope', locals: locals %>
-
-        <dl class="goal-metadata-list">
-          <dt>
-
-          </dt>
-          <dd>
-            <%= goal.description %>
-          </dd>
-
-          <dt>
-            Status
-          <dt>
-          <dd>
-            <%= goal.status %>
-          </dd>
-
-          <dt>
-            Target Date
-          <dt>
-          <dd>
-            <%= goal.target_date %>
-          </dd>
-          <% if !goal.parent_goals.empty? %>
-            <dt>
-              This goal is influenced by:
-            <dt>
-            <dd>
-              <ul class="associated-goals-list">
-                <% goal.parent_goals.each do |ag| %>
-                  <li>
-                    <a href="<%= ag.url %>"><%= ag.title %></a>
-                  </li>
-                <% end %>
-              </ul>
-            </dd>
-          <% end %>
-
-          <% if !goal.child_goals.empty? %>
-            <dt>
-              This goal is cited as being an influence on:
-            <dt>
-            <dd>
-              <ul class="associated-goals-list">
-                <% goal.child_goals.each do |ag| %>
-                  <li>
-                    <a href="<%= ag.url %>"><%= ag.title %></a>
-                  </li>
-                <% end %>
-              </ul>
-            </dd>
-          <% end %>
-        </dl>
-
-      </li>
-
-    </ul>
-  </main>
-</div>
-
-
-
-
+  <dl class="goal-metadata-list">
+    <%= render 'goal/ownership_and_scope', locals: locals %>
+    <%= render 'goal/fields', locals: locals %>
+    <%= render 'goal/associated_goals', locals: locals %>
+  </dl>
+</main>

@@ -1,38 +1,26 @@
 <form id="mainform" method="GET" class="search-form" role="search" action="/litgoals/goals">
-
   <%= render 'layout/search_ribbon', locals: locals.merge({ajax: true}) %>
 
   <div class="container flex-container">
-
     <%= render 'layout/facets', locals: locals %>
-
 
     <main class="goal-result-container">
       <div class="goal-result-summary-container">
-
         <p id="count" class="goal-result-summary">
-          <b><%= goals.size%> results</b>
-        </p>
-      </div>
+          <b><%= goals.size %> <%= goals.size > 1 ? "results" : "result" %></b>
 
-      <div class="goal-result-description">
-        <% filter.filter_pairs.each do |k,v | %>
-          <b><%=k%></b>: <%=v%>;
-        <% end %>
+          <% filter.filter_pairs.each do |k,v | %>
+            <b><%=k%></b>: <%=v%>;
+          <% end %>
+        </p>
       </div>
 
       <!-- goal list -->
       <ul class="goal-result-list">
-
         <% goals.each do |goal| %>
-
           <%= render 'goal/search_result', locals: {user: user, goal: goal} %>
         <% end %>
-
       </ul>
     </main>
   </div>
-
 </form>
-
-

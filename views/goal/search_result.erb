@@ -1,18 +1,13 @@
 <li class="goal-result">
+  <%= render "goal/edit_link", locals: locals %>
   <h2 class="goal-title">
     <a class="goal-link" href="<%= goal.url %>"><%= goal.title %></a>
   </h2>
-  <%= render "goal/edit_button", locals: locals %>
-
-  <%= render 'goal/ownership_and_scope', locals: locals %>
-
   <dl class="goal-metadata-list">
-    <dt>
-      Why
-    </dt>
-    <dd>
-      <%= goal.description %>
-    </dd>
-
+    <dl class="goal-metadata-list">
+      <%= render 'goal/ownership_and_scope', locals: locals %>
+      <%= render 'goal/fields', locals: locals %>
+      <%= render 'goal/associated_goals', locals: locals %>
+    </dl>
   </dl>
 </li>

@@ -210,7 +210,7 @@ class LITGoalsApp < Roda
         end
       end
 
-      r.on "edit_goal/:goalid" do |goalid|
+      r.on "edit_edit/:goalid" do |goalid|
         gid = goalid.to_i
         unless user.is_admin or user.goals.map(&:id).include? gid
           flash[:error_msg] = "You're not allowed to edit that goal (must be owner/creator or admin)"
