@@ -24,7 +24,7 @@ module GoalsViz
     extend Forwardable
     def_delegators :@goal, :viewable_by?, :title, :status, :owners, :stewards, :associated_owners, :creator, :draft?, :id
 
-    attr_reader :goal
+    attr_reader :goal, :user
 
     def editors
       @editors ||= owners.concat stewards
@@ -34,8 +34,9 @@ module GoalsViz
       editors.include? p
     end
 
-    def initialize(goal)
+    def initialize(goal, user)
       @goal = goal
+      @user = user
     end
 
     def url
@@ -55,11 +56,11 @@ module GoalsViz
     end
 
     def child_goals
-      goal.child_goals.map{|ag| self.class.new(ag)}
+      goal.child_goals.select{|x| x.viewable_by?(user)}.map{|ag| self.class.new(ag, user)}
     end
 
     def parent_goals
-      goal.parent_goals.map{|ag| self.class.new(ag)}
+      goal.parent_goals.select{|x| x.viewable_by?(user)}.map{|ag| self.class.new(ag, user)}
     end
 
 

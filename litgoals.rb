@@ -55,7 +55,7 @@ def goal_form_locals(user, goal=nil)
       goal:                              goal,
       gforme:                            gforme,
       goalowners_to_show_goals_for:      interesting_goal_owners,
-      selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners),
+      selectize_associated_goal_options: goal_list_for_selectize(interesting_goal_owners, user),
       parent_goal_ids:                   goal.parent_goals.map(&:id)
 
 
@@ -64,9 +64,9 @@ def goal_form_locals(user, goal=nil)
 end
 
 
-def goal_list_for_selectize(list_of_owners)
+def goal_list_for_selectize(list_of_owners, user)
 
-  list_of_owners.map(&:reload).map(&:goals).flatten.uniq.map do |g|
+  list_of_owners.map(&:reload).map(&:goals).flatten.uniq.select{|x| x.viewable_by?(user)}.map do |g|
     {
         title:       g.title,
         uid:         g.id,
@@ -131,7 +131,7 @@ class LITGoalsApp < Roda
       # Look at a particular goal
       r.on 'goal' do
         r.get /(\d+)/ do |id|
-          g = GoalsViz::GoalSearchResult.new(GoalsViz::Goal[id.to_i])
+          g = GoalsViz::GoalSearchResult.new(GoalsViz::Goal[id.to_i], user)
           if g.viewable_by?(user)
             view 'goal/single_page', locals: common_locals.merge(goal: g, querystring: r.params['searchkeywords'])
           else
@@ -148,7 +148,7 @@ class LITGoalsApp < Roda
         goals = f.filtered_goals.to_a
         goals = goals.find_all {|g| g.viewable_by?(user)}
         locals = common_locals.merge ({
-            goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g)},
+            goals:    goals.map {|g| GoalsViz::GoalSearchResult.new(g, user)},
             units:    SORTED_UNITS,
             statuses: STATUS_LIST,
             filter:   f,
