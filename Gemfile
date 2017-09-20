@@ -22,6 +22,7 @@ gem 'dry-auto_inject'
 gem 'puma', '~>3.0'
 
 gem 'kramdown', '~>1.13'
+gem 'pry'
 
 group :development do
   gem "bundler", "~> 1.3"
