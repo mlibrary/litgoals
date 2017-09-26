@@ -55,7 +55,7 @@
     <fieldset class="full-width">
       <label for="description">Description</label>
       <p class="help-text">
-        Write down and explain relevant details. Markdown friendly.
+        Write down and explain relevant details. <a target="_blank" href="https://github.github.com/gfm/">Markdown friendly</a>.
       </p>
       <%= forme.input(:textarea, name: 'description', value: goal.description) %>
     </fieldset>
@@ -104,7 +104,8 @@
     <% end %>
 
     <fieldset class="full-width">
-      <label for="notes">Notes</label>
+      <label for="notes">Optional notes</label>
+      <div>...on progress, links to documents or tickets, etc.</div>
       <textarea name="notes" id="notes"><%= goal.notes %></textarea>
     </fieldset>
 
