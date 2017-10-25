@@ -8,14 +8,14 @@ require 'dry-initializer'
 class Department
 
   NAME_MAP = {
-     "Library Info Tech Dept Group" => "LIT",
-     "Library Info Tech - HathiTrust" => "HathiTrust",
-     "Library Info Tech - General" => "General",
-     "Library Info Tech - Arch & Eng" => "A&E",
-     "LibraryInfoTech - Dig. Content" => "DCC",
-     "Library Info Tech - AIM" => "AIM",
-     "LibraryInfoTech-Design&Discov" => "D&D",
-     "Library Info Tech-Dig Lib Apps" => "DLA"
+    "Library Info Tech Dept Group"   => "LIT",
+    "Library Info Tech - HathiTrust" => "HathiTrust",
+    "Library Info Tech - General"    => "General",
+    "Library Info Tech - Arch & Eng" => "A&E",
+    "LibraryInfoTech - Dig. Content" => "DCC",
+    "Library Info Tech - AIM"        => "AIM",
+    "LibraryInfoTech-Design&Discov"  => "D&D",
+    "Library Info Tech-Dig Lib Apps" => "DLA"
   }
 
 
@@ -27,7 +27,11 @@ class Department
   option :head, default: -> {nil}
   option :employees, default: -> {[]}
   option :sub_departments, default: -> {[]}
-  option :parent_department, default: ->{nil}
+  option :parent_department, default: -> {nil}
+
+  def initialize(*args, **kwargs)
+    super
+  end
 
   def head
     staff_map[head_id]
@@ -39,6 +43,7 @@ class Department
 
   def staff_map=(sm)
     @staff_map = sm
+    @staff_map.values.uniq.each {|s| s.department = dept_by_id(s.department_id)}
   end
 
   def staff_map
@@ -65,16 +70,30 @@ class Department
     d
   end
 
-  def dmap(d = self, h = {})
-    return @dmap if defined? @dmap
+  def dmap
+    @dmap ||= self.create_dmap
+  end
+
+  def create_dmap(d = self, h = {})
     h[d.id] = d
-    m       = h.merge d.sub_departments.reduce({}) {|h2, sd| dmap(sd, h2)}
-    @dmap   = m if d == self
-    m
+    h.merge d.sub_departments.reduce({}) {|h2, sd| create_dmap(sd, h2)}
   end
 
   def dept_by_id(id)
     dmap[id]
+  end
+
+  def dept_by_head_uniqname(u)
+    dmap.values.find {|x| x.head && x.head.uniqname == u}
+  end
+
+  def is_within(target)
+     id == target.id or (!parent_department.nil? and parent_department.is_within(target))
+  end
+
+
+  def staff
+    @staff ||= staff_map.values.select{|x| x.department && x.department.is_within(self)}.uniq
   end
 
 end
@@ -95,6 +114,7 @@ class StaffMember
   option :department, default: -> {nil}
   option :manager, default: -> {nil}
 
+  attr_reader :department
   alias_method :name, :display_name
 
   def self.from_json_hash(rawstaff, manager = nil)
@@ -115,12 +135,17 @@ class StaffMember
     @manager = s
   end
 
+  def department=(d)
+    @department = d
+  end
+
+
   def smap(s = self, h = {})
     return @smap if defined? @smap
-    h[s.id] = s
+    h[s.id]       = s
     h[s.uniqname] = s
-    m = h.merge s.reports.reduce({}) {|h2, r| smap(r, h2)}
-    @smap = m if s == self
+    m             = h.merge s.reports.reduce({}) {|h2, r| smap(r, h2)}
+    @smap         = m if s == self
     m
   end
 
@@ -128,17 +153,21 @@ class StaffMember
     smap[uniqname]
   end
 
+
 end
 
 depthash = JSON.parse(File.open(File.join(__dir__, 'library_depts.json')).read);
-lit      = Department.from_json_hash(depthash['DepartmentsList'].find {|x| x['DepartmentID'] == LIT_DEPT_ID})
+library = Department.from_json_hash(depthash)
 
 staffhash = JSON.parse(File.open(File.join(__dir__, 'library_staff.json')).read)
-staff = StaffMember.from_json_hash(staffhash)
+staff     = StaffMember.from_json_hash(staffhash)
 
-lit.staff_map = staff
+library.staff_map = staff.smap
+
+lit = library.dept_by_head_uniqname('mcyork')
 
 
 require 'pry'; binding.pry
 
-1
+
+puts "LIT head is #{lit.head.name}"
