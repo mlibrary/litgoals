@@ -72,8 +72,7 @@ class Filter
 
 
     goals = GoalsViz::Goal
-    goals = goals.where(year_filterhash)
-    goals = goals.where(status_filterhash)
+
 
     # If we've got keywords, build up a search of the fulltext index as well
     # as the people
@@ -87,16 +86,22 @@ class Filter
 
     # Now the personal / division stuff. How should that work? Creator? Owner?
     # Steward? All of the above?
-    goals = filter_by_mine(goals)
+    goals = goals.where(year_filterhash)
+    goals = goals.where(status_filterhash)
     goals = filter_by_unit(goals)
     goals = filter_by_person(goals)
+    goals = filter_by_mine(goals)
+    puts goals.sql
     goals
   end
 
   def filter_by_person(goals)
+    puts "Person is #{person}"
     # Are we restricted to a particular person?
     if person and person =~ /\S/
-      goals.all.find_all{|g| g.owners.map(&:uniqname).concat(g.stewards.map(&:uniqname)).include? person}
+      p = GoalsViz::Person.where(uniqname: person)
+      # goals.all.find_all{|g| g.owners.map(&:uniqname).concat(g.stewards.map(&:uniqname)).include? person}
+      goals.where(associated_owners: p).or(associated_stewards: p)
     else
       goals
     end
@@ -114,7 +119,8 @@ class Filter
     if unit.empty?
       goals
     else
-      goals.where(associated_owners: @unit_objects)
+      valid_owners = GoalsViz::GoalOwner.where(parent_uniqname: unit).or(uniqname: unit)
+      goals.where(associated_owners: valid_owners)
     end
   end
 

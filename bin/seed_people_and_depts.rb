@@ -205,6 +205,7 @@ def update_people_and_departments(lit)
   db[:goalowner].delete
   lit.departments.each do |d|
     db[:goalowner].insert(
+      id:              d.id.to_i,
       uniqname:        d.name,
       lastname:        d.name,
       parent_uniqname: d.parent_department.name,
@@ -216,6 +217,7 @@ def update_people_and_departments(lit)
   lit.staff.each do |s|
     puts "#{s.uniqname} of #{s.department.name}"
     db[:goalowner].insert(
+      id:              s.id.to_i,
       uniqname:        s.uniqname,
       lastname:        s.last_name,
       firstname:       s.first_name,
