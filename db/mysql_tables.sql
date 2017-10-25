@@ -74,3 +74,24 @@ CREATE TABLE goaltosteward (
   goalid    INT(10) UNSIGNED DEFAULT NULL,
   stewardid INT(10) UNSIGNED DEFAULT NULL
 ) ENGINE = InnoDB;
+
+
+
+-- Indexes and views
+
+create fulltext index title_desc_fulltext on goal(title, description);
+
+create view human_owners as
+  select goal.id, goal.title, group_concat(concat(o.uniqname,' ', o.lastname, ' ', coalesce(o.firstname, '')) separator ', ') names
+  from goal, goalowner o, goaltoowner gto where goal.id = gto.goalid and o.id = gto.ownerid and o.is_unit = 0 group by goal.id;
+
+create view human_stewards as
+  select goal.id, goal.title, group_concat(concat(o.uniqname, ' ',  o.lastname, ' ', coalesce(o.firstname, '')) separator ', ') names
+  from goal, goalowner o, goaltosteward gts where goal.id = gts.goalid and o.id = gts.stewardid and o.is_unit = 0 group by goal.id;
+
+create view goalsearch AS
+  select goal.id, goal.title, goal.description,
+    concat(coalesce(human_owners.names, ' '), coalesce(human_stewards.names, ' ')) people from goal
+    left OUTER JOIN human_owners on human_owners.id = goal.id
+    left OUTER JOIN human_stewards on human_stewards.id = goal.id;
+

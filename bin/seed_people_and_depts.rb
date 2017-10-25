@@ -1,6 +1,8 @@
-STAFF_FEED  = "https://alida.lib.umich.edu/library_staff.json"
-DEPT_FEED   = "https://alida.lib.umich.edu/library_depts.json"
-LIT_DEPT_ID = "470400"
+require_relative '../lib/db'
+
+
+STAFF_FEED = "https://alida.lib.umich.edu/library_staff.json"
+DEPT_FEED  = "https://alida.lib.umich.edu/library_depts.json"
 
 require 'json'
 require 'dry-initializer'
@@ -88,12 +90,16 @@ class Department
   end
 
   def is_within(target)
-     id == target.id or (!parent_department.nil? and parent_department.is_within(target))
+    id == target.id or (!parent_department.nil? and parent_department.is_within(target))
   end
 
 
   def staff
-    @staff ||= staff_map.values.select{|x| x.department && x.department.is_within(self)}.uniq
+    @staff ||= staff_map.values.select {|x| x.department && x.department.is_within(self)}.uniq
+  end
+
+  def departments
+    dmap.values
   end
 
 end
@@ -164,10 +170,61 @@ staff     = StaffMember.from_json_hash(staffhash)
 
 library.staff_map = staff.smap
 
-lit = library.dept_by_head_uniqname('mcyork')
+lit = library.sub_departments.find {|x| x.head.uniqname == 'mcyork'}
+
+# OK. We've got all the departments and people
+# Let's stick them in there
+#
+#
 
 
-require 'pry'; binding.pry
+STATUS = [
+  'Not started',
+  'On hold',
+  'In progress',
+  'Completed',
+  'Abandoned'
+]
+
+PLATFORM = {
+  create: 'Create',
+  scale:  'Scale',
+  build:  'Build'
+}
+
+def seed_statuses
+  db = GoalsViz.new_db_connection
+  db[:status].delete
+  STATUS.map do |status|
+    db[:status].insert(name: status)
+  end
+end
+
+def update_people_and_departments(lit)
+  db = GoalsViz.new_db_connection
+  db[:goalowner].delete
+  lit.departments.each do |d|
+    db[:goalowner].insert(
+      uniqname:        d.name,
+      lastname:        d.name,
+      parent_uniqname: d.parent_department.name,
+      is_unit:         true
+    )
+  end
 
 
-puts "LIT head is #{lit.head.name}"
+  lit.staff.each do |s|
+    puts "#{s.uniqname} of #{s.department.name}"
+    db[:goalowner].insert(
+      uniqname:        s.uniqname,
+      lastname:        s.last_name,
+      firstname:       s.first_name,
+      parent_uniqname: s.department.name,
+      is_unit:         false,
+      is_admin:        !(lit.dept_by_head_uniqname(s.uniqname).nil?)
+    )
+  end
+end
+
+seed_statuses
+update_people_and_departments(lit)

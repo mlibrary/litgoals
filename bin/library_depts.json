@@ -1,0 +1,648 @@
+{
+    "DepartmentHeadID":  "68918177",
+    "DepartmentsList":  [
+                            {
+                                "DepartmentID":  "470200",
+                                "DepartmentName":  "Library Dean Dept Group",
+                                "NumberOfEmployees":  0,
+                                "DepartmentHeadID":  "68918177",
+                                "DepartmentsList":  [
+
+                                                    ]
+                            },
+                            {
+                                "DepartmentID":  "470201",
+                                "DepartmentName":  "Library Dean - General",
+                                "NumberOfEmployees":  17,
+                                "DepartmentHeadID":  "68918177",
+                                "DepartmentsList":  [
+
+                                                    ]
+                            },
+                            {
+                                "DepartmentHeadID":  "91110556",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470400",
+                                                            "DepartmentName":  "Library Info Tech Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "91110556",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470401",
+                                                            "DepartmentName":  "Library Info Tech - HathiTrust",
+                                                            "NumberOfEmployees":  10,
+                                                            "DepartmentHeadID":  "28920882",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470402",
+                                                            "DepartmentName":  "Library Info Tech - General",
+                                                            "NumberOfEmployees":  1,
+                                                            "DepartmentHeadID":  "91110556",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470410",
+                                                            "DepartmentName":  "Library Info Tech - Arch \u0026 Eng",
+                                                            "NumberOfEmployees":  7,
+                                                            "DepartmentHeadID":  "87282466",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470420",
+                                                            "DepartmentName":  "LibraryInfoTech - Dig. Content",
+                                                            "NumberOfEmployees":  21,
+                                                            "DepartmentHeadID":  "13246388",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470430",
+                                                            "DepartmentName":  "Library Info Tech - AIM",
+                                                            "NumberOfEmployees":  8,
+                                                            "DepartmentHeadID":  "04501940",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470440",
+                                                            "DepartmentName":  "LibraryInfoTech-Design\u0026Discov",
+                                                            "NumberOfEmployees":  14,
+                                                            "DepartmentHeadID":  "12501713",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470450",
+                                                            "DepartmentName":  "Library Info Tech-Dig Lib Apps",
+                                                            "NumberOfEmployees":  12,
+                                                            "DepartmentHeadID":  "60342448",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "49878853",
+                                "DepartmentName":  "Library Info Tech",
+                                "DepartmentID":  "470400"
+                            },
+                            {
+                                "DepartmentHeadID":  "74921112",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470090",
+                                                            "DepartmentName":  "Library Collections Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "74921112",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470091",
+                                                            "DepartmentName":  "Library Collect - General",
+                                                            "NumberOfEmployees":  3,
+                                                            "DepartmentHeadID":  "74921112",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470131",
+                                                            "DepartmentName":  "Library Collect - MLDD - ILL",
+                                                            "NumberOfEmployees":  62,
+                                                            "DepartmentHeadID":  "29629746",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470150",
+                                                            "DepartmentName":  "Library Collect - Preservation",
+                                                            "NumberOfEmployees":  19,
+                                                            "DepartmentHeadID":  "74357185",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470220",
+                                                            "DepartmentName":  "Library Collect - Papyrology",
+                                                            "NumberOfEmployees":  6,
+                                                            "DepartmentHeadID":  "86464474",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470240",
+                                                            "DepartmentName":  "Library Collect - Tech Service",
+                                                            "NumberOfEmployees":  57,
+                                                            "DepartmentHeadID":  "32355464",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470680",
+                                                            "DepartmentName":  "Library Collect - Spec Collec",
+                                                            "NumberOfEmployees":  25,
+                                                            "DepartmentHeadID":  "21412156",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "86434428",
+                                "DepartmentName":  "Library Collections",
+                                "DepartmentID":  "470090"
+                            },
+                            {
+                                "DepartmentHeadID":  "04026687",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470210",
+                                                            "DepartmentName":  "Library B\u0026P - Development",
+                                                            "NumberOfEmployees":  5,
+                                                            "DepartmentHeadID":  "89269968",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470230",
+                                                            "DepartmentName":  "Library B\u0026P - Mktg/Commun",
+                                                            "NumberOfEmployees":  5,
+                                                            "DepartmentHeadID":  "94052973",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470300",
+                                                            "DepartmentName":  "Library - B \u0026 P Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "04026687",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470301",
+                                                            "DepartmentName":  "Library B\u0026P - General",
+                                                            "NumberOfEmployees":  2,
+                                                            "DepartmentHeadID":  "04026687",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470330",
+                                                            "DepartmentName":  "Library B\u0026P - Finance",
+                                                            "NumberOfEmployees":  10,
+                                                            "DepartmentHeadID":  "98794322",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470340",
+                                                            "DepartmentName":  "Library B\u0026P - HR",
+                                                            "NumberOfEmployees":  12,
+                                                            "DepartmentHeadID":  "54193885",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "01942503",
+                                "DepartmentName":  "Library - B \u0026 P",
+                                "DepartmentID":  "470300"
+                            },
+                            {
+                                "DepartmentHeadID":  "33869089",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470320",
+                                                            "DepartmentName":  "Library Operations-Facilities",
+                                                            "NumberOfEmployees":  19,
+                                                            "DepartmentHeadID":  "47815081",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470600",
+                                                            "DepartmentName":  "Library Operations Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "33869089",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470601",
+                                                            "DepartmentName":  "Library Operations - General",
+                                                            "NumberOfEmployees":  2,
+                                                            "DepartmentHeadID":  "33869089",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470602",
+                                                            "DepartmentName":  "LibraryOperations-Environments",
+                                                            "NumberOfEmployees":  4,
+                                                            "DepartmentHeadID":  "36180467",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470610",
+                                                            "DepartmentName":  "Library Operations - US \u0026 OO",
+                                                            "NumberOfEmployees":  101,
+                                                            "DepartmentHeadID":  "47412082",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470611",
+                                                            "DepartmentName":  "Library Operations - C \u0026 A Svc",
+                                                            "NumberOfEmployees":  29,
+                                                            "DepartmentHeadID":  "02153218",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470650",
+                                                            "DepartmentName":  "Library Operations - PC \u0026 A",
+                                                            "NumberOfEmployees":  53,
+                                                            "DepartmentHeadID":  "57411653",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470660",
+                                                            "DepartmentName":  "Library Operations - S \u0026 DL",
+                                                            "NumberOfEmployees":  53,
+                                                            "DepartmentHeadID":  "95215545",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "74106985",
+                                "DepartmentName":  "Library Operations",
+                                "DepartmentID":  "470600"
+                            },
+                            {
+                                "DepartmentHeadID":  "37796815",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470900",
+                                                            "DepartmentName":  "Library Publishing Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470901",
+                                                            "DepartmentName":  "Library Publish - General",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470950",
+                                                            "DepartmentName":  "Mich Publishing-General",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470951",
+                                                            "DepartmentName":  "Mich Publishing-Acquisitions",
+                                                            "NumberOfEmployees":  12,
+                                                            "DepartmentHeadID":  "77164860",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470952",
+                                                            "DepartmentName":  "Mich Publishing-Pub Services",
+                                                            "NumberOfEmployees":  8,
+                                                            "DepartmentHeadID":  "55930625",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470953",
+                                                            "DepartmentName":  "Mich Publishing-Production",
+                                                            "NumberOfEmployees":  8,
+                                                            "DepartmentHeadID":  "50940180",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470954",
+                                                            "DepartmentName":  "Mich Publishing-Marketing",
+                                                            "NumberOfEmployees":  5,
+                                                            "DepartmentHeadID":  "77961072",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470955",
+                                                            "DepartmentName":  "Mich Publishing-Administration",
+                                                            "NumberOfEmployees":  2,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470956",
+                                                            "DepartmentName":  "Mich Publishing-Technology",
+                                                            "NumberOfEmployees":  4,
+                                                            "DepartmentHeadID":  "60508956",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470957",
+                                                            "DepartmentName":  "Mich Publishing-ELT",
+                                                            "NumberOfEmployees":  6,
+                                                            "DepartmentHeadID":  "31801191",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470961",
+                                                            "DepartmentName":  "Mich Publishing-Deep Blue",
+                                                            "NumberOfEmployees":  1,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "499990",
+                                                            "DepartmentName":  "Mich Pub General",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "499991",
+                                                            "DepartmentName":  "Mich Pub Editorial",
+                                                            "NumberOfEmployees":  1,
+                                                            "DepartmentHeadID":  "37796815",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "57060944",
+                                "DepartmentName":  "Library Publishing",
+                                "DepartmentID":  "470900"
+                            },
+                            {
+                                "DepartmentHeadID":  "10134487",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470620",
+                                                            "DepartmentName":  "Library Research-Intern\u0027l Stud",
+                                                            "NumberOfEmployees":  30,
+                                                            "DepartmentHeadID":  "95833329",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470630",
+                                                            "DepartmentName":  "Library Research - Asia",
+                                                            "NumberOfEmployees":  19,
+                                                            "DepartmentHeadID":  "77761599",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470800",
+                                                            "DepartmentName":  "Library Research Dept Group",
+                                                            "NumberOfEmployees":  1,
+                                                            "DepartmentHeadID":  "10134487",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470801",
+                                                            "DepartmentName":  "Library Research - General",
+                                                            "NumberOfEmployees":  2,
+                                                            "DepartmentHeadID":  "10134487",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470802",
+                                                            "DepartmentName":  "Library Research-Sci \u0026Engineer",
+                                                            "NumberOfEmployees":  51,
+                                                            "DepartmentHeadID":  "92827641",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470803",
+                                                            "DepartmentName":  "Library Research-Arts \u0026Humanit",
+                                                            "NumberOfEmployees":  24,
+                                                            "DepartmentHeadID":  "35975687",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470804",
+                                                            "DepartmentName":  "Library Research-Social Scienc",
+                                                            "NumberOfEmployees":  10,
+                                                            "DepartmentHeadID":  "03916604",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470910",
+                                                            "DepartmentName":  "Library Research - Copyright",
+                                                            "NumberOfEmployees":  4,
+                                                            "DepartmentHeadID":  "27466334",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "66138619",
+                                "DepartmentName":  "Library Research",
+                                "DepartmentID":  "470800"
+                            },
+                            {
+                                "DepartmentHeadID":  "81757830",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470670",
+                                                            "DepartmentName":  "Library - Health Sciences",
+                                                            "NumberOfEmployees":  33,
+                                                            "DepartmentHeadID":  "81757830",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "30061008",
+                                "DepartmentName":  "Library - Health Sciences",
+                                "DepartmentID":  "470670"
+                            },
+                            {
+                                "DepartmentHeadID":  "13871618",
+                                "DepartmentsList":  [
+                                                        {
+                                                            "DepartmentID":  "470260",
+                                                            "DepartmentName":  "Duderstadt Ctr Studios",
+                                                            "NumberOfEmployees":  5,
+                                                            "DepartmentHeadID":  "41416615",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470262",
+                                                            "DepartmentName":  "Library Learn\u0026Teach-Creative A",
+                                                            "NumberOfEmployees":  29,
+                                                            "DepartmentHeadID":  "80169670",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470263",
+                                                            "DepartmentName":  "Duderstadt Ctr Admin",
+                                                            "NumberOfEmployees":  21,
+                                                            "DepartmentHeadID":  "92987716",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470267",
+                                                            "DepartmentName":  "Duderstadt Ctr Academic Init",
+                                                            "NumberOfEmployees":  2,
+                                                            "DepartmentHeadID":  "13871618",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470268",
+                                                            "DepartmentName":  "Duderstadt Ctr Emerging Tech",
+                                                            "NumberOfEmployees":  51,
+                                                            "DepartmentHeadID":  "25642772",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470269",
+                                                            "DepartmentName":  "Duderstadt Ctr Facilities",
+                                                            "NumberOfEmployees":  1,
+                                                            "DepartmentHeadID":  "13871618",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470640",
+                                                            "DepartmentName":  "Library Learn\u0026Teach- P \u0026 I",
+                                                            "NumberOfEmployees":  50,
+                                                            "DepartmentHeadID":  "68723451",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470700",
+                                                            "DepartmentName":  "Library Learn\u0026Teach Dept Group",
+                                                            "NumberOfEmployees":  0,
+                                                            "DepartmentHeadID":  "13871618",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470701",
+                                                            "DepartmentName":  "Library Learn\u0026Teach-General",
+                                                            "NumberOfEmployees":  4,
+                                                            "DepartmentHeadID":  "13871618",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470702",
+                                                            "DepartmentName":  "Library Learn\u0026Teach-User Info",
+                                                            "NumberOfEmployees":  26,
+                                                            "DepartmentHeadID":  "75487633",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        },
+                                                        {
+                                                            "DepartmentID":  "470704",
+                                                            "DepartmentName":  "Library Learn\u0026Teach-Connected",
+                                                            "NumberOfEmployees":  28,
+                                                            "DepartmentHeadID":  "26795531",
+                                                            "DepartmentsList":  [
+
+                                                                                ]
+                                                        }
+                                                    ],
+                                "AdministrativeAssistantID":  "87299600",
+                                "DepartmentName":  "Library Learn\u0026Teach",
+                                "DepartmentID":  "470700"
+                            }
+                        ],
+    "AdministrativeAssistantID":  "11361721",
+    "DepartmentName":  "Library Dean",
+    "DepartmentID":  "470200"
+}
