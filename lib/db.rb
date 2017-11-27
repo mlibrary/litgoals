@@ -1,22 +1,18 @@
 require 'sequel'
-require 'dotenv'
 require 'dry-auto_inject'
-
-Dotenv.load
-
+require 'yaml'
 
 module GoalsViz
   LOG = Logger.new(STDERR)
 
+  YAML_Config = YAML.load '../config/database.yml'
 
-  CurrentConfig = if ENV['litgoals_environment'] == 'mysql'
+  CurrentConfig = if YAML_Config['litgoals_environment'] == 'mysql'
                     LOG.info "Attaching to mysql"
                     require_relative('../lib/dbconfig/mysql')
                     Dry::AutoInject(GoalsViz::DBConfig::Mysql)
                   else
-                    LOG.info "Attaching to sqlite"
-                    require_relative('../lib/dbconfig/sqlite')
-                    Dry::AutoInject(GoalsViz::DBConfig::SQLite)
+                    raise "We only support mysql now"
                   end
 
   def self.new_db_connection
@@ -25,25 +21,12 @@ module GoalsViz
 
   class DBConnection
 
-    include CurrentConfig["database_type", "dsn", "setup", "seed"]
+    include CurrentConfig["database_type", "dsn"]
 
     attr_reader :db
 
-    def connect(setup_tables: false, seed_tables: false)
-      db = Sequel.connect(dsn)
-      setup.(db) if setup_tables
-      seed.(db) if seed_tables
-      @db = db
+    def connect
+      @db = Sequel.connect(dsn)
     end
-
-
-    def setup_tables
-      setup.(@db)
-    end
-
-    def seed_tables
-      seed.(@db)
-    end
-
   end
 end

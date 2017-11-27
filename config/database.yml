@@ -1,0 +1,6 @@
+---
+litgoals_environment: mysql
+litgoals_database: goalsviz
+litgoals_user: dueberb
+litgoals_adapter: mysql2
+SECRET: "Yes. It's a secret."

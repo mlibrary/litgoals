@@ -8,18 +8,6 @@ module GoalsViz
   module DBConfig
     class Mysql < General
 
-      class Setup
-
-
-        def call(db)
-          General.drop_all_tables(db)
-          dir = File.dirname(__FILE__)
-          sql = File.read("#{dir}/../../seeds/mysql_tables.sql")
-          sql.split(/-- SPLIT/m).select{|x| /\S/.match(x)}.each {|x|  db.run x}
-        end
-      end
-
-
       extend Dry::Container::Mixin
 
       register "database_type" do
@@ -27,22 +15,15 @@ module GoalsViz
       end
 
       register "dsn" do
-        {adapter: ENV['litgoals_adapter'],
-         database: ENV['litgoals_database'],
-         user: ENV['litgoals_user'],
-         host: ENV['litgoals_host'],
-         password: ENV['litgoals_password']
+        YAML_Config = YAML.load '../config/database.yml'
+
+        {adapter:  YAML_Config['litgoals_adapter'],
+         database: YAML_Config['litgoals_database'],
+         user:     YAML_Config['litgoals_user'],
+         host:     YAML_Config['litgoals_host'],
+         password: YAML_Config['litgoals_password']
         }
       end
-
-      register "setup" do
-        Setup.new
-      end
-
-      register "seed" do
-        Seed.new
-      end
-
 
     end
   end
