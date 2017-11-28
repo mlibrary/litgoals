@@ -15,8 +15,6 @@ module GoalsViz
       end
 
       register "dsn" do
-        YAML_Config = YAML.load '../config/database.yml'
-
         {adapter:  YAML_Config['litgoals_adapter'],
          database: YAML_Config['litgoals_database'],
          user:     YAML_Config['litgoals_user'],

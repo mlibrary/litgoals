@@ -1,11 +1,13 @@
 require 'sequel'
 require 'dry-auto_inject'
 require 'yaml'
+require 'pathname'
 
 module GoalsViz
   LOG = Logger.new(STDERR)
 
-  YAML_Config = YAML.load '../config/database.yml'
+  dbfilepath = Pathname.new(__dir__).parent + 'config' + 'database.yml'
+  YAML_Config = YAML.load_file(dbfilepath)['production']
 
   CurrentConfig = if YAML_Config['litgoals_environment'] == 'mysql'
                     LOG.info "Attaching to mysql"
@@ -21,9 +23,9 @@ module GoalsViz
 
   class DBConnection
 
-    include CurrentConfig["database_type", "dsn"]
-
     attr_reader :db
+    include CurrentConfig['dsn']
+      
 
     def connect
       @db = Sequel.connect(dsn)
