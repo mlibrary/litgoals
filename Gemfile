@@ -8,6 +8,7 @@ gem 'slim'
 gem 'mysql2'
 gem 'sequel'
 
+gem 'httpclient'
 
 
 
@@ -18,6 +19,7 @@ gem 'forme'
 gem 'dry-validation'
 gem 'dry-container'
 gem 'dry-auto_inject'
+gem 'dry-initializer'
 
 gem 'puma', '~>3.0'
 

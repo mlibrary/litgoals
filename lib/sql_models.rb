@@ -4,13 +4,10 @@ require_relative 'db'
 
 module GoalsViz
 
-  DB = new_db_connection
-
+  DB = GoalsViz.new_db_connection
 
   # Pre-declare everything so the associations work
-  class GoalOwner < Sequel::Model;
-    set_dataset DB[:goalowner]
-  end
+  class GoalOwner < Sequel::Model(:goalowner); end
 
   class Goal < GoalOwner;
   end
@@ -41,7 +38,8 @@ module GoalsViz
 
   end
 
-  class GoalOwner < Sequel::Model
+  # Reopen to add methods
+  class GoalOwner
     # set_dataset DB[:goalowner]
     plugin :after_initialize
 
@@ -171,10 +169,7 @@ module GoalsViz
     end
   end
 
-
-  class Status < Sequel::Model
-    set_dataset DB[:status]
-  end
+  class Status < Sequel::Model(DB[:status]);end
 
   class Goal
     set_dataset DB[:goal]

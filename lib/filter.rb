@@ -91,7 +91,6 @@ class Filter
     goals = filter_by_unit(goals)
     goals = filter_by_person(goals)
     goals = filter_by_mine(goals)
-    puts goals.sql
     goals
   end
 

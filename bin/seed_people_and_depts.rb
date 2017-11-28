@@ -1,5 +1,6 @@
 require_relative '../lib/db'
 
+require 'httpclient'
 
 STAFF_FEED = "https://alida.lib.umich.edu/library_staff.json"
 DEPT_FEED  = "https://alida.lib.umich.edu/library_depts.json"
@@ -162,10 +163,12 @@ class StaffMember
 
 end
 
-depthash = JSON.parse(File.open(File.join(__dir__, 'library_depts.json')).read);
+hc = HTTPClient.new
+
+depthash = JSON.parse(hc.get_content(DEPT_FEED))
 library = Department.from_json_hash(depthash)
 
-staffhash = JSON.parse(File.open(File.join(__dir__, 'library_staff.json')).read)
+staffhash = JSON.parse(hc.get_content(STAFF_FEED))
 staff     = StaffMember.from_json_hash(staffhash)
 
 library.staff_map = staff.smap
