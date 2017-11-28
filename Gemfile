@@ -28,12 +28,12 @@ gem 'pry'
 
 gem "bundler", "~> 1.3"
 gem "rake"
+gem "yard", ">= 0.9.5"
 
 
 group :development do
   gem "minitest", "~> 5.0"
   gem "minitest-hooks"
-  gem "yard", ">= 0.9.5"
   gem 'sqlite3'
   # gem 'neo4j', '~>4.0'
   gem 'pry'
