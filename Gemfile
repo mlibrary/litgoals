@@ -27,7 +27,7 @@ gem 'kramdown', '~>1.13'
 gem 'pry'
 
 gem "bundler", "~> 1.3"
-gem "rake"
+gem "rake", "~> 12.0"
 gem "yard", ">= 0.9.5"
 
 
