@@ -21,7 +21,7 @@ CREATE TABLE `goal` (
   `goal_year`        INT(11)                   DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
-  ENGINE = InnoDB;
+  ENGINE = MyISAM;
 
 --
 -- Table structure for table `goalowner`
