@@ -21,11 +21,9 @@ Sequel::Model.plugin :json_serializer
 
 # Set up logging and defaults for testing
 
-LOG                   = Logger.new(STDERR)
+LOG                   = Logger.new('log/production.log')
 DEFAULT_USER_UNIQNAME = 'dueberb'
-# DEFAULT_USER_UNIQNAME = 'rsteg'
 
-#
 UNITS                 = GoalsViz::Unit.abbreviation_to_unit_map
 SORTED_UNITS          = UNITS.values.sort {|a, b| a.abbreviation <=> b.abbreviation}
 STATUS_OPTIONS        = GoalsViz::Status.order_by(:id).map {|s| [s.name, s.name]}
