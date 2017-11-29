@@ -95,7 +95,6 @@ class Filter
   end
 
   def filter_by_person(goals)
-    puts "Person is #{person}"
     # Are we restricted to a particular person?
     if person and person =~ /\S/
       p = GoalsViz::Person.where(uniqname: person)
