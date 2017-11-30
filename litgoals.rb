@@ -114,7 +114,7 @@ class LITGoalsApp < Roda
 
       LOG.warn "Uniqname is #{uniqname}"
       LOG.warn "User is '#{user}'"
-      LOG.warn "All users is #{GoalsViz::Person.all.map{|x| x.uniqname}"
+      LOG.warn "All users is #{GoalsViz::Person.all.map{|x| x.uniqname}}"
       
       currentFY = GoalsViz::FiscalYear.new
 
