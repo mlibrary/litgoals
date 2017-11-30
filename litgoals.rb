@@ -111,6 +111,11 @@ class LITGoalsApp < Roda
       # Set up some useful data for later on
       uniqname  = r.env['HTTP_X_REMOTE_USER'] || DEFAULT_USER_UNIQNAME
       user      = GoalsViz::Person.find(uniqname: uniqname)
+
+      LOG.warn "Uniqname is #{uniqname}"
+      LOG.warn "User is '#{user}'"
+      LOG.warn "All users is #{GoalsViz::Person.all.map{|x| x.uniqname}"
+      
       currentFY = GoalsViz::FiscalYear.new
 
       common_locals= {

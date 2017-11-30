@@ -116,7 +116,7 @@ DEPENDENCIES
   puma (~> 3.0)
   rack-protection (~> 1.5.3)
   rack_csrf (~> 2.5.0)
-  rake
+  rake (~> 12.0)
   roda (~> 2.0)
   sequel
   slim
